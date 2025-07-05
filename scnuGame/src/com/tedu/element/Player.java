@@ -130,5 +130,7 @@ public class Player extends ElementObj{
 	public String toString() {
 		// {x:3,y:1,f:right} json格式 弹药样式可拓展
 		return "x:"+this.getX()+",y:"+this.getY()+",fx:"+this.fx;
+
 	}
+
 }

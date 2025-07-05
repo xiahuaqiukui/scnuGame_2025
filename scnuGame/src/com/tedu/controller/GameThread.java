@@ -19,7 +19,6 @@ import com.tedu.manager.GameElement;
 
 public class GameThread extends Thread{
 	private ElementManager em;
-	
 	public GameThread() {
 		em = ElementManager.getManager();
 	}

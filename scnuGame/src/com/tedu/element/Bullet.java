@@ -63,7 +63,7 @@ public class Bullet extends ElementObj{
 	
 	@Override
 	protected void move() {
-		System.out.println(this.fx);
+//		System.out.println(this.fx);
 		
 		switch (this.fx) {
 		case "left": this.setX(this.getX()-this.speed); break;
