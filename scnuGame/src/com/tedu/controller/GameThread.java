@@ -35,7 +35,7 @@ public class GameThread extends Thread{
 			gameOver();
 			
 			try {
-				sleep(50);
+				sleep(10);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
@@ -71,7 +71,7 @@ public class GameThread extends Thread{
 			}
 			
 			try {
-				sleep(50);
+				sleep(10);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
@@ -80,14 +80,14 @@ public class GameThread extends Thread{
 	
 	/**游戏切换关卡*/
 	private void gameOver() {
-		// TODO Auto-generated method stub
+		// ......
 		
 	}
 	
 	public void load() {
 //		图片导入
 		ImageIcon icon = new ImageIcon("image/1 Woodcutter/Woodcutter_right.png");
-		ElementObj obj = new Player(100,100,100,100,icon);//实例化对象
+		ElementObj obj = new Player(100,600,100,100,icon);//实例化对象
 //		将对象放入到 元素管理器中
 //		em.getElementsByKey(GameElement.PLAY).add(obj);
 		em.addElement(obj,GameElement.PLAYER);//直接添加
@@ -95,7 +95,9 @@ public class GameThread extends Thread{
 		
 		// 添加一个敌人类，仿照玩家类编写，注意：不需要实现键盘监听
 		// 实现敌人的显示，同时实现最简单的移动，例如:从坐标100，100移动到500，100然后调头
-		// ......
+		// 子弹发射,子弹移动,元素死亡
+		// 只实现了子弹的发射和死亡，思考道具掉落是否与之相近？
+		
 		
 	}
 }

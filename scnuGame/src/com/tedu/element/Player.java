@@ -6,7 +6,10 @@ import java.util.Map;
 
 import javax.swing.ImageIcon;
 
+import com.tedu.manager.ElementManager;
+import com.tedu.manager.GameElement;
 import com.tedu.manager.GameLoad;
+import com.tedu.element.Bullet;
 
 public class Player extends ElementObj{
 	/**
@@ -27,12 +30,12 @@ public class Player extends ElementObj{
 	 */
 	// 移动属性(四属性方式)
 	private boolean left = false;
-	private boolean up = false;
 	private boolean right = false;
-	private boolean down = false;
 	
 	// 变量，记录当前主角朝向(默认为右)
 	private String fx = "right";
+	// 战斗控制
+	private int pkType = 0; // true 攻击   false 停止
 	
 	// 初始化玩家属性，目前仅继承父类属性
 	public Player(int x, int y, int w, int h, ImageIcon icon) {
@@ -53,25 +56,34 @@ public class Player extends ElementObj{
 	 * @说明 重写方法： 重写的要求：方法名称 和参数类型序列 必须和父类的方法一样
 	 * @重点 监听的数据需要改变状态值
 	 */
-	// 重写keyClick函数，监听键盘操作，改变玩家方向状态
+	// 重写keyClick函数，监听键盘操作，玩家操作
 	@Override
 	public void keyClick(boolean bl, int key) {
 		if (bl) {
-			/**
-			 * @移动控制 移动方式改变
-			 */
 			switch (key) {
+			/**
+			 * @说明 移动控制
+			 */
 			case 65: this.right=false; this.left = true; this.fx = "left"; 	break; // 左
-			case 87: this.down=false; this.up = true; this.fx = "up"; 		break; // 上
 			case 68: this.left=false; this.right = true; this.fx = "right"; break; // 右
-			case 83: this.up=false; this.down = true; this.fx = "down"; 	break; // 下
+			
+			/**
+			 * @说明 战斗控制
+			 */
+			case 74: this.pkType = 1; break; // 开启攻击状态
 			}
 		} else {
 			switch (key) {
+			/**
+			 * @说明 移动控制
+			 */
 			case 65: this.left = false; 	break; // 左
-			case 87: this.up = false; 		break; // 上
 			case 68: this.right = false; 	break; // 右
-			case 83: this.down = false; 	break; // 下
+			
+			/**
+			 * @说明 战斗控制
+			 */
+			case 74: this.pkType = 0; break;
 			}
 		}
 	}
@@ -88,14 +100,8 @@ public class Player extends ElementObj{
 		if (this.left && this.getX() > 0) {
 			this.setX(this.getX() - 10);
 		}
-		if (this.up && this.getY() > 0) {
-			this.setY(this.getY() - 10);
-		}
 		if (this.right && this.getX() < 1200-this.getW()) {
 			this.setX(this.getX() + 10);
-		}
-		if (this.down && this.getY() < 800-this.getH()-50) {
-			this.setY(this.getY() + 10);
 		}
 	}
 	
@@ -107,5 +113,22 @@ public class Player extends ElementObj{
 		
 		// 从数据加载器中加载图片
 		this.setIcon(GameLoad.imgMap.get(fx));
+	}
+	
+	@Override
+	public void add() {
+		if (pkType == 0) {
+			return ;
+		}
+		// 将构造类的多个步骤封装成一个方法，返回值直接是这个对象
+		ElementObj element = new Bullet().createBullet(this.toString());
+		// 装入集合当中
+		ElementManager.getManager().addElement(element, GameElement.BULLET);
+	}
+	
+	@Override
+	public String toString() {
+		// {x:3,y:1,f:right} json格式 弹药样式可拓展
+		return "x:"+this.getX()+",y:"+this.getY()+",fx:"+this.fx;
 	}
 }

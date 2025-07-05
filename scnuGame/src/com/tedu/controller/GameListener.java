@@ -36,7 +36,7 @@ public class GameListener implements KeyListener{
 	// a65  w87  d68  s83
 	@Override
 	public void keyPressed(KeyEvent e) {
-//		System.out.println("keyPressed"+e.getKeyCode());
+		System.out.println("keyPressed"+e.getKeyCode());
 		int key = e.getKeyCode();
 		if (this.set.contains(key)) {
 			return ;

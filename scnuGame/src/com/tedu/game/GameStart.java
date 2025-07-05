@@ -27,7 +27,6 @@ public class GameStart {
 		
 		// 启动窗口（框架）
 		gj.start();
-		
 	}
 
 }

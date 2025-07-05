@@ -15,7 +15,7 @@ public abstract class ElementObj {
 	private int y;
 	private int w;
 	private int h;
-	private ImageIcon icon;
+	protected ImageIcon icon;
 	// 还有。。。。 各种必要的状态值，例如：是否生存.
 	
 	// 防止子类继承报错，没有其他意义
@@ -76,6 +76,11 @@ public abstract class ElementObj {
 		move();
 		// 发射子弹
 		add();
+	}
+	
+	public ElementObj createBullet(String str) {
+		
+		return null;
 	}
 	
 	

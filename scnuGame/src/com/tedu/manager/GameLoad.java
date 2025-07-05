@@ -13,14 +13,13 @@ import javax.swing.ImageIcon;
 
 public class GameLoad {
 	// 图片集合 使用map来进行存储 枚举类型配合（拓展）
+	// 人物图像map
 	public static Map<String, ImageIcon> imgMap;
 	
 	static {
-		// 由加载器来加载
+		// 加载人物图像
 		imgMap = new HashMap<String, ImageIcon>();
 		imgMap.put("left", new ImageIcon("image/1 Woodcutter/Woodcutter_left.png"));
-		imgMap.put("up", new ImageIcon("image/1 Woodcutter/Woodcutter_up.png"));
 		imgMap.put("right", new ImageIcon("image/1 Woodcutter/Woodcutter_right.png"));
-		imgMap.put("down", new ImageIcon("image/1 Woodcutter/Woodcutter_down.png"));
 	}
 }
