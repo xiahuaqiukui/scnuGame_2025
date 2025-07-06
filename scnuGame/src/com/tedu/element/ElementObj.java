@@ -63,6 +63,7 @@ public abstract class ElementObj {
 	protected void move() {}
 	protected void updateImage() {}
 	protected void add() {}
+	public void die(){}
 	
 	/**
 	 * @设计模式 模板模式;在模板模式中定义 对象执行方法的先后顺序,由子类选择性重写方法
@@ -78,7 +79,7 @@ public abstract class ElementObj {
 		add();
 	}
 	
-	public ElementObj createBullet(String str) {
+	public ElementObj createElement(String str) {
 		
 		return null;
 	}

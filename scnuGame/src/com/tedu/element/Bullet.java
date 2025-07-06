@@ -33,7 +33,7 @@ public class Bullet extends ElementObj{
 	
 	// 传输参数，返回对应参数的对象
 	@Override
-	public ElementObj createBullet(String str) { // 定义字符串的规则
+	public ElementObj createElement(String str) { // 定义字符串的规则
 		String[] split = str.split(",");
 		for (String str1: split) {
 			String[] split2 = str1.split(":");

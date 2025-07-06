@@ -121,7 +121,7 @@ public class Player extends ElementObj{
 			return ;
 		}
 		// 将构造类的多个步骤封装成一个方法，返回值直接是这个对象
-		ElementObj element = new Bullet().createBullet(this.toString());
+		ElementObj element = new Bullet().createElement(this.toString());
 		// 装入集合当中
 		ElementManager.getManager().addElement(element, GameElement.BULLET);
 	}

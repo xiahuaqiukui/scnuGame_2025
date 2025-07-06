@@ -9,6 +9,7 @@ import com.tedu.element.ElementObj;
 import com.tedu.element.Player;
 import com.tedu.manager.ElementManager;
 import com.tedu.manager.GameElement;
+import com.tedu.manager.GameLoad;
 
 /**
  * @说明 游戏的主线程，用于控制游戏加载，游戏关卡，游戏运行时自动化
@@ -45,8 +46,10 @@ public class GameThread extends Thread{
 	 * 游戏的加载
 	 */
 	private void gameLoad() {
-		// TODO Auto-generated method stub
+
+		GameLoad.MapLoad(1);
 		load();
+
 	}
 	
 	/**
@@ -57,7 +60,7 @@ public class GameThread extends Thread{
 	 * 先实现主角的移动
 	 * */
 	private void gameRun() {
-		// TODO Auto-generated method stub
+		long gameTime=0L;
 		while (true) { // 预留拓展 true可以作为变量 用于控制关卡结束等
 			Map<GameElement, List<ElementObj>> all = em.getGameElements();
 //			GameElement.values(); // 隐藏方法 返回值是一个数组，数组顺序是定义枚举的顺序
@@ -68,7 +71,9 @@ public class GameThread extends Thread{
 					obj.model();//调用每个类的自己的show方法完成自己的显示
 				}
 			}
-			
+
+
+			gameTime++;
 			try {
 				sleep(10);
 			} catch (InterruptedException e) {
@@ -76,7 +81,12 @@ public class GameThread extends Thread{
 			}
 		}
 	}
-	
+
+	public void moveAndUpdate(Map<GameElement, List<ElementObj>> all,long gameTime){
+
+	}
+
+
 	/**游戏切换关卡*/
 	private void gameOver() {
 		// ......
