@@ -1,14 +1,14 @@
 package com.tedu.manager;
 
 import com.tedu.element.ElementObj;
+import com.tedu.element.Enemy;
 import com.tedu.element.MapObj;
+import com.tedu.element.Player1;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Properties;
+import java.net.URL;
+import java.util.*;
 
 import javax.swing.ImageIcon;
 
@@ -24,14 +24,10 @@ public class GameLoad {
 
 	// 图片集合 使用map来进行存储 枚举类型配合（拓展）
 	// 人物图像map
-	public static Map<String, ImageIcon> imgMap;
-	
-	static {
-		// 加载人物图像
-		imgMap = new HashMap<String, ImageIcon>();
-		imgMap.put("left", new ImageIcon("image/1 Woodcutter/Woodcutter_left.png"));
-		imgMap.put("right", new ImageIcon("image/1 Woodcutter/Woodcutter_right.png"));
-	}
+	//单张图片测试，后面删除
+//	public static Map<String, ImageIcon> imgMap=new HashMap<>();
+
+	public static Map<String, List<ImageIcon>> imgMaps=new HashMap<>();
 
 	private static Properties pro = new Properties();
 
@@ -44,25 +40,66 @@ public class GameLoad {
 			return;
 		}
 		try {
+			pro.clear();
 			pro.load(maps);
 			Enumeration<?> names=pro.propertyNames();
 			while(names.hasMoreElements()){
 				String key= names.nextElement().toString();
-				System.out.println(pro.getProperty(key));
+				System.out.println("KEY:"+key);
 				String []arrs=pro.getProperty(key).split(";");
-				for(int i=0;i<arrs.length;i++){
-					ElementObj element = new MapObj().createElement(key+","+arrs[i]);
-					System.out.println(element);
-					em.addElement(element,GameElement.MAPS);
+				if(key.equals("ENEMY")){
+					for(int i=0;i<arrs.length;i++){
+						ElementObj element = new Enemy().createElement(key+","+arrs[i]);
+						System.out.println(element);
+						em.addElement(element,GameElement.ENEMY);
+					}
+				}else{
+					for(int i=0;i<arrs.length;i++){
+						ElementObj element = new MapObj().createElement(key+","+arrs[i]);
+						System.out.println(element);
+						em.addElement(element,GameElement.MAPS);
+					}
 				}
-
 			}
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
-	}
-	public static void loadImg(){
 
 	}
+	public static void ImgLoad(){
+		String texturl="com/tedu/text/GameData.pro";
+		ClassLoader classLoader = GameLoad.class.getClassLoader();
+		InputStream texts=classLoader.getResourceAsStream(texturl);
+		pro.clear();
+        try {
+            pro.load(texts);
+			Set<Object> set =  pro.keySet();
+			for(Object key:set){
+				String url=pro.getProperty(key.toString());
+				System.out.println("key:"+key+",url:"+url);
+				List<ImageIcon> imageIcons=new ArrayList<>();
+				for(int i=1;;i++){
+//					image/1 Woodcutter/walk/right/1.png
+					String path=url+"/"+i+".png";
+					ImageIcon icon = new ImageIcon(path);
+					if(icon.getIconWidth()<=0){
+						break;
+					}
+					imageIcons.add(icon);
+				}
+				imgMaps.put(key.toString(),imageIcons);
+				//System.out.println(GameLoad.imgMaps.keySet());
+				//System.out.println(GameLoad.imgMaps.get("player1_right_walk"));
+			}
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+	public static void playerLoad(){
+		String playerStr="100,700,player1_right_idle";
+		ElementObj player = new Player1().createElement(playerStr);
+		em.addElement(player,GameElement.PLAYER);
+	}
+
 
 }

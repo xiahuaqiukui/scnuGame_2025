@@ -20,8 +20,8 @@ import javax.swing.JPanel;
  */
 
 public class GameJFrame extends JFrame{
-	public static int GameX = 1200; // 横向长度
-	public static int GameY = 800;  // 纵向长度
+	public static int GameX = 1700; // 横向长度
+	public static int GameY = 920;  // 纵向长度
 	private JPanel jPanel = null;   // 正在显示的面板
 	private KeyListener keyListener = null;  // 键盘监听器
 	private MouseMotionListener mouseMotionListener=null;  //鼠标监听
@@ -36,7 +36,7 @@ public class GameJFrame extends JFrame{
 	// 初始化
 	public void init() {
 		this.setSize(GameX, GameY); // 游戏窗口大小设置
-		this.setTitle("hkksGame");  // 游戏标题
+		this.setTitle("scnuGame_2025");  // 游戏标题
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); //设置退出并关闭
 		this.setLocationRelativeTo(null); // 屏幕居中
 	}

@@ -3,10 +3,7 @@ package com.tedu.controller;
 import java.util.List;
 import java.util.Map;
 
-import javax.swing.ImageIcon;
-
 import com.tedu.element.ElementObj;
-import com.tedu.element.Player;
 import com.tedu.manager.ElementManager;
 import com.tedu.manager.GameElement;
 import com.tedu.manager.GameLoad;
@@ -20,10 +17,10 @@ import com.tedu.manager.GameLoad;
 
 public class GameThread extends Thread{
 	private ElementManager em;
+	public static int sleepTime=15;
 	public GameThread() {
 		em = ElementManager.getManager();
 	}
-	
 	@Override
 	public void run() {
 		while (true) {
@@ -35,7 +32,7 @@ public class GameThread extends Thread{
 			gameOver();
 			
 			try {
-				sleep(10);
+				sleep(15);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
@@ -46,9 +43,9 @@ public class GameThread extends Thread{
 	 * 游戏的加载
 	 */
 	private void gameLoad() {
-
-		GameLoad.MapLoad(1);
-		load();
+		GameLoad.ImgLoad();//加载图片
+		GameLoad.MapLoad(1);//加载地图
+		GameLoad.playerLoad();//可以带参数表示几个人
 
 	}
 	
@@ -63,29 +60,21 @@ public class GameThread extends Thread{
 		long gameTime=0L;
 		while (true) { // 预留拓展 true可以作为变量 用于控制关卡结束等
 			Map<GameElement, List<ElementObj>> all = em.getGameElements();
-//			GameElement.values(); // 隐藏方法 返回值是一个数组，数组顺序是定义枚举的顺序
-			for (GameElement ge:GameElement.values()) {
-				List<ElementObj> list = all.get(ge);
-				for(int i=0;i<list.size();i++) {
-					ElementObj obj=list.get(i);
-					obj.model();//调用每个类的自己的show方法完成自己的显示
-				}
-			}
+			List<ElementObj> enemys = em.getElementsByKey(GameElement.ENEMY);
+			List<ElementObj> bullets = em.getElementsByKey(GameElement.BULLET);
+			List<ElementObj> maps = em.getElementsByKey(GameElement.MAPS);
+			moveAndUpdate(all,gameTime);
 
+			ElementPK(enemys,bullets);
 
 			gameTime++;
 			try {
-				sleep(10);
+				sleep(sleepTime);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
 		}
 	}
-
-	public void moveAndUpdate(Map<GameElement, List<ElementObj>> all,long gameTime){
-
-	}
-
 
 	/**游戏切换关卡*/
 	private void gameOver() {
@@ -93,20 +82,52 @@ public class GameThread extends Thread{
 		
 	}
 	
-	public void load() {
-//		图片导入
-		ImageIcon icon = new ImageIcon("image/1 Woodcutter/Woodcutter_right.png");
-		ElementObj obj = new Player(100,600,100,100,icon);//实例化对象
-//		将对象放入到 元素管理器中
-//		em.getElementsByKey(GameElement.PLAY).add(obj);
-		em.addElement(obj,GameElement.PLAYER);//直接添加
-		
-		
-		// 添加一个敌人类，仿照玩家类编写，注意：不需要实现键盘监听
-		// 实现敌人的显示，同时实现最简单的移动，例如:从坐标100，100移动到500，100然后调头
-		// 子弹发射,子弹移动,元素死亡
-		// 只实现了子弹的发射和死亡，思考道具掉落是否与之相近？
-		
-		
+//	public void load() {
+////		图片导入
+//		ImageIcon icon = new ImageIcon("image/1 Woodcutter/Woodcutter_right.png");
+//		ElementObj obj = new Player(100,600,100,100,icon);//实例化对象
+////		将对象放入到 元素管理器中
+////		em.getElementsByKey(GameElement.PLAY).add(obj);
+//		em.addElement(obj,GameElement.PLAYER);//直接添加
+//
+//
+//		// 添加一个敌人类，仿照玩家类编写，注意：不需要实现键盘监听
+//		// 实现敌人的显示，同时实现最简单的移动，例如:从坐标100，100移动到500，100然后调头
+//		// 子弹发射,子弹移动,元素死亡
+//		// 只实现了子弹的发射和死亡，思考道具掉落是否与之相近？
+//
+//
+//	}
+	public void moveAndUpdate(Map<GameElement, List<ElementObj>> all,long gameTime) {
+//		GameElement.values();//隐藏方法，返回是一个数组
+		for (GameElement ge : GameElement.values()) {
+			List<ElementObj> list = all.get(ge);
+			for (int i = 0; i < list.size(); i++) {
+				ElementObj obj = list.get(i);
+				if(!obj.isLive()){
+
+					obj.die();
+					list.remove(i-- );
+					continue;
+				}
+				obj.model(gameTime);//调用每个类的自己的show方法完成自己的显示
+			}
+		}
 	}
+
+	public void ElementPK(List<ElementObj> listA, List<ElementObj> ListB) {
+		for(int i=0;i<listA.size();i++){
+			ElementObj enemy=listA.get(i);
+			for(int j=0;j<ListB.size();j++){
+				ElementObj file=ListB.get(j);
+				if(enemy.pk(file)){
+					enemy.setLive(false);
+					file.setLive(false);
+					break;
+				}
+			}
+		}
+
+	}
+
 }

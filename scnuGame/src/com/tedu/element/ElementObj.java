@@ -1,6 +1,6 @@
 package com.tedu.element;
 
-import java.awt.Graphics;
+import java.awt.*;
 
 import javax.swing.ImageIcon;
 
@@ -17,7 +17,7 @@ public abstract class ElementObj {
 	private int h;
 	protected ImageIcon icon;
 	// 还有。。。。 各种必要的状态值，例如：是否生存.
-	
+	private boolean live=true;
 	// 防止子类继承报错，没有其他意义
 	public ElementObj() {}
 	/**
@@ -61,8 +61,8 @@ public abstract class ElementObj {
 	 * @说明 移动方法; 需要移动的子类，请 重写这个方法
 	 */
 	protected void move() {}
-	protected void updateImage() {}
-	protected void add() {}
+	protected void updateImage(long gameTime) {}
+	protected void attack(long gameTime) {}
 	public void die(){}
 	
 	/**
@@ -70,18 +70,26 @@ public abstract class ElementObj {
 	 *        1.移动  2.换装  3.子弹发射
 	 */
 	// 模型操作
-	public final void model() {
+	public final void model(long gameTime) {
 		// 先换装
-		updateImage();
+		updateImage(gameTime);
 		// 再移动
 		move();
 		// 发射子弹
-		add();
+		attack(gameTime);
 	}
 	
 	public ElementObj createElement(String str) {
 		
 		return null;
+	}
+
+	public Rectangle getRectangle() {
+		return new Rectangle(x,y,w,h);
+	}
+	//检测碰撞
+	public boolean pk(ElementObj obj) {
+		return this.getRectangle().intersects(obj.getRectangle());
 	}
 	
 	
@@ -118,5 +126,9 @@ public abstract class ElementObj {
 	}
 	public void setIcon(ImageIcon icon) {
 		this.icon = icon;
+	}
+	public void setLive(boolean live) {this.live = live;}
+	public boolean isLive(){
+		return live;
 	}
 }

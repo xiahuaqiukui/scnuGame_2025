@@ -87,9 +87,9 @@ public class ElementManager {
 //		gameElements.put(GameElement.MAPS, new ArrayList<ElementObj>());
 //		gameElements.put(GameElement.ENEMY, new ArrayList<ElementObj>());
 //		gameElements.put(GameElement.BOSS, new ArrayList<ElementObj>());
-		
-		for (GameElement ge:GameElement.values()) { // 通过循环读取枚举类型的方式添加集合
-			gameElements.put(ge, new ArrayList<ElementObj>());
+
+		for (GameElement ge : GameElement.values()) {
+			gameElements.put(ge,new ArrayList<>());
 		}
 		// 其他各种实体+效果......
 	}

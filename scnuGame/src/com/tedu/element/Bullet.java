@@ -52,19 +52,12 @@ public class Bullet extends ElementObj{
 	@Override
 	public void showElement(Graphics g) {
 		g.setColor(Color.red);
-		int x = this.getX();
-		int y = this.getY();
-		switch (this.fx) {
-		case "left": y+=50; break;
-		case "right": x+=100; y+=50; break;
-		}
-		g.fillOval(x, y, this.getW(), this.getH());
+		g.fillOval(this.getX(), this.getY(), this.getW(), this.getH());
 	}
 	
 	@Override
 	protected void move() {
-//		System.out.println(this.fx);
-		
+		//System.out.println(this.fx);
 		switch (this.fx) {
 		case "left": this.setX(this.getX()-this.speed); break;
 		case "right": this.setX(this.getX()+this.speed); break;

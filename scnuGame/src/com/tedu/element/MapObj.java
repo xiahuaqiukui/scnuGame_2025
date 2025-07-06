@@ -11,7 +11,6 @@ public class MapObj extends ElementObj{
                 this.getX(),this.getY(),
                 this.getW(),this.getH(),null);
     }
-
     @Override
     public ElementObj createElement(String str) {
         System.out.println(str);
