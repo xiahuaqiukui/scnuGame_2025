@@ -71,11 +71,13 @@ public abstract class ElementObj {
 	 */
 	// 模型操作
 	public final void model(long gameTime) {
-		// 先换装
-		updateImage(gameTime);
-		// 再移动
+
+
+		// 移动
 		move();
-		// 发射子弹
+		// 换装
+		updateImage(gameTime);
+		// 攻击
 		attack(gameTime);
 	}
 	

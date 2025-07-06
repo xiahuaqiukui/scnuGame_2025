@@ -30,7 +30,6 @@ public class Enemy extends ElementObj{
         this.setX(x);
         this.setY(y);
         this.setIcon(icon);
-
         return this;
     }
 }

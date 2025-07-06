@@ -31,6 +31,12 @@ public class Player1 extends ElementObj{
 	private boolean player1_right_idle = true;
 	private boolean player1_left_walk = false;
 	private boolean player1_right_walk = false;
+	private Collider topCollider;
+	private Collider bottomCollider;
+	private Collider leftCollider;
+	private Collider rightCollider;
+	private int walkSpeed=1;
+	private int runSpeed=5;
 	private long pictureTime=0L;
 	private long attackTime=0L;
 	private int pictureIndex=0;
@@ -59,9 +65,7 @@ public class Player1 extends ElementObj{
 		String[] strs = str.split(",");
 		this.setX(Integer.parseInt(strs[0]));
 		this.setY(Integer.parseInt(strs[1]));
-		System.out.println(GameLoad.imgMaps.get(strs[2]));
-		ImageIcon icon2= GameLoad.imgMaps.get(strs[2]).get(0);
-
+		ImageIcon icon2= GameLoad.imgMaps.get("player1_right_idle").get(0);
 		this.setH(100);
 		this.setW(100);
 		this.setIcon(icon2);
@@ -140,12 +144,29 @@ public class Player1 extends ElementObj{
 	// 重写角色移动方式
 	@Override
 	protected void move() {
+
 		if (this.player1_left_walk && this.getX() > 0) {
-			this.setX(this.getX() - 1);
+			ColliderMove( -walkSpeed,0);
+
+			this.setX(this.getX() - walkSpeed);
 		}
 		if (this.player1_right_walk && this.getX() < 1200-this.getW()) {
-			this.setX(this.getX() + 1);
+
+			ColliderMove(walkSpeed,0);
+			this.setX(this.getX() + walkSpeed);
+
 		}
+	}
+	private void ColliderMove(int XMovement,int YMovement){
+		topCollider.setX(topCollider.getX()+XMovement);
+		bottomCollider.setX(bottomCollider.getX()+XMovement);
+		leftCollider.setX(leftCollider.getX()+XMovement);
+		rightCollider.setX(rightCollider.getX()+XMovement);
+		topCollider.setY(topCollider.getY()+YMovement);
+		bottomCollider.setY(bottomCollider.getY()+YMovement);
+		leftCollider.setY(leftCollider.getY()+YMovement);
+		rightCollider.setY(rightCollider.getY()+YMovement);
+
 	}
 
 	@Override
@@ -212,5 +233,37 @@ public class Player1 extends ElementObj{
 
 		// {x:3,y:1,f:right} json格式 弹药样式可拓展
 		return "x:"+x+",y:"+y+",fx:"+this.fx;
+	}
+
+	public Collider getTopCollider() {
+		return topCollider;
+	}
+
+	public void setTopCollider(Collider topCollider) {
+		this.topCollider = topCollider;
+	}
+
+	public Collider getBottomCollider() {
+		return bottomCollider;
+	}
+
+	public void setBottomCollider(Collider bottomCollider) {
+		this.bottomCollider = bottomCollider;
+	}
+
+	public Collider getLeftCollider() {
+		return leftCollider;
+	}
+
+	public void setLeftCollider(Collider leftCollider) {
+		this.leftCollider = leftCollider;
+	}
+
+	public Collider getRightCollider() {
+		return rightCollider;
+	}
+
+	public void setRightCollider(Collider rightCollider) {
+		this.rightCollider = rightCollider;
 	}
 }
