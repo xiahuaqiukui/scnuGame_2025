@@ -38,7 +38,7 @@ player2_right_attack2=
 player2_right_attack3=
 
 
-steamMan_left_idle=
+steamMan_left_idle=image/3 SteamMan/idle/left
 steamMan_left_walk=
 steamMan_left_hurt=
 steamMan_left_death=
@@ -48,7 +48,7 @@ steamMan_left_attack1=
 steamMan_left_attack2=
 steamMan_left_attack3=
 
-steamMan_right_idle=
+steamMan_right_idle=image/3 SteamMan/idle/right
 steamMan_right_walk=
 steamMan_right_hurt=
 steamMan_right_death=

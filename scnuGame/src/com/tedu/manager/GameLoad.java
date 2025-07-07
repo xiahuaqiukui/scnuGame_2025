@@ -82,8 +82,7 @@ public class GameLoad {
 					imageIcons.add(icon);
 				}
 				imgMaps.put(key.toString(),imageIcons);
-				//System.out.println(GameLoad.imgMaps.keySet());
-				//System.out.println(GameLoad.imgMaps.get("player1_right_walk"));
+
 			}
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -92,19 +91,7 @@ public class GameLoad {
 	public static void playerLoad(){
 		String playerStr="100,700";
 		ElementObj player = new Player1().createElement(playerStr);
-		ElementObj topCollider=new Collider(player.getX(), player.getY()-5,player.getW(),5);
-		ElementObj bottomCollider=new Collider(player.getX(), player.getY()+100,player.getW(),5);
-		ElementObj leftCollider=new Collider(player.getX()-5, player.getY(),5,player.getH()-20);
-		ElementObj rightCollider=new Collider(player.getX()+100, player.getY(),5,player.getH()-20);
-		((Player1)player).setTopCollider((Collider) topCollider);
-		((Player1)player).setBottomCollider((Collider) bottomCollider);
-		((Player1)player).setLeftCollider((Collider) leftCollider);
-		((Player1)player).setRightCollider((Collider) rightCollider);
 		em.addElement(player,GameElement.PLAYER);
-		em.addElement(topCollider,GameElement.COLLIDER);
-		em.addElement(bottomCollider,GameElement.COLLIDER);
-		em.addElement(leftCollider,GameElement.COLLIDER);
-		em.addElement(rightCollider,GameElement.COLLIDER);
 	}
 
 
