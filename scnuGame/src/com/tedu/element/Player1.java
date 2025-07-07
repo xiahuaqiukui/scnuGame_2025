@@ -26,7 +26,7 @@ public class Player1 extends ElementObj{
 	 *       2.什么时候进行修改图片(因为图片是在父类中的属性存储)
 	 *       3.图片应该使用什么集合进行存储
 	 */
-	// 移动属性(四属性方式)
+	// 移动状态属性(走路、奔跑、跳跃、待机)
 	private boolean player1_left_idle = false;
 	private boolean player1_right_idle = true;
 	private boolean player1_left_walk = false;
@@ -36,39 +36,54 @@ public class Player1 extends ElementObj{
 	private boolean player1_left_run=false;
 	private boolean player1_right_run=false;
 	
+	// 碰撞箱
 	private Collider topCollider;
 	private Collider bottomCollider;
 	private Collider leftCollider;
 	private Collider rightCollider;
+	
+	// 速度
 	private int maxXSpeed=1;
+	private int maxXRunSpeed=10;
 	private int maxYSpeed=-15;
 	private int XSpeed=0;
 	private int YSpeed=0;
+	
+	// 重力
 	private int g=1;
-	private int maxXRunSpeed=10;
+	
+	// 换装轮替时间
 	private long pictureTime=0L;
+	
+	// 攻击间隔
 	private long attackTime=0L;
+	
+	// 图片序号(图片轮播时使用)
 	private int pictureIndex=0;
-	// 变量，记录当前主角朝向(默认为右)
+	
+	// 当前主角朝向(默认为右)
 	private String fx = "right";
-	// 战斗控制
-	private int pkType = 0; // true 攻击   false 停止
+	
+	// 攻击类型
+	private int pkType = 0; // 1普攻  2重击  3远程
 
+	
+	
 	public Player1(){}
 	// 初始化玩家属性，目前仅继承父类属性
 	public Player1(int x, int y, int w, int h, ImageIcon icon) {
 		super(x, y, w, h, icon);
 	}
+	
 	// 重写showElement函数，使视图层可以显示图象
 	@Override
 	public void showElement(Graphics g) {
-
 		// 展示图像
 		g.drawImage(this.getIcon().getImage(), 
 				this.getX(), this.getY(), 
 				this.getW(), this.getH(), null);
 	}
-
+	
 	@Override
 	public ElementObj createElement(String str) {
 		String[] strs = str.split(",");
@@ -108,9 +123,9 @@ public class Player1 extends ElementObj{
 				 * @说明 移动控制
 				 */
 				case 65:
-					this.player1_right_walk=false;
-					this.player1_right_idle=false;
-					this.player1_left_idle=false;
+					this.player1_right_walk = false;
+					this.player1_right_idle = false;
+					this.player1_left_idle = false;
 					this.player1_left_walk = true;
 					this.player1_left_run = false;
 					this.player1_right_run = false;
@@ -118,16 +133,24 @@ public class Player1 extends ElementObj{
 					pictureIndex=0;
 					break; // 左
 				case 68:
-					this.player1_right_walk=true;
-					this.player1_right_idle=false;
-					this.player1_left_idle=false;
+					this.player1_right_walk = true;
+					this.player1_right_idle = false;
+					this.player1_left_idle = false;
 					this.player1_left_walk = false;
 					this.player1_left_run = false;
 					this.player1_right_run = false;
 					this.fx = "right";
 					pictureIndex=0;
 					break; // 右
-
+					
+				case 75:
+					if (!bottomCollider.isCollided()) break;
+					if (this.player1_left_idle || this.player1_left_walk || this.player1_left_run) {
+						this.player1_left_jump = true;
+					} else if (this.player1_right_idle || this.player1_right_walk || this.player1_right_run) {
+						this.player1_right_jump = true;
+					}
+					
 				/**
 				 * @说明 战斗控制
 				 */
@@ -162,7 +185,7 @@ public class Player1 extends ElementObj{
 				this.fx = "right";
 				pictureIndex=0;
 				break; // 右
-
+				
 			/**
 			 * @说明 战斗控制
 			 */
@@ -187,14 +210,6 @@ public class Player1 extends ElementObj{
 					this.player1_right_run = false;
 					pictureIndex = 0;
 					break; // 右
-					
-				case 75:
-					if (!bottomCollider.isCollided()) break;
-					if (this.player1_left_idle || this.player1_left_walk || this.player1_left_run) {
-						this.player1_left_jump = true;
-					} else if (this.player1_right_idle || this.player1_right_walk || this.player1_right_run) {
-						this.player1_right_jump = true;
-					}
 
 
 					/**
