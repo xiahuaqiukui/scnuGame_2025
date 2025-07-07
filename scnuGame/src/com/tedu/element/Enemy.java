@@ -6,6 +6,8 @@ import java.util.Random;
 
 public class Enemy extends ElementObj{
 
+    private String Name;
+    private int blood;
     @Override
     public void showElement(Graphics g) {
         g.drawImage(this.getIcon().getImage(),
@@ -14,6 +16,11 @@ public class Enemy extends ElementObj{
     }
     @Override
     public ElementObj createElement(String str) {
+        /**
+         * str格式：
+         * ENEMY=敌人名称,x坐标,y坐标;
+         *
+         * */
         System.out.println(str);
         String []arr=str.split(",");
         ImageIcon icon=null;
@@ -24,7 +31,6 @@ public class Enemy extends ElementObj{
         int y=Integer.parseInt(arr[2]);
         int w=icon.getIconWidth();
         int h=icon.getIconHeight();
-        System.out.println("W:"+w+" H:"+h);
         this.setH(h);
         this.setW(w);
         this.setX(x);
@@ -32,4 +38,13 @@ public class Enemy extends ElementObj{
         this.setIcon(icon);
         return this;
     }
+
+
+    public void getHurt(){
+        blood--;
+        if(blood<=0){
+            setLive(false);
+        }
+    }
+
 }

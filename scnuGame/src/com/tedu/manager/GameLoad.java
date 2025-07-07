@@ -28,6 +28,7 @@ public class GameLoad {
 
 	private static Properties pro = new Properties();
 
+	//包括地图和敌人
 	public static void MapLoad(int mapId){
 		String mapName="com/tedu/text/"+mapId+".map";
 		ClassLoader classLoader = GameLoad.class.getClassLoader();
@@ -42,18 +43,15 @@ public class GameLoad {
 			Enumeration<?> names=pro.propertyNames();
 			while(names.hasMoreElements()){
 				String key= names.nextElement().toString();
-				System.out.println("KEY:"+key);
 				String []arrs=pro.getProperty(key).split(";");
 				if(key.equals("ENEMY")){
 					for(int i=0;i<arrs.length;i++){
 						ElementObj element = new Enemy().createElement(key+","+arrs[i]);
-						System.out.println(element);
 						em.addElement(element,GameElement.ENEMY);
 					}
 				}else{
 					for(int i=0;i<arrs.length;i++){
 						ElementObj element = new MapObj().createElement(key+","+arrs[i]);
-						System.out.println(element);
 						em.addElement(element,GameElement.MAPS);
 					}
 				}
@@ -73,7 +71,6 @@ public class GameLoad {
 			Set<Object> set =  pro.keySet();
 			for(Object key:set){
 				String url=pro.getProperty(key.toString());
-				System.out.println("key:"+key+",url:"+url);
 				List<ImageIcon> imageIcons=new ArrayList<>();
 				for(int i=1;;i++){
 //					image/1 Woodcutter/walk/right/1.png
