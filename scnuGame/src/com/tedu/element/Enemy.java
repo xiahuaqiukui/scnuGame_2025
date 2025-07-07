@@ -14,7 +14,7 @@ public class Enemy extends ElementObj{
     }
     @Override
     public ElementObj createElement(String str) {
-        System.out.println(str);
+//        System.out.println(str);
         String []arr=str.split(",");
         ImageIcon icon=null;
         switch (arr[0]){
@@ -24,7 +24,7 @@ public class Enemy extends ElementObj{
         int y=Integer.parseInt(arr[2]);
         int w=icon.getIconWidth();
         int h=icon.getIconHeight();
-        System.out.println("W:"+w+" H:"+h);
+//        System.out.println("W:"+w+" H:"+h);
         this.setH(h);
         this.setW(w);
         this.setX(x);

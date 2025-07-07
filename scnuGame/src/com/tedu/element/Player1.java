@@ -147,13 +147,13 @@ public class Player1 extends ElementObj{
 	// 重写角色移动方式
 	@Override
 	protected void move() {
-		System.out.println("leftCollider"+leftCollider.isCollided());
-		System.out.println("rightCollider"+rightCollider.isCollided());
-		System.out.println("topCollider"+topCollider.isCollided());
-		System.out.println("bottomCollider"+bottomCollider.isCollided());
+//		System.out.println("leftCollider"+leftCollider.isCollided());
+//		System.out.println("rightCollider"+rightCollider.isCollided());
+//		System.out.println("topCollider"+topCollider.isCollided());
+//		System.out.println("bottomCollider"+bottomCollider.isCollided());
 		if (this.player1_left_walk && this.getX() > 0) {
 			ColliderMove( -XSpeed,0);
-			System.out.println("leftCollider"+leftCollider.isCollided());
+//			System.out.println("leftCollider"+leftCollider.isCollided());
 			if(leftCollider.isCollided()){
 				ColliderMove( XSpeed,0);
 			}else{

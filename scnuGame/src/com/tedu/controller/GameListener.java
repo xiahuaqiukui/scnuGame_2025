@@ -2,107 +2,81 @@ package com.tedu.controller;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import com.tedu.element.ElementObj;
 import com.tedu.manager.ElementManager;
 import com.tedu.manager.GameElement;
 
-/**
- * @说明 监听类，用于监听用户的操作 KeyListener
- * @author renjj
- *
- */
+public class GameListener implements KeyListener {
+    ElementManager em = ElementManager.getManager();
 
-public class GameListener implements KeyListener{
-	// 获取游戏资源管理器
-	ElementManager em = ElementManager.getManager();
-	
-	// 双击检测间隔, 参数
-	private int lastKey = -1;
-	private long lastKeyPressTime = 0; // 最后一次按键的时间
-	private final int DOUBLE_CLICK_HIGH_THRESHOLD = 500; // 500ms
-	private final int DOUBLE_CLICK_LOW_THRESHOLD = 100; // 100ms
-	
-	/**
-	 * 通过set来记录所有按下的键
-	 * 第一次按下，加入到set1中
-	 * 第二次按下，与前一次按下键相同，若在时间阈值内，加入到set2中
-	 * 松开从set1和set2删除
-	 */
-	private Set<Integer> set1 = new HashSet<Integer>();
-	private Set<Integer> set2 = new HashSet<Integer>();
-	
-	@Override
-	public void keyTyped(KeyEvent e) {
-	}
+    // 记录每个键的上一次按下/释放时间
+    private Map<Integer, Long> keyFirstPressedTime = new HashMap<>();
+    private Map<Integer, Long> keyLastReleasedTime = new HashMap<>();
+    private Set<Integer> pressedKeys = new HashSet<>();
+    private Set<Integer> runningKeys = new HashSet<>();
 
-	@Override
-	public void keyPressed(KeyEvent e) {
-//		测试按键key值
-//		System.out.println("keyPressed"+e.getKeyCode());
-		
-		int key = e.getKeyCode(); // 获取此时键盘值
-		long currentTime = System.currentTimeMillis(); // 获取此时时间值
-		
-		// 获取玩家集合,可以得到每个玩家的按键
-		List<ElementObj> player = em.getElementsByKey(GameElement.PLAYER);
-		
-		if (this.set2.contains(key)) {
-			for (ElementObj obj:player) {
-				obj.keyClick(2, key);
-			}
-			return ;
-		}
-		
-		if (this.set1.contains(key)) {
-			if (currentTime - lastKeyPressTime <= DOUBLE_CLICK_HIGH_THRESHOLD
-			 && currentTime - lastKeyPressTime >= DOUBLE_CLICK_LOW_THRESHOLD
-			 && lastKey == key)
-			{
-		        set2.add(key);
-		        for (ElementObj obj:player) {
-					obj.keyClick(2, key);
-				}
-		        return ;
-		    } else {
-		    	for (ElementObj obj:player) {
-					obj.keyClick(1, key);
-				}
-		    	lastKey = key;
-		    	lastKeyPressTime = currentTime;
-		    	return ;
-		    }
-		}
-		
-		// 既不在set1也不在set2
-		set1.add(key);
-		lastKey = key;
-        lastKeyPressTime = currentTime;
-		for (ElementObj obj:player) {
-			obj.keyClick(1, key);
-		}
-	}
+    // 时间阈值
+    private final int DOUBLECLICK_THRESHOLD = 300;  // 双击时间间隔
 
-	// 松开
-	@Override
-	public void keyReleased(KeyEvent e) {
-//		System.out.println("keyReleased"+e.getKeyCode());
-		int key = e.getKeyCode();
-		if (this.set2.contains(key)) {
-			set2.remove(key); // 移除数据
-		}
-		if (this.set1.contains(key)) {
-			set1.remove(key); // 移除数据
-		}
-		
-		// 获取玩家集合
-		List<ElementObj> player = em.getElementsByKey(GameElement.PLAYER);
-		for (ElementObj obj:player) {
-			obj.keyClick(0, key);
-		}
-	}
-	
+    @Override
+    public void keyTyped(KeyEvent e) {}
+
+    @Override
+    public void keyPressed(KeyEvent e) {
+        int key = e.getKeyCode();
+        long now = System.currentTimeMillis();
+        List<ElementObj> players = em.getElementsByKey(GameElement.PLAYER);
+
+        // 如果已经在奔跑状态，持续奔跑
+        if (runningKeys.contains(key)) {
+            for (ElementObj obj : players) {
+                obj.keyClick(2, key); // 持续奔跑
+            }
+            return;
+        }
+
+        // 如果这个键是首次按下（不是长按重复）
+        if (!pressedKeys.contains(key)) {
+            pressedKeys.add(key);
+
+            // 判断是否为双击：第一次按下、释放、第二次按下都要记录
+            if (keyFirstPressedTime.containsKey(key) && keyLastReleasedTime.containsKey(key)) {
+                long down1 = keyFirstPressedTime.get(key);
+                long up1 = keyLastReleasedTime.get(key);
+                long down2 = now;
+
+                if ((down2 - down1) <= DOUBLECLICK_THRESHOLD && (up1 - down1) <= DOUBLECLICK_THRESHOLD) {
+                    // 满足双击条件
+                    runningKeys.add(key);
+                    for (ElementObj obj : players) {
+                        obj.keyClick(2, key); // 开始奔跑
+                    }
+                    return;
+                }
+            }
+
+            // 如果不是双击，就作为普通按键处理
+            keyFirstPressedTime.put(key, now);
+            for (ElementObj obj : players) {
+                obj.keyClick(1, key); // 正常移动
+            }
+        }
+    }
+
+    @Override
+    public void keyReleased(KeyEvent e) {
+        int key = e.getKeyCode();
+        long now = System.currentTimeMillis();
+        List<ElementObj> players = em.getElementsByKey(GameElement.PLAYER);
+
+        pressedKeys.remove(key);
+        runningKeys.remove(key);
+        keyLastReleasedTime.put(key, now);
+
+        for (ElementObj obj : players) {
+            obj.keyClick(0, key); // 停止动作
+        }
+    }
 }
