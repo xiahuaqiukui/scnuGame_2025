@@ -13,7 +13,7 @@ public class MapObj extends ElementObj{
     }
     @Override
     public ElementObj createElement(String str) {
-        System.out.println(str);
+//        System.out.println(str);
         String []arr=str.split(",");
         ImageIcon icon=null;
         switch (arr[0]){
