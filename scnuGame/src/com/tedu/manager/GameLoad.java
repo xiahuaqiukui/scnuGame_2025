@@ -97,8 +97,8 @@ public class GameLoad {
 		ElementObj player = new Player1().createElement(playerStr);
 		ElementObj topCollider=new Collider(player.getX(), player.getY()-5,player.getW(),5);
 		ElementObj bottomCollider=new Collider(player.getX(), player.getY()+100,player.getW(),5);
-		ElementObj leftCollider=new Collider(player.getX()-5, player.getY(),5,player.getH());
-		ElementObj rightCollider=new Collider(player.getX()+100, player.getY(),5,player.getH());
+		ElementObj leftCollider=new Collider(player.getX()-5, player.getY(),5,player.getH()-20);
+		ElementObj rightCollider=new Collider(player.getX()+100, player.getY(),5,player.getH()-20);
 		((Player1)player).setTopCollider((Collider) topCollider);
 		((Player1)player).setBottomCollider((Collider) bottomCollider);
 		((Player1)player).setLeftCollider((Collider) leftCollider);

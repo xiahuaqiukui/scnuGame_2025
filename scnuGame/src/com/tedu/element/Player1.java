@@ -37,8 +37,11 @@ public class Player1 extends ElementObj{
 	private Collider bottomCollider;
 	private Collider leftCollider;
 	private Collider rightCollider;
-	private int XSpeed=1;
-	private int YSpeed=1;
+	private int maxXSpeed=1;
+	private int maxYSpeed=-15;
+	private int XSpeed=0;
+	private int YSpeed=0;
+	private int g=1;
 	private int runSpeed=5;
 	private long pictureTime=0L;
 	private long attackTime=0L;
@@ -85,55 +88,65 @@ public class Player1 extends ElementObj{
 		System.out.println(bl+","+key);
 		if (bl==1) {
 			switch (key) {
-			/**
-			 * @说明 移动控制
-			 */
-			case 65:
-				this.player1_right_walk=false;
-				this.player1_right_idle=false;
-				this.player1_left_idle=false;
-				this.player1_left_walk = true;
-				this.fx = "left";
-				pictureIndex=0;
-				break; // 左
-			case 68:
-				this.player1_left_walk=false;
-				this.player1_left_idle=false;
-				this.player1_right_idle=false;
-				this.player1_right_walk = true;
-				this.fx = "right";
-				pictureIndex=0;
-				break; // 右
-			
-			/**
-			 * @说明 战斗控制
-			 */
-			case 74: this.pkType = 1; break; // 开启攻击状态
-			case 76: this.pkType = 2; break;
-			case 73: this.pkType = 3; break;
+				/**
+				 * @说明 移动控制
+				 */
+				case 65:
+					this.player1_right_walk=false;
+					this.player1_right_idle=false;
+					this.player1_left_idle=false;
+					this.player1_left_walk = true;
+					this.fx = "left";
+					pictureIndex=0;
+					break; // 左
+				case 68:
+					this.player1_left_walk=false;
+					this.player1_left_idle=false;
+					this.player1_right_idle=false;
+					this.player1_right_walk = true;
+					this.fx = "right";
+					pictureIndex=0;
+					break; // 右
+
+				/**
+				 * @说明 战斗控制
+				 */
+				case 74: this.pkType = 1; break; // 开启攻击状态
+				case 76: this.pkType = 2; break;
+				case 73: this.pkType = 3; break;
 			}
 		} else {
 			switch (key) {
-			/**
-			 * @说明 移动控制
-			 */
-			case 65:
-				this.player1_left_walk = false;
-				this.player1_left_idle = true;
-				pictureIndex=0;
-				break; // 左
-			case 68:
-				this.player1_right_walk = false;
-				this.player1_right_idle = true;
-				pictureIndex=0;
-				break; // 右
-			
-			/**
-			 * @说明 战斗控制
-			 */
-			case 76:
-			case 73:
-			case 74: this.pkType = 0; break;
+				/**
+				 * @说明 移动控制
+				 */
+				case 65:
+					this.player1_left_walk = false;
+					this.player1_left_idle = true;
+					pictureIndex = 0;
+					break; // 左
+				case 68:
+					this.player1_right_walk = false;
+					this.player1_right_idle = true;
+					pictureIndex = 0;
+					break; // 右
+				case 75:
+					if (!bottomCollider.isCollided()) break;
+					if (this.player1_left_idle || this.player1_left_walk) {
+						this.player1_left_jump = true;
+					} else if (this.player1_right_idle || this.player1_right_walk) {
+						this.player1_right_jump = true;
+					}
+
+
+					/**
+					 * @说明 战斗控制
+					 */
+				case 76:
+				case 73:
+				case 74:
+					this.pkType = 0;
+					break;
 			}
 		}
 	}
@@ -147,29 +160,59 @@ public class Player1 extends ElementObj{
 	// 重写角色移动方式
 	@Override
 	protected void move() {
-//		System.out.println("leftCollider"+leftCollider.isCollided());
-//		System.out.println("rightCollider"+rightCollider.isCollided());
-//		System.out.println("topCollider"+topCollider.isCollided());
-//		System.out.println("bottomCollider"+bottomCollider.isCollided());
+
+
+
+		playerXMove();
+		playerYMove();
+
+
+		System.out.println(XSpeed);
+		System.out.println(YSpeed);
+		XSpeed=0;
+		YSpeed=Math.min(20,YSpeed+g);
+
+	}
+	private void playerXMove(){
 		if (this.player1_left_walk && this.getX() > 0) {
-			ColliderMove( -XSpeed,0);
-//			System.out.println("leftCollider"+leftCollider.isCollided());
+			XSpeed=-maxXSpeed;
+			ColliderMove( XSpeed,0);
 			if(leftCollider.isCollided()){
-				ColliderMove( XSpeed,0);
-			}else{
-				this.setX(this.getX() - XSpeed);
+				ColliderMove( -XSpeed,0);
+				XSpeed=0;
 			}
 		}
-		if (this.player1_right_walk && this.getX() < 1200-this.getW()) {
+		else if (this.player1_right_walk && this.getX() < 1200-this.getW()) {
+			XSpeed=maxXSpeed;
 			ColliderMove(XSpeed,0);
 			if(rightCollider.isCollided()){
 				ColliderMove( -XSpeed,0);
-			}else{
-				this.setX(this.getX() + XSpeed);
+				XSpeed=0;
 			}
-
 		}
+		this.setX(this.getX() + XSpeed);
 	}
+	private void playerYMove(){
+		//按下跳跃键
+		if(this.player1_left_jump||this.player1_right_jump){
+			this.player1_left_jump=false;
+			this.player1_right_jump=false;
+			YSpeed=maxYSpeed;
+		}
+
+		//默认下落
+		ColliderMove( 0,YSpeed);
+		if(YSpeed>0){
+			if(bottomCollider.isCollided()){
+				ColliderMove( 0,-YSpeed);
+				YSpeed=0;
+			}
+		}
+
+		this.setY(this.getY() + YSpeed);
+
+	}
+
 	private void ColliderMove(int XMovement,int YMovement){
 		topCollider.setX(topCollider.getX()+XMovement);
 		bottomCollider.setX(bottomCollider.getX()+XMovement);
@@ -179,7 +222,6 @@ public class Player1 extends ElementObj{
 		bottomCollider.setY(bottomCollider.getY()+YMovement);
 		leftCollider.setY(leftCollider.getY()+YMovement);
 		rightCollider.setY(rightCollider.getY()+YMovement);
-
 	}
 
 	@Override
