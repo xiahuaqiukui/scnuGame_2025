@@ -359,7 +359,7 @@ public class Player1 extends ElementObj{
 	public void attack(long gameTime) {
 		if (pkType == 0) {
 			return ;
-		}else if(pkType == 1){// 普攻
+		}else if(pkType == 1){ // 普攻
 			if(gameTime-this.attackTime>=50){
 				attackTime=gameTime;
 				// 动画
