@@ -23,7 +23,6 @@ public class GameStart {
 		gj.setKeyListener(listener);
 		gj.setMainThread(th);
 
-
 		gj.start();
 
 	}

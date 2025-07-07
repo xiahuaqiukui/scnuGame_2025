@@ -33,6 +33,9 @@ public class Player1 extends ElementObj{
 	private boolean player1_right_walk = false;
 	private boolean player1_left_jump=false;
 	private boolean player1_right_jump=false;
+	private boolean player1_left_run=false;
+	private boolean player1_right_run=false;
+	
 	private Collider topCollider;
 	private Collider bottomCollider;
 	private Collider leftCollider;
@@ -42,7 +45,7 @@ public class Player1 extends ElementObj{
 	private int XSpeed=0;
 	private int YSpeed=0;
 	private int g=1;
-	private int runSpeed=5;
+	private int maxXRunSpeed=10;
 	private long pictureTime=0L;
 	private long attackTime=0L;
 	private int pictureIndex=0;
@@ -96,14 +99,18 @@ public class Player1 extends ElementObj{
 					this.player1_right_idle=false;
 					this.player1_left_idle=false;
 					this.player1_left_walk = true;
+					this.player1_left_run = false;
+					this.player1_right_run = false;
 					this.fx = "left";
 					pictureIndex=0;
 					break; // 左
 				case 68:
-					this.player1_left_walk=false;
-					this.player1_left_idle=false;
+					this.player1_right_walk=true;
 					this.player1_right_idle=false;
-					this.player1_right_walk = true;
+					this.player1_left_idle=false;
+					this.player1_left_walk = false;
+					this.player1_left_run = false;
+					this.player1_right_run = false;
 					this.fx = "right";
 					pictureIndex=0;
 					break; // 右
@@ -115,6 +122,41 @@ public class Player1 extends ElementObj{
 				case 76: this.pkType = 2; break;
 				case 73: this.pkType = 3; break;
 			}
+		} else if(bl==2){
+			switch (key) {
+			/**
+			 * @说明 移动控制
+			 */
+			case 65:
+				this.player1_right_walk=false;
+				this.player1_right_idle=false;
+				this.player1_left_idle=false;
+				this.player1_left_walk = false;
+				this.player1_left_run = true;
+				this.player1_right_run = false;
+				
+				this.fx = "left";
+				pictureIndex=0;
+				break; // 左
+			case 68:
+				this.player1_right_walk=false;
+				this.player1_right_idle=false;
+				this.player1_left_idle=false;
+				this.player1_left_walk = false;
+				this.player1_left_run = false;
+				this.player1_right_run = true;
+				
+				this.fx = "right";
+				pictureIndex=0;
+				break; // 右
+
+			/**
+			 * @说明 战斗控制
+			 */
+			case 74: this.pkType = 1; break; // 开启攻击状态
+			case 76: this.pkType = 2; break;
+			case 73: this.pkType = 3; break;
+			}
 		} else {
 			switch (key) {
 				/**
@@ -123,18 +165,21 @@ public class Player1 extends ElementObj{
 				case 65:
 					this.player1_left_walk = false;
 					this.player1_left_idle = true;
+					this.player1_left_run = false;
 					pictureIndex = 0;
 					break; // 左
 				case 68:
 					this.player1_right_walk = false;
 					this.player1_right_idle = true;
+					this.player1_right_run = false;
 					pictureIndex = 0;
 					break; // 右
+					
 				case 75:
 					if (!bottomCollider.isCollided()) break;
-					if (this.player1_left_idle || this.player1_left_walk) {
+					if (this.player1_left_idle || this.player1_left_walk || this.player1_left_run) {
 						this.player1_left_jump = true;
-					} else if (this.player1_right_idle || this.player1_right_walk) {
+					} else if (this.player1_right_idle || this.player1_right_walk || this.player1_right_run) {
 						this.player1_right_jump = true;
 					}
 
@@ -167,8 +212,8 @@ public class Player1 extends ElementObj{
 		playerYMove();
 
 
-		System.out.println(XSpeed);
-		System.out.println(YSpeed);
+//		System.out.println(XSpeed);
+//		System.out.println(YSpeed);
 		XSpeed=0;
 		YSpeed=Math.min(20,YSpeed+g);
 
@@ -181,9 +226,22 @@ public class Player1 extends ElementObj{
 				ColliderMove( -XSpeed,0);
 				XSpeed=0;
 			}
-		}
-		else if (this.player1_right_walk && this.getX() < 1200-this.getW()) {
+		} else if (this.player1_right_walk && this.getX() < 1200-this.getW()) {
 			XSpeed=maxXSpeed;
+			ColliderMove(XSpeed,0);
+			if(rightCollider.isCollided()){
+				ColliderMove( -XSpeed,0);
+				XSpeed=0;
+			}
+		} else if (this.player1_left_run && this.getX() > 0) {
+			XSpeed=-maxXRunSpeed;
+			ColliderMove(XSpeed,0);
+			if(leftCollider.isCollided()){
+				ColliderMove( -XSpeed,0);
+				XSpeed=0;
+			}
+		} else if (this.player1_right_run && this.getX() < 1200-this.getW()) {
+			XSpeed=maxXRunSpeed;
 			ColliderMove(XSpeed,0);
 			if(rightCollider.isCollided()){
 				ColliderMove( -XSpeed,0);
@@ -241,6 +299,14 @@ public class Player1 extends ElementObj{
 				List<ImageIcon> imageIcons = GameLoad.imgMaps.get("player1_"+fx+"_walk");
 				this.setIcon(imageIcons.get(pictureIndex));
 				pictureIndex++;
+				pictureIndex%=imageIcons.size();
+				pictureTime=gameTime;
+			}else if (this.player1_left_run||this.player1_right_run) {
+				List<ImageIcon> imageIcons = GameLoad.imgMaps.get("player1_"+fx+"_run");
+				this.setIcon(imageIcons.get(pictureIndex));
+//				System.out.println(pictureIndex);
+				pictureIndex++;
+//				System.out.println(imageIcons.size());
 				pictureIndex%=imageIcons.size();
 				pictureTime=gameTime;
 			}

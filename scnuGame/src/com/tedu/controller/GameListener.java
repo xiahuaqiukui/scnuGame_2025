@@ -11,14 +11,16 @@ import com.tedu.manager.GameElement;
 public class GameListener implements KeyListener {
     ElementManager em = ElementManager.getManager();
 
-    // 记录每个键的上一次按下/释放时间
     private Map<Integer, Long> keyFirstPressedTime = new HashMap<>();
     private Map<Integer, Long> keyLastReleasedTime = new HashMap<>();
+
+    // 当前已经按住的键
     private Set<Integer> pressedKeys = new HashSet<>();
+
+    // 当前正在奔跑状态的键
     private Set<Integer> runningKeys = new HashSet<>();
 
-    // 时间阈值
-    private final int DOUBLECLICK_THRESHOLD = 300;  // 双击时间间隔
+    private final int DOUBLECLICK_THRESHOLD = 300;
 
     @Override
     public void keyTyped(KeyEvent e) {}
@@ -29,39 +31,32 @@ public class GameListener implements KeyListener {
         long now = System.currentTimeMillis();
         List<ElementObj> players = em.getElementsByKey(GameElement.PLAYER);
 
-        // 如果已经在奔跑状态，持续奔跑
-        if (runningKeys.contains(key)) {
-            for (ElementObj obj : players) {
-                obj.keyClick(2, key); // 持续奔跑
-            }
+        // 如果是重复 keyPressed（长按造成的），跳过处理
+        if (pressedKeys.contains(key)) {
             return;
         }
 
-        // 如果这个键是首次按下（不是长按重复）
-        if (!pressedKeys.contains(key)) {
-            pressedKeys.add(key);
+        pressedKeys.add(key); // 第一次真正按下
 
-            // 判断是否为双击：第一次按下、释放、第二次按下都要记录
-            if (keyFirstPressedTime.containsKey(key) && keyLastReleasedTime.containsKey(key)) {
-                long down1 = keyFirstPressedTime.get(key);
-                long up1 = keyLastReleasedTime.get(key);
-                long down2 = now;
+        // 是否满足双击条件
+        if (keyFirstPressedTime.containsKey(key) && keyLastReleasedTime.containsKey(key)) {
+            long down1 = keyFirstPressedTime.get(key);
+            long up1 = keyLastReleasedTime.get(key);
+            long down2 = now;
 
-                if ((down2 - down1) <= DOUBLECLICK_THRESHOLD && (up1 - down1) <= DOUBLECLICK_THRESHOLD) {
-                    // 满足双击条件
-                    runningKeys.add(key);
-                    for (ElementObj obj : players) {
-                        obj.keyClick(2, key); // 开始奔跑
-                    }
-                    return;
+            if ((down2 - down1) <= DOUBLECLICK_THRESHOLD && (up1 - down1) <= DOUBLECLICK_THRESHOLD) {
+                runningKeys.add(key); // 进入奔跑状态
+                for (ElementObj obj : players) {
+                    obj.keyClick(2, key); // 只触发一次
                 }
+                return;
             }
+        }
 
-            // 如果不是双击，就作为普通按键处理
-            keyFirstPressedTime.put(key, now);
-            for (ElementObj obj : players) {
-                obj.keyClick(1, key); // 正常移动
-            }
+        // 普通单击移动
+        keyFirstPressedTime.put(key, now);
+        for (ElementObj obj : players) {
+            obj.keyClick(1, key); // 只触发一次
         }
     }
 
@@ -71,8 +66,8 @@ public class GameListener implements KeyListener {
         long now = System.currentTimeMillis();
         List<ElementObj> players = em.getElementsByKey(GameElement.PLAYER);
 
-        pressedKeys.remove(key);
-        runningKeys.remove(key);
+        pressedKeys.remove(key);      // 松开该键
+        runningKeys.remove(key);      // 停止奔跑状态
         keyLastReleasedTime.put(key, now);
 
         for (ElementObj obj : players) {
