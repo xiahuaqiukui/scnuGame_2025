@@ -7,7 +7,6 @@ player1_left_jump=
 player1_left_attack1=image/1 Woodcutter/attack1/left
 player1_left_attack2=
 player1_left_attack3=
-
 player1_right_idle=image/1 Woodcutter/idle/right
 player1_right_walk=image/1 Woodcutter/walk/right
 player1_right_hurt=
@@ -18,3 +17,43 @@ player1_right_attack1=image/1 Woodcutter/attack1/right
 player1_right_attack2=
 player1_right_attack3=
 
+
+player2_left_idle=
+player2_left_walk=
+player2_left_hurt=
+player2_left_death=
+player2_left_run=
+player2_left_jump=
+player2_left_attack1=
+player2_left_attack2=
+player2_left_attack3=
+player2_right_idle=
+player2_right_walk=
+player2_right_hurt=
+player2_right_death=
+player2_right_run=
+player2_right_jump=
+player2_right_attack1=
+player2_right_attack2=
+player2_right_attack3=
+
+
+steamMan_left_idle=
+steamMan_left_walk=
+steamMan_left_hurt=
+steamMan_left_death=
+steamMan_left_run=
+steamMan_left_jump=
+steamMan_left_attack1=
+steamMan_left_attack2=
+steamMan_left_attack3=
+
+steamMan_right_idle=
+steamMan_right_walk=
+steamMan_right_hurt=
+steamMan_right_death=
+steamMan_right_run=
+steamMan_right_jump=
+steamMan_right_attack1=
+steamMan_right_attack2=
+steamMan_right_attack3=
