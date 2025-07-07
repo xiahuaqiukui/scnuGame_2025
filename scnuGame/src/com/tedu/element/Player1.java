@@ -31,11 +31,14 @@ public class Player1 extends ElementObj{
 	private boolean player1_right_idle = true;
 	private boolean player1_left_walk = false;
 	private boolean player1_right_walk = false;
+	private boolean player1_left_jump=false;
+	private boolean player1_right_jump=false;
 	private Collider topCollider;
 	private Collider bottomCollider;
 	private Collider leftCollider;
 	private Collider rightCollider;
-	private int walkSpeed=1;
+	private int XSpeed=1;
+	private int YSpeed=1;
 	private int runSpeed=5;
 	private long pictureTime=0L;
 	private long attackTime=0L;
@@ -144,16 +147,26 @@ public class Player1 extends ElementObj{
 	// 重写角色移动方式
 	@Override
 	protected void move() {
-
+		System.out.println("leftCollider"+leftCollider.isCollided());
+		System.out.println("rightCollider"+rightCollider.isCollided());
+		System.out.println("topCollider"+topCollider.isCollided());
+		System.out.println("bottomCollider"+bottomCollider.isCollided());
 		if (this.player1_left_walk && this.getX() > 0) {
-			ColliderMove( -walkSpeed,0);
-
-			this.setX(this.getX() - walkSpeed);
+			ColliderMove( -XSpeed,0);
+			System.out.println("leftCollider"+leftCollider.isCollided());
+			if(leftCollider.isCollided()){
+				ColliderMove( XSpeed,0);
+			}else{
+				this.setX(this.getX() - XSpeed);
+			}
 		}
 		if (this.player1_right_walk && this.getX() < 1200-this.getW()) {
-
-			ColliderMove(walkSpeed,0);
-			this.setX(this.getX() + walkSpeed);
+			ColliderMove(XSpeed,0);
+			if(rightCollider.isCollided()){
+				ColliderMove( -XSpeed,0);
+			}else{
+				this.setX(this.getX() + XSpeed);
+			}
 
 		}
 	}

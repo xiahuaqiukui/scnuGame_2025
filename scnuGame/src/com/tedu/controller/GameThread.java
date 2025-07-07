@@ -3,6 +3,7 @@ package com.tedu.controller;
 import java.util.List;
 import java.util.Map;
 
+import com.tedu.element.Collider;
 import com.tedu.element.ElementObj;
 import com.tedu.manager.ElementManager;
 import com.tedu.manager.GameElement;
@@ -63,9 +64,11 @@ public class GameThread extends Thread{
 			List<ElementObj> enemys = em.getElementsByKey(GameElement.ENEMY);
 			List<ElementObj> bullets = em.getElementsByKey(GameElement.BULLET);
 			List<ElementObj> maps = em.getElementsByKey(GameElement.MAPS);
+			List<ElementObj> collider = em.getElementsByKey(GameElement.COLLIDER);
 			moveAndUpdate(all,gameTime);
 
 			ElementPK(enemys,bullets);
+			ColliderCollided(collider,maps);
 
 			gameTime++;
 			try {
@@ -115,16 +118,33 @@ public class GameThread extends Thread{
 		}
 	}
 
-	public void ElementPK(List<ElementObj> listA, List<ElementObj> ListB) {
+	public void ElementPK(List<ElementObj> listA, List<ElementObj> listB) {
 		for(int i=0;i<listA.size();i++){
 			ElementObj enemy=listA.get(i);
-			for(int j=0;j<ListB.size();j++){
-				ElementObj file=ListB.get(j);
+			for(int j=0;j<listB.size();j++){
+				ElementObj file=listB.get(j);
 				if(enemy.pk(file)){
 					enemy.setLive(false);
 					file.setLive(false);
 					break;
 				}
+			}
+		}
+	}
+	public void ColliderCollided(List<ElementObj> listA, List<ElementObj> listB) {
+		for(int i=0;i<listA.size();i++){
+			ElementObj collider=listA.get(i);
+			if(collider instanceof Collider){
+				Collider A=(Collider) collider;
+				boolean collided=false;
+				for(int j=0;j<listB.size();j++){
+					ElementObj B=listB.get(j);
+					if(A.pk(B)){
+						collided=true;
+					}
+				}
+				A.setCollided(collided);
+				//System.out.println(A+" collided "+collided);
 			}
 		}
 	}

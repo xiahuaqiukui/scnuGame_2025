@@ -5,6 +5,7 @@ import com.tedu.manager.GameElement;
 import java.awt.*;
 
 public class Collider extends ElementObj {
+    private boolean isCollided=false;
 
     @Override
     public void showElement(Graphics g) {
@@ -17,5 +18,13 @@ public class Collider extends ElementObj {
         setY(y);
         setW(w);
         setH(h);
+    }
+
+    public boolean isCollided() {
+        return isCollided;
+    }
+
+    public void setCollided(boolean collided) {
+        isCollided = collided;
     }
 }
