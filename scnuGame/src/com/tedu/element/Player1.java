@@ -97,6 +97,19 @@ public class Player1 extends ElementObj{
 		this.setH(100);
 		this.setW(100);
 		this.setIcon(icon2);
+		ElementObj topCollider=new Collider(getX(), getY()-5,getW(),5);
+		ElementObj bottomCollider=new Collider(getX(), getY()+100,getW(),5);
+		ElementObj leftCollider=new Collider(getX()-5, getY(),5,getH()-15);
+		ElementObj rightCollider=new Collider(getX()+100, getY(),5,getH()-15);
+		setTopCollider((Collider) topCollider);
+		setBottomCollider((Collider) bottomCollider);
+		setLeftCollider((Collider) leftCollider);
+		setRightCollider((Collider) rightCollider);
+
+		ElementManager.getManager().addElement(topCollider,GameElement.COLLIDER);
+		ElementManager.getManager().addElement(bottomCollider,GameElement.COLLIDER);
+		ElementManager.getManager().addElement(leftCollider,GameElement.COLLIDER);
+		ElementManager.getManager().addElement(rightCollider,GameElement.COLLIDER);
 		return this;
 	}
 
