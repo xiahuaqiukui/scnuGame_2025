@@ -26,7 +26,17 @@ public class Player1 extends ElementObj{
 	 *       2.什么时候进行修改图片(因为图片是在父类中的属性存储)
 	 *       3.图片应该使用什么集合进行存储
 	 */
-	// 移动状态属性(走路、奔跑、跳跃、待机)
+	
+	// 角色属性
+	private int player1_hp=100; // 血量
+	private int player1_vit=10; // 耐力
+	private int attack=2; // 攻击力
+	private long attackTime=0L; // 攻击间隔
+	
+	// 攻击类型  1普攻  2重击  3远程
+	private int pkType = 0;
+	
+	// 移动状态属性(走路、奔跑、跳跃、待机 4个状态)
 	private boolean player1_left_idle = false;
 	private boolean player1_right_idle = true;
 	private boolean player1_left_walk = false;
@@ -43,29 +53,23 @@ public class Player1 extends ElementObj{
 	private Collider rightCollider;
 	
 	// 速度
-	private int maxXSpeed=1;
-	private int maxXRunSpeed=10;
-	private int maxYSpeed=-15;
-	private int XSpeed=0;
-	private int YSpeed=0;
+	private int maxXSpeed=2; // x轴最大速度
+	private int maxXRunSpeed=7; // x轴奔跑最大速度
+	private int maxYSpeed=-15; // 最大下落/上升速度
+	private int XSpeed=0; // 当前x轴速度
+	private int YSpeed=0; // 当前y轴速度
 	
-	// 重力
+	// 重力(下落速度相关)
 	private int g=1;
 	
 	// 换装轮替时间
 	private long pictureTime=0L;
 	
-	// 攻击间隔
-	private long attackTime=0L;
-	
 	// 图片序号(图片轮播时使用)
 	private int pictureIndex=0;
 	
-	// 当前主角朝向(默认为右)
+	// 主角朝向(初始默认为右)
 	private String fx = "right";
-	
-	// 攻击类型
-	private int pkType = 0; // 1普攻  2重击  3远程
 
 	
 	
@@ -130,14 +134,6 @@ public class Player1 extends ElementObj{
 					pictureIndex=0;
 					break; // 右
 					
-				case 75:
-					if (!bottomCollider.isCollided()) break;
-					if (this.player1_left_idle || this.player1_left_walk || this.player1_left_run) {
-						this.player1_left_jump = true;
-					} else if (this.player1_right_idle || this.player1_right_walk || this.player1_right_run) {
-						this.player1_right_jump = true;
-					}
-					
 				/**
 				 * @说明 战斗控制
 				 */
@@ -172,7 +168,7 @@ public class Player1 extends ElementObj{
 				this.fx = "right";
 				pictureIndex=0;
 				break; // 右
-				
+
 			/**
 			 * @说明 战斗控制
 			 */
@@ -198,10 +194,17 @@ public class Player1 extends ElementObj{
 					pictureIndex = 0;
 					break; // 右
 
-
-					/**
-					 * @说明 战斗控制
-					 */
+				case 75:
+					if (!bottomCollider.isCollided()) break;
+					if (this.player1_left_idle || this.player1_left_walk || this.player1_left_run) {
+						this.player1_left_jump = true;
+					} else if (this.player1_right_idle || this.player1_right_walk || this.player1_right_run) {
+						this.player1_right_jump = true;
+					}
+					
+				/**
+				* @说明 战斗控制
+				*/
 				case 76:
 				case 73:
 				case 74:
@@ -234,6 +237,7 @@ public class Player1 extends ElementObj{
 
 	}
 	private void playerXMove(){
+		// 根据移动方向和方式设置速度
 		if (this.player1_left_walk && this.getX() > 0) {
 			XSpeed=-maxXSpeed;
 			ColliderMove( XSpeed,0);
@@ -263,8 +267,12 @@ public class Player1 extends ElementObj{
 				XSpeed=0;
 			}
 		}
+		
+		
+		// 设置位置变换 15ms刷新一次
 		this.setX(this.getX() + XSpeed);
 	}
+	
 	private void playerYMove(){
 		//按下跳跃键
 		if(this.player1_left_jump||this.player1_right_jump){
@@ -287,10 +295,13 @@ public class Player1 extends ElementObj{
 	}
 
 	private void ColliderMove(int XMovement,int YMovement){
+		// X轴移动
 		topCollider.setX(topCollider.getX()+XMovement);
 		bottomCollider.setX(bottomCollider.getX()+XMovement);
 		leftCollider.setX(leftCollider.getX()+XMovement);
 		rightCollider.setX(rightCollider.getX()+XMovement);
+		
+		// Y轴移动
 		topCollider.setY(topCollider.getY()+YMovement);
 		bottomCollider.setY(bottomCollider.getY()+YMovement);
 		leftCollider.setY(leftCollider.getY()+YMovement);
@@ -335,16 +346,26 @@ public class Player1 extends ElementObj{
 	public void attack(long gameTime) {
 		if (pkType == 0) {
 			return ;
-		}else if(pkType == 1){
+		}else if(pkType == 1){// 普攻
 			if(gameTime-this.attackTime>=50){
 				attackTime=gameTime;
-				// 将构造类的多个步骤封装成一个方法，返回值直接是这个对象
-
+				// 动画
+//				List<ImageIcon> imageIcons = GameLoad.imgMaps.get("player1_"+fx+"_attack1");
+//				this.setIcon(imageIcons.get(pictureIndex));
+//				pictureIndex++;
+//				pictureIndex%=imageIcons.size();
+//				pictureTime=gameTime;
+				
+				// 碰撞箱
+				
+				
 			}
 		}else if(pkType == 2){
-			if(gameTime-this.attackTime>=50){
+			if(gameTime-this.attackTime>=50){// 重击
 				attackTime=gameTime;
-				// 将构造类的多个步骤封装成一个方法，返回值直接是这个对象
+				// 动画
+				
+				// 碰撞箱
 
 			}
 		}else if(pkType == 3){

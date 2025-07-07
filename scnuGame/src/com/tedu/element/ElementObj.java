@@ -71,8 +71,6 @@ public abstract class ElementObj {
 	 */
 	// 模型操作
 	public final void model(long gameTime) {
-
-
 		// 移动
 		move();
 		// 换装

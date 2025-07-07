@@ -8,9 +8,13 @@ import com.tedu.element.ElementObj;
 import com.tedu.manager.ElementManager;
 import com.tedu.manager.GameElement;
 
-public class GameListener implements KeyListener {
-    ElementManager em = ElementManager.getManager();
 
+// 键盘监听
+public class GameListener implements KeyListener {
+	// 加载器获得元素，把监听到的值传给元素
+    ElementManager em = ElementManager.getManager();
+    
+    // 新建第一次按键时间map 第二次按键时间map
     private Map<Integer, Long> keyFirstPressedTime = new HashMap<>();
     private Map<Integer, Long> keyLastReleasedTime = new HashMap<>();
 
@@ -19,7 +23,8 @@ public class GameListener implements KeyListener {
 
     // 当前正在奔跑状态的键
     private Set<Integer> runningKeys = new HashSet<>();
-
+    
+    // 双击阈值
     private final int DOUBLECLICK_THRESHOLD = 300;
 
     @Override
@@ -31,14 +36,14 @@ public class GameListener implements KeyListener {
         long now = System.currentTimeMillis();
         List<ElementObj> players = em.getElementsByKey(GameElement.PLAYER);
 
-        // 如果是重复 keyPressed（长按造成的），跳过处理
+        // 如果是重复 keyPressed（长按），跳过处理
         if (pressedKeys.contains(key)) {
             return;
         }
 
         pressedKeys.add(key); // 第一次真正按下
 
-        // 是否满足双击条件
+        // 判断双击
         if (keyFirstPressedTime.containsKey(key) && keyLastReleasedTime.containsKey(key)) {
             long down1 = keyFirstPressedTime.get(key);
             long up1 = keyLastReleasedTime.get(key);
