@@ -55,7 +55,7 @@ public abstract class ElementObj {
 	 * @param key  代表触发的键盘的code值  
 	 * @扩展 本方法是否可以分为2个方法？1个接收按下，1个接收松开(给同学扩展使用)
 	 */
-	public void keyClick(boolean bl, int key) {}
+	public void keyClick(int bl, int key) {}
 	
 	/**
 	 * @说明 移动方法; 需要移动的子类，请 重写这个方法

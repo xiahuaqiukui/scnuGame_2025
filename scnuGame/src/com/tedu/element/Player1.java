@@ -81,9 +81,9 @@ public class Player1 extends ElementObj{
 	 */
 	// 重写keyClick函数，监听键盘操作，玩家操作
 	@Override
-	public void keyClick(boolean bl, int key) {
+	public void keyClick(int bl, int key) {
 		System.out.println(bl+","+key);
-		if (bl) {
+		if (bl==1) {
 			switch (key) {
 			/**
 			 * @说明 移动控制
