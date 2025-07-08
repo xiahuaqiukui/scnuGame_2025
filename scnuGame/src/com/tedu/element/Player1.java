@@ -27,16 +27,31 @@ public class Player1 extends ElementObj{
 	 *       3.图片应该使用什么集合进行存储
 	 */
 	
-	// 角色属性
-	private int player1_hp=100; // 血量
-	private int player1_vit=10; // 耐力
+	// 角色基本属性
+	private int player1_hp = 100; // 血量
+	private int player1_vit = 10; // 耐力
+	private int player1_mp = 10; //法力值
+	private int attack=2; // 攻击力
 	
-	// 攻击类型  1普攻  2重击  3远程
-	private int pkType = 0;
-	private boolean player1_attacking1 = false; // 是否在第一次攻击状态中
-	private boolean player1_attacking2 = false; // 是否在
 	
-	// 移动状态属性(走路、奔跑、跳跃、待机 4个状态)
+	// 攻击控制
+	private int pkType = 0; // 1普攻  2重击  3远程
+	
+	private boolean player1_attacking1 = false; // 正在第1种攻击状态中
+	private boolean player1_attacking2 = false; // 正在第2种攻击状态中
+	private boolean player1_attacking3 = false; // 正在第3种攻击状态中
+	
+	private boolean player1_attack1_time = false; // 控制第1种攻击状态的判定时间
+	private boolean player1_attack2_time = false; // 控制第2种攻击状态的判定时间
+	private boolean player1_attack3_time = false; // 控制第3种攻击子弹发射时间
+	
+	private long attackTime=0L; // 攻击间隔
+	private long player1_attack1_over_time=0L; // 第1种攻击上次攻击结束时间
+	private long player1_attack2_over_time=0L; // 第2种攻击上次攻击结束时间
+	private long player1_attack3_over_time=0L; // 第3种攻击上次攻击结束时间
+	
+	
+	// 移动状态属性(待机、走路、跳跃、奔跑 4个状态)
 	private boolean player1_left_idle = false;
 	private boolean player1_right_idle = true;
 	private boolean player1_left_walk = false;
@@ -46,15 +61,17 @@ public class Player1 extends ElementObj{
 	private boolean player1_left_run=false;
 	private boolean player1_right_run=false;
 	
+	
 	// 碰撞箱
 	private Collider topCollider;
 	private Collider bottomCollider;
 	private Collider leftCollider;
 	private Collider rightCollider;
 	
+	
 	// 速度
-	private int maxXSpeed=2; // x轴最大速度
-	private int maxXRunSpeed=7; // x轴奔跑最大速度
+	private int maxXWalkSpeed=2; // x轴最大走路速度
+	private int maxXRunSpeed=7; // x轴最大奔跑速度
 	private int maxYSpeed=-15; // 最大下落/上升速度
 	private int XSpeed=0; // 当前x轴速度
 	private int YSpeed=0; // 当前y轴速度
@@ -62,22 +79,15 @@ public class Player1 extends ElementObj{
 	// 重力(下落速度相关)
 	private int g=1;
 	
-	// 换装轮替时间
-	private long pictureTime=0L;
-	private long attackPictureTime = 0L;
-	
-	// 图片序号(图片轮播时使用)
-	private int pictureIndex=0;
-	private int attackPictureIndex=0;
+	// 换装图片轮播
+	private long pictureTime=0L; // 移动照片切换间隔时间
+	private long attackPictureTime = 0L; // 攻击照片切换间隔时间
+	private int pictureIndex=0; // 移动照片切换序号
+	private int attackPictureIndex=0; // 攻击照片切换序号
 	
 	// 主角朝向(初始默认为右)
-	private String fx = "right";
+	private String fx = "right"; // 左或右
 
-	// 攻击相关
-	private int attack=2; // 攻击力
-	private long attackTime=0L; // 攻击间隔
-	private long player1_attack1_over_time=0L; //上次攻击结束时间
-	private int attackSpeed=5;// 完成一次普通攻击所需帧数(越小越快)
 	
 	public Player1(){}
 	// 初始化玩家属性，目前仅继承父类属性
@@ -85,10 +95,8 @@ public class Player1 extends ElementObj{
 		super(x, y, w, h, icon);
 	}
 	
-	// 重写showElement函数，使视图层可以显示图象
 	@Override
 	public void showElement(Graphics g) {
-		// 展示图像
 		g.drawImage(this.getIcon().getImage(), 
 				this.getX(), this.getY(), 
 				this.getW(), this.getH(), null);
@@ -126,8 +134,8 @@ public class Player1 extends ElementObj{
 	// 重写keyClick函数，监听键盘操作，玩家操作
 	@Override
 	public void keyClick(int bl, int key) {
-		System.out.println(bl+","+key);
-		if (bl==1) {
+//		System.out.println(bl + "," + key);
+		if (bl == 1) { // 单击
 			switch (key) {
 				/**
 				 * @说明 移动控制
@@ -160,7 +168,7 @@ public class Player1 extends ElementObj{
 				case 76: this.pkType = 2; break;
 				case 73: this.pkType = 3; break;
 			}
-		} else if(bl==2){
+		} else if(bl==2){ // 双击
 			switch (key) {
 			/**
 			 * @说明 移动控制
@@ -172,7 +180,6 @@ public class Player1 extends ElementObj{
 				this.player1_left_walk = false;
 				this.player1_left_run = true;
 				this.player1_right_run = false;
-				
 				this.fx = "left";
 				pictureIndex=0;
 				break; // 左
@@ -183,7 +190,6 @@ public class Player1 extends ElementObj{
 				this.player1_left_walk = false;
 				this.player1_left_run = false;
 				this.player1_right_run = true;
-				
 				this.fx = "right";
 				pictureIndex=0;
 				break; // 右
@@ -195,7 +201,7 @@ public class Player1 extends ElementObj{
 			case 76: this.pkType = 2; break;
 			case 73: this.pkType = 3; break;
 			}
-		} else {
+		} else { // 松开
 			switch (key) {
 				/**
 				 * @说明 移动控制
@@ -233,44 +239,41 @@ public class Player1 extends ElementObj{
 		}
 	}
 	
-//	@Override
-//	public int compareTo(Play o) {
-//		// TODO Auto-generated method stub
-//		return 0;
-//	}
-	
 	// 重写角色移动方式
 	@Override
 	protected void move() {
-
-
-
+		// x轴和y轴移动
 		playerXMove();
 		playerYMove();
 
-
 //		System.out.println(XSpeed);
 //		System.out.println(YSpeed);
-		XSpeed=0;
-		YSpeed=Math.min(20,YSpeed+g);
+		
+		// 动完之后初始化
+		XSpeed = 0;
+		YSpeed = Math.min(20,YSpeed+g);
 
 	}
-	private void playerXMove(){
+	
+	// X轴移动，走路、奔跑状态
+	private void playerXMove(){ 
 		// 根据移动方向和方式设置速度
+		// 走路
 		if (this.player1_left_walk && this.getX() > 0) {
-			XSpeed=-maxXSpeed;
+			XSpeed=-maxXWalkSpeed;
 			ColliderMove( XSpeed,0);
 			if(leftCollider.isCollided()){
 				ColliderMove( -XSpeed,0);
 				XSpeed=0;
 			}
 		} else if (this.player1_right_walk && this.getX() < 1200-this.getW()) {
-			XSpeed=maxXSpeed;
+			XSpeed=maxXWalkSpeed;
 			ColliderMove(XSpeed,0);
 			if(rightCollider.isCollided()){
 				ColliderMove( -XSpeed,0);
 				XSpeed=0;
 			}
+		// 奔跑
 		} else if (this.player1_left_run && this.getX() > 0) {
 			XSpeed=-maxXRunSpeed;
 			ColliderMove(XSpeed,0);
@@ -287,14 +290,13 @@ public class Player1 extends ElementObj{
 			}
 		}
 		
-		
 		// 设置位置变换 15ms刷新一次
 		this.setX(this.getX() + XSpeed);
 	}
 	
 	private void playerYMove(){
 		//按下跳跃键
-		if(this.player1_left_jump||this.player1_right_jump){
+		if(this.player1_left_jump || this.player1_right_jump){
 			this.player1_left_jump=false;
 			this.player1_right_jump=false;
 			YSpeed=maxYSpeed;
@@ -326,23 +328,30 @@ public class Player1 extends ElementObj{
 		leftCollider.setY(leftCollider.getY()+YMovement);
 		rightCollider.setY(rightCollider.getY()+YMovement);
 	}
-
+	
+	// 玩家的动画刷新(攻击/待机/走路/奔跑动画)
 	@Override
 	protected void updateImage(long gameTime, int sleepTime) {
 //		ImageIcon icon=GameLoad.imgMap.get(fx);
-//		System.out.println(icon.getIconHeight());//得到图片的高度
+//		System.out.println(icon.getIconHeight()); // 得到图片的高度
 //		如果高度是小于等于0 就说明你的这个图片路径有问题
+		
 		// 从数据加载器中加载图片
 		List<ImageIcon> imageIcons = null;
 		
 		if(gameTime-this.pictureTime >= 5){
-			if (pkType != 0 || player1_attacking1 || player1_attacking2) {
+			if (pkType != 0 || player1_attacking1 || player1_attacking2 || player1_attacking3) {
 				if (player1_attacking1 || pkType==1) {
 					player1_attacking1 = true;
 					
 					imageIcons = GameLoad.imgMaps.get("player1_" + fx + "_attack1");
 					this.setIcon(imageIcons.get(attackPictureIndex));
+					
 					attackPictureIndex++;
+					
+					if (attackPictureIndex == 4) {
+						player1_attack1_time = true; // 控制攻击1判定箱何时出现
+					}
 					
 					// 结束攻击设置
 					if (attackPictureIndex >= imageIcons.size()) {
@@ -351,10 +360,21 @@ public class Player1 extends ElementObj{
 						pkType = 0;
 					}
 					
-				} else if (pkType==2){
+				} else if (pkType==2){ // 技能动画
 					;
-				} else if (pkType==3){
-					;
+				} else if (player1_attacking3 || pkType==3){ // 远程动画
+					player1_attacking3 = true;
+					
+					imageIcons = GameLoad.imgMaps.get("player1_" + fx + "_attack3");
+					this.setIcon(imageIcons.get(attackPictureIndex));
+					attackPictureIndex++;
+					
+					if (attackPictureIndex >= imageIcons.size()) {
+						attackPictureIndex = 0;
+						player1_attacking3 = false;
+						pkType = 0;
+						player1_attack3_time = true; // 控制子弹可以发射
+					}
 				}
 				
 			} else if(this.player1_left_idle||this.player1_right_idle){
@@ -372,14 +392,12 @@ public class Player1 extends ElementObj{
 			}else if (this.player1_left_run||this.player1_right_run) {
 				imageIcons = GameLoad.imgMaps.get("player1_"+fx+"_run");
 				this.setIcon(imageIcons.get(pictureIndex));
-//				System.out.println(pictureIndex);
 				pictureIndex++;
-//				System.out.println(imageIcons.size());
 				pictureIndex%=imageIcons.size();
 				
 			}
-
 			
+			// 执行了一次刷新，更新照片更换最后时间
 			pictureTime=gameTime;
 		}
 
@@ -387,26 +405,30 @@ public class Player1 extends ElementObj{
 
 	@Override
 	public void attack(long gameTime) {
-		if (pkType == 0) {
-			return ;
-		}else if(pkType == 1 && gameTime-this.attackTime>=50){ // 控制两次普攻动作的间隔
+		if(pkType == 1){ // 控制两次普攻动作的间隔
 			// 碰撞箱
 			
 		}else if(pkType == 2){
 			if(gameTime-this.attackTime>=50){// 重击
 				attackTime=gameTime;
-				// 动画
-				
 				// 碰撞箱
 
 			}
-		}else if(pkType == 3){
+		}else if(player1_attack3_time){
 			if(gameTime-this.attackTime>=50){
 				attackTime=gameTime;
+				
+//				if(gameTime-this.pictureTime >= 5){}
+//				List<ImageIcon> imageIcons = GameLoad.imgMaps.get("player1_" + fx + "_attack1");
+				
+				
+				// 发射子弹
 				// 将构造类的多个步骤封装成一个方法，返回值直接是这个对象
 				ElementObj element = new Bullet().createElement(this.toString());
 				// 装入集合当中
 				ElementManager.getManager().addElement(element, GameElement.BULLET);
+				
+				player1_attack3_time = false;
 			}
 		}
 
