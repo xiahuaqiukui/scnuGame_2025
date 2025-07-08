@@ -33,6 +33,8 @@ public class Player1 extends ElementObj{
 	
 	// 攻击类型  1普攻  2重击  3远程
 	private int pkType = 0;
+	private boolean player1_attacking1 = false; // 是否在第一次攻击状态中
+	private boolean player1_attacking2 = false; // 是否在
 	
 	// 移动状态属性(走路、奔跑、跳跃、待机 4个状态)
 	private boolean player1_left_idle = false;
@@ -333,24 +335,21 @@ public class Player1 extends ElementObj{
 		// 从数据加载器中加载图片
 		List<ImageIcon> imageIcons = null;
 		
-		if(gameTime-this.pictureTime>=10){
-			if (pkType != 0) {
-				if (pkType==1) {
+		if(gameTime-this.pictureTime >= 5){
+			if (pkType != 0 || player1_attacking1 || player1_attacking2) {
+				if (player1_attacking1 || pkType==1) {
+					player1_attacking1 = true;
+					
 					imageIcons = GameLoad.imgMaps.get("player1_" + fx + "_attack1");
-					while (attackPictureIndex < imageIcons.size()) {
-						this.setIcon(imageIcons.get(attackPictureIndex));
-						attackPictureIndex++;
-						
-						try {
-							Thread.sleep(attackSpeed*sleepTime);
-						} catch (InterruptedException e) {
-							e.printStackTrace();
-						}
-					}
+					this.setIcon(imageIcons.get(attackPictureIndex));
+					attackPictureIndex++;
 					
 					// 结束攻击设置
-					pkType = 0;
-					attackPictureIndex = 0;
+					if (attackPictureIndex >= imageIcons.size()) {
+						attackPictureIndex = 0;
+						player1_attacking1 = false;
+						pkType = 0;
+					}
 					
 				} else if (pkType==2){
 					;
