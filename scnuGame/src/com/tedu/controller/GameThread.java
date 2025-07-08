@@ -131,7 +131,7 @@ public class GameThread extends Thread{
 				}
 				
 				// 移动+换装+攻击 三个操作
-				obj.model(gameTime);
+				obj.model(gameTime, sleepTime);
 			}
 		}
 	}

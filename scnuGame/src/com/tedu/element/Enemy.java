@@ -129,7 +129,7 @@ public class Enemy extends ElementObj{
     }
 
     @Override
-    protected void updateImage(long gameTime) {
+    protected void updateImage(long gameTime, int sleepTime) {
 
     }
     private void ColliderMove(int XMovement,int YMovement){

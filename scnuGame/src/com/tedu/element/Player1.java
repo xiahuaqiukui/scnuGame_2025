@@ -30,8 +30,6 @@ public class Player1 extends ElementObj{
 	// 角色属性
 	private int player1_hp=100; // 血量
 	private int player1_vit=10; // 耐力
-	private int attack=2; // 攻击力
-	private long attackTime=0L; // 攻击间隔
 	
 	// 攻击类型  1普攻  2重击  3远程
 	private int pkType = 0;
@@ -64,14 +62,20 @@ public class Player1 extends ElementObj{
 	
 	// 换装轮替时间
 	private long pictureTime=0L;
+	private long attackPictureTime = 0L;
 	
 	// 图片序号(图片轮播时使用)
 	private int pictureIndex=0;
+	private int attackPictureIndex=0;
 	
 	// 主角朝向(初始默认为右)
 	private String fx = "right";
 
-	
+	// 攻击相关
+	private int attack=2; // 攻击力
+	private long attackTime=0L; // 攻击间隔
+	private long player1_attack1_over_time=0L; //上次攻击结束时间
+	private int attackSpeed=5;// 完成一次普通攻击所需帧数(越小越快)
 	
 	public Player1(){}
 	// 初始化玩家属性，目前仅继承父类属性
@@ -322,35 +326,62 @@ public class Player1 extends ElementObj{
 	}
 
 	@Override
-	protected void updateImage(long gameTime) {
+	protected void updateImage(long gameTime, int sleepTime) {
 //		ImageIcon icon=GameLoad.imgMap.get(fx);
 //		System.out.println(icon.getIconHeight());//得到图片的高度
 //		如果高度是小于等于0 就说明你的这个图片路径有问题
 		// 从数据加载器中加载图片
+		List<ImageIcon> imageIcons = null;
+		
 		if(gameTime-this.pictureTime>=10){
-			if(this.player1_left_idle||this.player1_right_idle){
-				List<ImageIcon> imageIcons = GameLoad.imgMaps.get("player1_"+fx+"_idle");
+			if (pkType != 0) {
+				if (pkType==1) {
+					imageIcons = GameLoad.imgMaps.get("player1_" + fx + "_attack1");
+					while (attackPictureIndex < imageIcons.size()) {
+						this.setIcon(imageIcons.get(attackPictureIndex));
+						attackPictureIndex++;
+						
+						try {
+							Thread.sleep(attackSpeed*sleepTime);
+						} catch (InterruptedException e) {
+							e.printStackTrace();
+						}
+					}
+					
+					// 结束攻击设置
+					pkType = 0;
+					attackPictureIndex = 0;
+					
+				} else if (pkType==2){
+					;
+				} else if (pkType==3){
+					;
+				}
+				
+			} else if(this.player1_left_idle||this.player1_right_idle){
+				imageIcons = GameLoad.imgMaps.get("player1_"+fx+"_idle");
 				this.setIcon(imageIcons.get(pictureIndex));
 				pictureIndex++;
 				pictureIndex%=imageIcons.size();
-				pictureTime=gameTime;
+				
 			}else if(this.player1_left_walk||this.player1_right_walk){
-				List<ImageIcon> imageIcons = GameLoad.imgMaps.get("player1_"+fx+"_walk");
+				imageIcons = GameLoad.imgMaps.get("player1_"+fx+"_walk");
 				this.setIcon(imageIcons.get(pictureIndex));
 				pictureIndex++;
 				pictureIndex%=imageIcons.size();
-				pictureTime=gameTime;
+				
 			}else if (this.player1_left_run||this.player1_right_run) {
-				List<ImageIcon> imageIcons = GameLoad.imgMaps.get("player1_"+fx+"_run");
+				imageIcons = GameLoad.imgMaps.get("player1_"+fx+"_run");
 				this.setIcon(imageIcons.get(pictureIndex));
 //				System.out.println(pictureIndex);
 				pictureIndex++;
 //				System.out.println(imageIcons.size());
 				pictureIndex%=imageIcons.size();
-				pictureTime=gameTime;
+				
 			}
 
-
+			
+			pictureTime=gameTime;
 		}
 
 	}
@@ -359,20 +390,9 @@ public class Player1 extends ElementObj{
 	public void attack(long gameTime) {
 		if (pkType == 0) {
 			return ;
-		}else if(pkType == 1){ // 普攻
-			if(gameTime-this.attackTime>=50){
-				attackTime=gameTime;
-				// 动画
-//				List<ImageIcon> imageIcons = GameLoad.imgMaps.get("player1_"+fx+"_attack1");
-//				this.setIcon(imageIcons.get(pictureIndex));
-//				pictureIndex++;
-//				pictureIndex%=imageIcons.size();
-//				pictureTime=gameTime;
-				
-				// 碰撞箱
-				
-				
-			}
+		}else if(pkType == 1 && gameTime-this.attackTime>=50){ // 控制两次普攻动作的间隔
+			// 碰撞箱
+			
 		}else if(pkType == 2){
 			if(gameTime-this.attackTime>=50){// 重击
 				attackTime=gameTime;
@@ -392,6 +412,7 @@ public class Player1 extends ElementObj{
 		}
 
 	}
+	
 	@Override
 	public String toString() {
 		int x = this.getX();
