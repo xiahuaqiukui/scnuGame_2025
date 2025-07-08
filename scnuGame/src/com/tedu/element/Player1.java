@@ -45,7 +45,7 @@ public class Player1 extends ElementObj{
 	private boolean player1_attack2_time = false; // 控制第2种攻击状态的判定时间
 	private boolean player1_attack3_time = false; // 控制第3种攻击子弹发射时间
 	
-	private long attackTime=0L; // 攻击间隔
+	private long attackTime = 0L; // 攻击间隔
 	private long player1_attack1_over_time=0L; // 第1种攻击上次攻击结束时间
 	private long player1_attack2_over_time=0L; // 第2种攻击上次攻击结束时间
 	private long player1_attack3_over_time=0L; // 第3种攻击上次攻击结束时间
@@ -339,45 +339,9 @@ public class Player1 extends ElementObj{
 		// 从数据加载器中加载图片
 		List<ImageIcon> imageIcons = null;
 		
+		// 更新移动图片
 		if(gameTime-this.pictureTime >= 5){
-			if (pkType != 0 || player1_attacking1 || player1_attacking2 || player1_attacking3) {
-				if (player1_attacking1 || pkType==1) {
-					player1_attacking1 = true;
-					
-					imageIcons = GameLoad.imgMaps.get("player1_" + fx + "_attack1");
-					this.setIcon(imageIcons.get(attackPictureIndex));
-					
-					attackPictureIndex++;
-					
-					if (attackPictureIndex == 4) {
-						player1_attack1_time = true; // 控制攻击1判定箱何时出现
-					}
-					
-					// 结束攻击设置
-					if (attackPictureIndex >= imageIcons.size()) {
-						attackPictureIndex = 0;
-						player1_attacking1 = false;
-						pkType = 0;
-					}
-					
-				} else if (pkType==2){ // 技能动画
-					;
-				} else if (player1_attacking3 || pkType==3){ // 远程动画
-					player1_attacking3 = true;
-					
-					imageIcons = GameLoad.imgMaps.get("player1_" + fx + "_attack3");
-					this.setIcon(imageIcons.get(attackPictureIndex));
-					attackPictureIndex++;
-					
-					if (attackPictureIndex >= imageIcons.size()) {
-						attackPictureIndex = 0;
-						player1_attacking3 = false;
-						pkType = 0;
-						player1_attack3_time = true; // 控制子弹可以发射
-					}
-				}
-				
-			} else if(this.player1_left_idle||this.player1_right_idle){
+			if(this.player1_left_idle||this.player1_right_idle){
 				imageIcons = GameLoad.imgMaps.get("player1_"+fx+"_idle");
 				this.setIcon(imageIcons.get(pictureIndex));
 				pictureIndex++;
@@ -398,7 +362,53 @@ public class Player1 extends ElementObj{
 			}
 			
 			// 执行了一次刷新，更新照片更换最后时间
-			pictureTime=gameTime;
+			pictureTime = gameTime;
+		}
+		
+		// 更新攻击图片
+		if(gameTime-this.attackPictureTime >= 5){
+			if (pkType != 0 || player1_attacking1 || player1_attacking2 || player1_attacking3) {
+				if (player1_attacking1 || pkType==1) {
+					player1_attacking1 = true;
+					
+					imageIcons = GameLoad.imgMaps.get("player1_" + fx + "_attack1");
+					this.setIcon(imageIcons.get(attackPictureIndex));
+					
+					attackPictureIndex++;
+					
+					if (attackPictureIndex == 4) {
+						player1_attack1_time = true; // 控制攻击1判定箱何时出现
+					}
+					
+					// 结束攻击设置
+					if (attackPictureIndex >= imageIcons.size()) {
+						attackPictureIndex = 0;
+						player1_attacking1 = false;
+						pkType = 0;
+					}
+					
+				} else if (player1_attacking2 || pkType==2){ // 技能动画
+					player1_attacking2 = true;
+					
+					
+					
+				} else if (player1_attacking3 || pkType==3){ // 远程动画
+					player1_attacking3 = true;
+						
+					imageIcons = GameLoad.imgMaps.get("player1_" + fx + "_attack3");
+					this.setIcon(imageIcons.get(attackPictureIndex));
+					attackPictureIndex++;
+						
+					if (attackPictureIndex >= imageIcons.size()) {
+						attackPictureIndex = 0;
+						player1_attacking3 = false;
+						pkType = 0;
+						player1_attack3_time = true; // 控制子弹可以发射
+					}
+				}
+			}
+			
+			attackPictureTime = gameTime;
 		}
 
 	}
