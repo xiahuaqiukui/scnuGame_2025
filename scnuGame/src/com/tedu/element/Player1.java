@@ -50,6 +50,8 @@ public class Player1 extends ElementObj{
 	private long player1_attack2_over_time=0L; // 第2种攻击上次攻击结束时间
 	private long player1_attack3_over_time=0L; // 第3种攻击上次攻击结束时间
 	
+	private int player1_attack2_rush_distance_rate = 8; // 冲刺技能距离是单次奔跑距离的倍率
+	
 	
 	// 移动状态属性(待机、走路、跳跃、奔跑 4个状态)
 	private boolean player1_left_idle = false;
@@ -291,7 +293,10 @@ public class Player1 extends ElementObj{
 		}
 		
 		// 设置位置变换 15ms刷新一次
-		this.setX(this.getX() + XSpeed);
+		if (player1_left_walk || player1_right_walk || this.player1_left_run ||
+				this.player1_right_run) {
+			this.setX(this.getX() + XSpeed);
+		}
 	}
 	
 	private void playerYMove(){
@@ -390,7 +395,36 @@ public class Player1 extends ElementObj{
 				} else if (player1_attacking2 || pkType==2){ // 技能动画
 					player1_attacking2 = true;
 					
+					imageIcons = GameLoad.imgMaps.get("player1_" + fx + "_attack2");
+					this.setIcon(imageIcons.get(attackPictureIndex));
 					
+					attackPictureIndex++;
+					
+					// 移动
+					if (this.fx.equals("left") && this.getX() > 0) {
+						XSpeed = -maxXRunSpeed*player1_attack2_rush_distance_rate;
+						ColliderMove(XSpeed,0);
+						if(leftCollider.isCollided()){
+							ColliderMove( -XSpeed,0);
+							XSpeed=0;
+						}
+					} else if (this.fx.equals("right") && this.getX() < 1200-this.getW()) {
+						XSpeed = maxXRunSpeed*player1_attack2_rush_distance_rate;
+						ColliderMove(XSpeed,0);
+						if(leftCollider.isCollided()){
+							ColliderMove( -XSpeed,0);
+							XSpeed=0;
+						}
+					}
+					this.setX(this.getX() + XSpeed);
+					
+					// 控制停止
+					if (attackPictureIndex >= imageIcons.size()) {
+						attackPictureIndex = 0;
+						player1_attacking2 = false;
+						pkType = 0;
+						player1_attack2_time = true; // 控制技能可以进行碰撞判定
+					}
 					
 				} else if (player1_attacking3 || pkType==3){ // 远程动画
 					player1_attacking3 = true;
