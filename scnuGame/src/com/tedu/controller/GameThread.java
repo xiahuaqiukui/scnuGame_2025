@@ -17,23 +17,30 @@ import com.tedu.manager.GameLoad;
  */
 
 public class GameThread extends Thread{
+	// 获取资源管理器
 	private ElementManager em;
-	public static int sleepTime=15;
+	// 设置刷新时间
+	public static int sleepTime=15; // 15ms一刷
+	
+	// 初始构造函数
 	public GameThread() {
 		em = ElementManager.getManager();
 	}
+	
+	// 重写run函数, 执行的进程
 	@Override
 	public void run() {
 		while (true) {
-		// 游戏开始前（加载资源）
+			// 加载资源
 			gameLoad();
-		// 游戏进行中
+			// 游戏进行
 			gameRun();
-		// 游戏场景结束（资源回收）
+			// 游戏场景结束（资源回收/跳转）
 			gameOver();
 			
+			// 游戏结束的刷新时间
 			try {
-				sleep(15);
+				sleep(sleepTime);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
@@ -44,34 +51,38 @@ public class GameThread extends Thread{
 	 * 游戏的加载
 	 */
 	private void gameLoad() {
-		GameLoad.ImgLoad();//加载图片
-		GameLoad.playerLoad();//可以带参数表示几个人
-		GameLoad.MapLoad(1);//加载地图
-
-
+		GameLoad.ImgLoad(); // 加载图片
+		GameLoad.MapLoad(1); // 加载地图
+		GameLoad.playerLoad(); // 可以带参数表示几个人(目前仅有1人)
 	}
 	
 	/**
-	 * @说明  游戏进行时
-	 * @任务说明  游戏过程中需要做的事情：1.自动化玩家的移动，碰撞，死亡
-	 *                                 2.新元素的增加(NPC死亡后出现道具)
-	 *                                 3.暂停等等。。。。。
+	 * @说明 游戏进行时
+	 * @任务说明 游戏过程中需要做的事情：1.自动化玩家的移动，碰撞，死亡
+	 *                                2.新元素的增加(NPC死亡后出现道具)
+	 *                                3.暂停等等。。。。。
 	 * 先实现主角的移动
 	 * */
 	private void gameRun() {
-		long gameTime=0L;
-		while (true) { // 预留拓展 true可以作为变量 用于控制关卡结束等
+		long gameTime = 0L;
+		
+		// 预留拓展 true可以作为变量 用于控制关卡结束等
+		while (true) {
+			// 加载所有变量 部分类
 			Map<GameElement, List<ElementObj>> all = em.getGameElements();
 			List<ElementObj> enemys = em.getElementsByKey(GameElement.ENEMY);
 			List<ElementObj> bullets = em.getElementsByKey(GameElement.BULLET);
 			List<ElementObj> maps = em.getElementsByKey(GameElement.MAPS);
 			List<ElementObj> collider = em.getElementsByKey(GameElement.COLLIDER);
-			moveAndUpdate(all,gameTime);
-
-			ElementPK(enemys,bullets);
-			ColliderCollided(collider,maps);
+			
+			// 
+			Update(all, gameTime);
+			ElementPK(enemys, bullets);
+			ColliderCollided(collider, maps);
 
 			gameTime++;
+			
+			// 游戏进程的刷新时间
 			try {
 				sleep(sleepTime);
 			} catch (InterruptedException e) {
@@ -102,23 +113,30 @@ public class GameThread extends Thread{
 //
 //
 //	}
-	public void moveAndUpdate(Map<GameElement, List<ElementObj>> all,long gameTime) {
+	
+	public void Update(Map<GameElement, List<ElementObj>> all, long gameTime) {
 //		GameElement.values();//隐藏方法，返回是一个数组
 		for (GameElement ge : GameElement.values()) {
+			// 分别取出所有枚举类
 			List<ElementObj> list = all.get(ge);
 			for (int i = 0; i < list.size(); i++) {
+				// 获取枚举类里的对象
 				ElementObj obj = list.get(i);
+				
+				// 若对象死亡则移除(die方法可拓展死亡掉落物品)
 				if(!obj.isLive()){
-
 					obj.die();
-					list.remove(i-- );
+					list.remove(i--);
 					continue;
 				}
-				obj.model(gameTime);//调用每个类的自己的show方法完成自己的显示
+				
+				// 移动+换装+攻击 三个操作
+				obj.model(gameTime, sleepTime);
 			}
 		}
 	}
-
+	
+	// 碰撞检测(非碰撞箱)
 	public void ElementPK(List<ElementObj> listA, List<ElementObj> listB) {
 		for(int i=0;i<listA.size();i++){
 			ElementObj enemy=listA.get(i);
@@ -132,12 +150,14 @@ public class GameThread extends Thread{
 			}
 		}
 	}
+	
+	// 碰撞检测(碰撞箱)
 	public void ColliderCollided(List<ElementObj> listA, List<ElementObj> listB) {
 		for(int i=0;i<listA.size();i++){
 			ElementObj collider=listA.get(i);
 			if(collider instanceof Collider){
 				Collider A=(Collider) collider;
-				boolean collided=false;
+				boolean collided = false;
 				for(int j=0;j<listB.size();j++){
 					ElementObj B=listB.get(j);
 					if(A.pk(B)){

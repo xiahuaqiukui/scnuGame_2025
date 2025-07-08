@@ -61,7 +61,7 @@ public abstract class ElementObj {
 	 * @说明 移动方法; 需要移动的子类，请 重写这个方法
 	 */
 	protected void move() {}
-	protected void updateImage(long gameTime) {}
+	protected void updateImage(long gameTime, int sleepTime) {}
 	protected void attack(long gameTime) {}
 	public void die(){}
 	
@@ -70,13 +70,11 @@ public abstract class ElementObj {
 	 *        1.移动  2.换装  3.子弹发射
 	 */
 	// 模型操作
-	public final void model(long gameTime) {
-
-
+	public final void model(long gameTime, int sleepTime) {
 		// 移动
 		move();
 		// 换装
-		updateImage(gameTime);
+		updateImage(gameTime, sleepTime);
 		// 攻击
 		attack(gameTime);
 	}
