@@ -47,6 +47,7 @@ public class GameLoad {
 				if(key.equals("ENEMY")){
 					for(int i=0;i<arrs.length;i++){
 						ElementObj element = new Enemy().createElement(key+","+arrs[i]);
+						((Enemy)element).setTargetList(em.getElementsByKey(GameElement.PLAYER));
 						em.addElement(element,GameElement.ENEMY);
 					}
 				}else{

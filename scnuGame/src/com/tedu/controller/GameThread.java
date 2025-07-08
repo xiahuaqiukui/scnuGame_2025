@@ -45,8 +45,9 @@ public class GameThread extends Thread{
 	 */
 	private void gameLoad() {
 		GameLoad.ImgLoad();//加载图片
-		GameLoad.MapLoad(1);//加载地图
 		GameLoad.playerLoad();//可以带参数表示几个人
+		GameLoad.MapLoad(1);//加载地图
+
 
 	}
 	

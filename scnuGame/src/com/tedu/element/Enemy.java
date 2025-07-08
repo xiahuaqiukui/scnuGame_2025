@@ -6,13 +6,16 @@ import com.tedu.manager.GameLoad;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.List;
 import java.util.Random;
 
 public class Enemy extends ElementObj{
 
     private String name="steamMan";
     private int hp;
-    private ElementObj target;
+    private int detectingDistance=250;
+    private ElementObj target=null;
+    private List<ElementObj> targetList=null;
 
     private boolean Enemy_left_idle = false;
     private boolean Enemy_right_idle = true;
@@ -26,7 +29,7 @@ public class Enemy extends ElementObj{
     private Collider bottomCollider;
     private Collider leftCollider;
     private Collider rightCollider;
-    private int maxXSpeed=1;
+    private int maxXSpeed=3;
     private int maxYSpeed=-15;
     private int XSpeed=0;
     private int YSpeed=0;
@@ -97,15 +100,64 @@ public class Enemy extends ElementObj{
         rightCollider.setLive(live);
     }
 
-    public void pathfinding(){
+    private void pathfinding() {
+        if (target == null) {
+            // 寻找目标（比如玩家）
+            for(ElementObj tar:targetList){
+                if(Math.abs(tar.getX()-this.getX())<detectingDistance){
+                    target=tar;
+                }
+                return;
+            }
+            return;
+        }
+
+        // 简单追踪逻辑
+        int targetX = target.getX();
+        int currentX = this.getX();
+
+        if (targetX < currentX) {
+            // 目标在左边
+            XSpeed = -maxXSpeed;
+            Enemy_left_walk = true;
+            Enemy_right_walk = false;
+        } else if (targetX > currentX) {
+            // 目标在右边
+            XSpeed = maxXSpeed;
+            Enemy_right_walk = true;
+            Enemy_left_walk = false;
+        } else {
+            XSpeed = 0;
+        }
 
     }
 
     @Override
     protected void move() {
-
+        System.out.println("target:"+target);
+        pathfinding();
+        EnemyXMove();
         EnemyYMove();
+        XSpeed=0;
         YSpeed=Math.min(20,YSpeed+g);
+    }
+    private void EnemyXMove(){
+        if (this.Enemy_left_walk && this.getX() > 0) {
+            XSpeed=-maxXSpeed;
+            ColliderMove( XSpeed,0);
+            if(leftCollider.isCollided()){
+                ColliderMove( -XSpeed,0);
+                XSpeed=0;
+            }
+        } else if (this.Enemy_right_walk && this.getX() < 1200-this.getW()) {
+            XSpeed=maxXSpeed;
+            ColliderMove(XSpeed,0);
+            if(rightCollider.isCollided()){
+                ColliderMove( -XSpeed,0);
+                XSpeed=0;
+            }
+        }
+        this.setX(this.getX() + XSpeed);
     }
     private void EnemyYMove(){
         //按下跳跃键
@@ -173,5 +225,13 @@ public class Enemy extends ElementObj{
 
     public void setBottomCollider(Collider bottomCollider) {
         this.bottomCollider = bottomCollider;
+    }
+
+    public List<ElementObj> getTargetList() {
+        return targetList;
+    }
+
+    public void setTargetList(List<ElementObj> targetList) {
+        this.targetList = targetList;
     }
 }
