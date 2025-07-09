@@ -279,7 +279,7 @@ public class Player1 extends ElementObj{
 	 * @说明：false表示移动失败，true表示移动成功
 	 * @移动失败：位置不会移动，留在原地
 	 * @移动成功，位置和碰撞箱移动特定距离
-	 *
+	 * @详细使用方法：参照无参数的playerXMove和playerYMove
 	 */
 	//XDistance正数表示向右边移动
 	private boolean playerXMove(int XDistance) {
