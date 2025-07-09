@@ -293,10 +293,7 @@ public class Player1 extends ElementObj{
 		}
 		
 		// 设置位置变换 15ms刷新一次
-		if (player1_left_walk || player1_right_walk || this.player1_left_run ||
-				this.player1_right_run) {
-			this.setX(this.getX() + XSpeed);
-		}
+		this.setX(this.getX() + XSpeed);
 	}
 	
 	private void playerYMove(){
@@ -315,8 +312,9 @@ public class Player1 extends ElementObj{
 				YSpeed=0;
 			}
 		}
-
+		
 		this.setY(this.getY() + YSpeed);
+		
 
 	}
 
@@ -401,22 +399,22 @@ public class Player1 extends ElementObj{
 					attackPictureIndex++;
 					
 					// 移动
-					if (this.fx.equals("left") && this.getX() > 0) {
-						XSpeed = -maxXRunSpeed*player1_attack2_rush_distance_rate;
-						ColliderMove(XSpeed,0);
-						if(leftCollider.isCollided()){
-							ColliderMove( -XSpeed,0);
-							XSpeed=0;
-						}
-					} else if (this.fx.equals("right") && this.getX() < 1200-this.getW()) {
-						XSpeed = maxXRunSpeed*player1_attack2_rush_distance_rate;
-						ColliderMove(XSpeed,0);
-						if(leftCollider.isCollided()){
-							ColliderMove( -XSpeed,0);
-							XSpeed=0;
-						}
-					}
-					this.setX(this.getX() + XSpeed);
+//					if (this.fx.equals("left") && this.getX() > 0) {
+//						XSpeed = -maxXRunSpeed*player1_attack2_rush_distance_rate;
+//						ColliderMove(XSpeed,0);
+//						if(leftCollider.isCollided()){
+//							ColliderMove( -XSpeed,0);
+//							XSpeed=0;
+//						}
+//					} else if (this.fx.equals("right") && this.getX() < 1200-this.getW()) {
+//						XSpeed = maxXRunSpeed*player1_attack2_rush_distance_rate;
+//						ColliderMove(XSpeed,0);
+//						if(leftCollider.isCollided()){
+//							ColliderMove( -XSpeed,0);
+//							XSpeed=0;
+//						}
+//					}
+//					this.setX(this.getX() + XSpeed);
 					
 					// 控制停止
 					if (attackPictureIndex >= imageIcons.size()) {
