@@ -31,7 +31,7 @@ public class Player1 extends ElementObj{
 	private int player1_hp = 100; // 血量
 	private int player1_vit = 10; // 耐力
 	private int player1_mp = 10; //法力值
-	private int attack=2; // 攻击力
+	private int attack = 2; // 攻击力
 	
 	
 	// 攻击控制
@@ -46,11 +46,16 @@ public class Player1 extends ElementObj{
 	private boolean player1_attack3_time = false; // 控制第3种攻击子弹发射时间
 	
 	private long attackTime = 0L; // 攻击间隔
-	private long player1_attack1_over_time=0L; // 第1种攻击上次攻击结束时间
-	private long player1_attack2_over_time=0L; // 第2种攻击上次攻击结束时间
-	private long player1_attack3_over_time=0L; // 第3种攻击上次攻击结束时间
 	
-	private int player1_attack2_rush_distance_rate = 8; // 冲刺技能距离是单次奔跑距离的倍率
+	// 用于控制不同攻击的cd
+	private long player1_attack1_over_time = 0L; // 第1种攻击上次攻击结束时间
+	private long player1_attack2_over_time = 0L; // 第2种攻击上次攻击结束时间
+	private long player1_attack3_over_time = 0L; // 第3种攻击上次攻击结束时间
+	private long player1_attack1_cd_time = 0L; // 第1种攻击的cd时间
+	private long player1_attack2_cd_time = 0L; // 第2种攻击的cd时间
+	private long player1_attack3_cd_time = 0L; // 第3种攻击的cd时间
+	
+	private int player1_attack2_rush_distance_rate = 5; // 冲刺技能距离是单次奔跑距离的倍率
 	
 	
 	// 移动状态属性(待机、走路、跳跃、奔跑 4个状态)
