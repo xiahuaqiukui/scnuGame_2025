@@ -256,46 +256,130 @@ public class Player1 extends ElementObj{
 		YSpeed = Math.min(20,YSpeed+g);
 
 	}
-	
+
+	/**
+	 * @说明：0表示移动失败，1和2表示移动成功
+	 * @0：位置不会移动，留在原地
+	 * @1，仅X轴移动成功
+	 * @2，仅Y轴移动成功
+	 * @3，全部移动成功
+	 */
+	//distance表示移动的距离
+	private int playerMove(int XDistance, int YDistance) {
+		int result=0;
+		if(playerXMove(XDistance)){
+			result+=1;
+		}
+		if(playerYMove(YDistance)){
+			result+=2;
+		}
+		return result;
+	}
+	/**
+	 * @说明：false表示移动失败，true表示移动成功
+	 * @移动失败：位置不会移动，留在原地
+	 * @移动成功，位置和碰撞箱移动特定距离
+	 *
+	 */
+	//XDistance正数表示向右边移动
+	private boolean playerXMove(int XDistance) {
+		Collider detectedCollision=null;
+		if(XDistance>0){
+			detectedCollision=rightCollider;
+		}else{
+			detectedCollision=leftCollider;
+		}
+
+		ColliderMove(XDistance,0);
+
+		if(detectedCollision!=null){
+			if(detectedCollision.isCollided()){
+				ColliderMove(-XDistance,0);
+				return false;
+			}else{
+				this.setX(this.getX()+XDistance);
+				return true;
+			}
+		}else{
+			System.out.println("ERROR：碰撞箱检测出错");
+			return false;
+		}
+
+	}
+	//YDistance正数表示向下边移动
+	private boolean playerYMove(int YDistance) {
+		Collider detectedCollision=null;
+		if(YDistance>0){
+			detectedCollision=bottomCollider;
+		}else{
+			//向上移动不予检测
+			detectedCollision=null;
+		}
+
+		ColliderMove(0,YDistance);
+
+		if(detectedCollision!=null){
+			//向下移动
+			if(detectedCollision.isCollided()){
+				ColliderMove(0,-YDistance);
+				return false;
+			}else{
+				this.setY(this.getY()+YDistance);
+				return true;
+			}
+		}else{
+			//向上移动不予检测，直接执行
+			this.setY(this.getY()+YDistance);
+			return true;
+		}
+	}
 	// X轴移动，走路、奔跑状态
 	private void playerXMove(){ 
 		// 根据移动方向和方式设置速度
 		// 走路
 		if (this.player1_left_walk && this.getX() > 0) {
 			XSpeed=-maxXWalkSpeed;
-			ColliderMove( XSpeed,0);
-			if(leftCollider.isCollided()){
-				ColliderMove( -XSpeed,0);
-				XSpeed=0;
-			}
+//			if(!playerXMove(XSpeed)){
+//				XSpeed=0;
+//			}
+
+//			ColliderMove( XSpeed,0);
+//			if(leftCollider.isCollided()){
+//				ColliderMove( -XSpeed,0);
+//				XSpeed=0;
+//			}
+
 		} else if (this.player1_right_walk && this.getX() < 1200-this.getW()) {
 			XSpeed=maxXWalkSpeed;
-			ColliderMove(XSpeed,0);
-			if(rightCollider.isCollided()){
-				ColliderMove( -XSpeed,0);
-				XSpeed=0;
-			}
+//			ColliderMove(XSpeed,0);
+//			if(rightCollider.isCollided()){
+//				ColliderMove( -XSpeed,0);
+//				XSpeed=0;
+//			}
 		// 奔跑
 		} else if (this.player1_left_run && this.getX() > 0) {
 			XSpeed=-maxXRunSpeed;
-			ColliderMove(XSpeed,0);
-			if(leftCollider.isCollided()){
-				ColliderMove( -XSpeed,0);
-				XSpeed=0;
-			}
+//			ColliderMove(XSpeed,0);
+//			if(leftCollider.isCollided()){
+//				ColliderMove( -XSpeed,0);
+//				XSpeed=0;
+//			}
 		} else if (this.player1_right_run && this.getX() < 1200-this.getW()) {
 			XSpeed=maxXRunSpeed;
-			ColliderMove(XSpeed,0);
-			if(rightCollider.isCollided()){
-				ColliderMove( -XSpeed,0);
-				XSpeed=0;
-			}
+//			ColliderMove(XSpeed,0);
+//			if(rightCollider.isCollided()){
+//				ColliderMove( -XSpeed,0);
+//				XSpeed=0;
+//			}
 		}
 		
 		// 设置位置变换 15ms刷新一次
 		if (player1_left_walk || player1_right_walk || this.player1_left_run ||
 				this.player1_right_run) {
-			this.setX(this.getX() + XSpeed);
+//			this.setX(this.getX() + XSpeed);
+			if(!playerXMove(XSpeed)){
+				XSpeed=0;
+			}
 		}
 	}
 	
@@ -308,15 +392,20 @@ public class Player1 extends ElementObj{
 		}
 
 		//默认下落
-		ColliderMove( 0,YSpeed);
-		if(YSpeed>0){
-			if(bottomCollider.isCollided()){
-				ColliderMove( 0,-YSpeed);
-				YSpeed=0;
-			}
+//		ColliderMove( 0,YSpeed);
+//		if(YSpeed>0){
+//			if(bottomCollider.isCollided()){
+//				ColliderMove( 0,-YSpeed);
+//				YSpeed=0;
+//			}
+//		}
+//
+//		this.setY(this.getY() + YSpeed);
+		if(!playerYMove(YSpeed)){
+			YSpeed=0;
 		}
 
-		this.setY(this.getY() + YSpeed);
+
 
 	}
 

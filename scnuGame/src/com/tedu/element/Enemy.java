@@ -17,14 +17,20 @@ public class Enemy extends ElementObj{
     private ElementObj target=null;
     private List<ElementObj> targetList=null;
 
+
+    private long attackTime = 0L; // 攻击间隔
+    private long attack1;
+
     private boolean Enemy_left_idle = false;
     private boolean Enemy_right_idle = true;
-    private boolean Enemy_left_walk = false;
-    private boolean Enemy_right_walk = false;
+//    private boolean Enemy_left_walk = false;
+//    private boolean Enemy_right_walk = false;
     private boolean Enemy_left_jump=false;
     private boolean Enemy_right_jump=false;
     private boolean Enemy_left_run=false;
     private boolean Enemy_right_run=false;
+
+
     private Collider topCollider;
     private Collider bottomCollider;
     private Collider leftCollider;
@@ -36,7 +42,7 @@ public class Enemy extends ElementObj{
     private int g=1;
     private int maxXRunSpeed=10;
     private long pictureTime=0L;
-    private long attackTime=0L;
+
     private int pictureIndex=0;
 
     private String fx = "right";
@@ -79,10 +85,7 @@ public class Enemy extends ElementObj{
     }
 
     public void getHurt(){
-        hp--;
-        if(hp<=0){
-            setLive(false);
-        }
+        getHurt(1);
     }
     public void getHurt(int demage){
         hp-=demage;
@@ -106,8 +109,13 @@ public class Enemy extends ElementObj{
             for(ElementObj tar:targetList){
                 if(Math.abs(tar.getX()-this.getX())<detectingDistance){
                     target=tar;
+                    return;
                 }
-                return;
+                else{
+                    Enemy_left_idle=true;
+                }
+
+
             }
             return;
         }
@@ -116,16 +124,27 @@ public class Enemy extends ElementObj{
         int targetX = target.getX();
         int currentX = this.getX();
 
+
         if (targetX < currentX) {
             // 目标在左边
+
+            if(leftCollider.getX()<targetX){}
+
+
             XSpeed = -maxXSpeed;
-            Enemy_left_walk = true;
-            Enemy_right_walk = false;
+            Enemy_left_run = true;
+            Enemy_right_run = false;
+            Enemy_right_idle=false;
+            Enemy_left_idle=false;
+            fx="left";
         } else if (targetX > currentX) {
             // 目标在右边
             XSpeed = maxXSpeed;
-            Enemy_right_walk = true;
-            Enemy_left_walk = false;
+            Enemy_right_run = true;
+            Enemy_left_run = false;
+            Enemy_right_idle=false;
+            Enemy_left_idle=false;
+            fx="right";
         } else {
             XSpeed = 0;
         }
@@ -134,7 +153,6 @@ public class Enemy extends ElementObj{
 
     @Override
     protected void move() {
-        System.out.println("target:"+target);
         pathfinding();
         EnemyXMove();
         EnemyYMove();
@@ -142,14 +160,15 @@ public class Enemy extends ElementObj{
         YSpeed=Math.min(20,YSpeed+g);
     }
     private void EnemyXMove(){
-        if (this.Enemy_left_walk && this.getX() > 0) {
+        if (this.Enemy_left_run && this.getX() > 0) {
             XSpeed=-maxXSpeed;
             ColliderMove( XSpeed,0);
             if(leftCollider.isCollided()){
                 ColliderMove( -XSpeed,0);
                 XSpeed=0;
+                //Enemy_left_attack;
             }
-        } else if (this.Enemy_right_walk && this.getX() < 1200-this.getW()) {
+        } else if (this.Enemy_right_run && this.getX() < 1200-this.getW()) {
             XSpeed=maxXSpeed;
             ColliderMove(XSpeed,0);
             if(rightCollider.isCollided()){
@@ -182,6 +201,29 @@ public class Enemy extends ElementObj{
 
     @Override
     protected void updateImage(long gameTime, int sleepTime) {
+        List<ImageIcon> imageIcons = null;
+        if(gameTime-this.pictureTime>=10){
+//            System.out.println(Enemy_left_idle);
+//            System.out.println(Enemy_left_run);
+            if(this.Enemy_left_idle||this.Enemy_right_idle){
+                imageIcons = GameLoad.imgMaps.get(name+"_"+fx+"_idle");
+                this.setIcon(imageIcons.get(pictureIndex));
+                pictureIndex++;
+                pictureIndex%=imageIcons.size();
+
+            }else if (this.Enemy_left_run||this.Enemy_right_run) {
+                imageIcons = GameLoad.imgMaps.get(name+"_"+fx+"_run");
+//                System.out.println(imageIcons);
+                this.setIcon(imageIcons.get(pictureIndex));
+                pictureIndex++;
+                pictureIndex%=imageIcons.size();
+            }
+
+
+
+            pictureTime = gameTime;
+        }
+
 
     }
     private void ColliderMove(int XMovement,int YMovement){
