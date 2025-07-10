@@ -47,7 +47,6 @@ steamMan_left_jump=
 steamMan_left_attack1=image/3 SteamMan/attack1/left
 steamMan_left_attack2=
 steamMan_left_attack3=
-
 steamMan_right_idle=image/3 SteamMan/idle/right
 steamMan_right_walk=
 steamMan_right_hurt=
@@ -57,3 +56,14 @@ steamMan_right_jump=
 steamMan_right_attack1=image/3 SteamMan/attack1/right
 steamMan_right_attack2=
 steamMan_right_attack3=
+
+skeleton_Crusader_1_left_attack=image/enemy/Skeleton_Crusader_1/attack/left
+skeleton_Crusader_1_left_hurt=image/enemy/Skeleton_Crusader_1/hurt/left
+skeleton_Crusader_1_left_idle=image/enemy/Skeleton_Crusader_1/idle/left
+skeleton_Crusader_1_left_run=image/enemy/Skeleton_Crusader_1/run/left
+
+skeleton_Crusader_1_right_attack=image/enemy/Skeleton_Crusader_1/attack/right
+skeleton_Crusader_1_right_hurt=image/enemy/Skeleton_Crusader_1/hurt/right
+skeleton_Crusader_1_right_idle=image/enemy/Skeleton_Crusader_1/idle/right
+skeleton_Crusader_1_right_run=image/enemy/Skeleton_Crusader_1/run/right
+

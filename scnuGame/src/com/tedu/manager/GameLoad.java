@@ -1,10 +1,11 @@
 package com.tedu.manager;
 
 import com.tedu.element.*;
+import com.tedu.element.enemys.Skeleton_Crusader_1;
+import com.tedu.element.enemys.SteamMan;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URL;
 import java.util.*;
 
 import javax.swing.ImageIcon;
@@ -44,9 +45,15 @@ public class GameLoad {
 			while(names.hasMoreElements()){
 				String key= names.nextElement().toString();
 				String []arrs=pro.getProperty(key).split(";");
-				if(key.equals("ENEMY")){
+				if(key.equals("STEAMMAN")){
 					for(int i=0;i<arrs.length;i++){
-						ElementObj element = new Enemy().createElement(key+","+arrs[i]);
+						ElementObj element = new SteamMan().createElement(key+","+arrs[i]);
+						((Enemy)element).setTargetList(em.getElementsByKey(GameElement.PLAYER));
+						em.addElement(element,GameElement.ENEMY);
+					}
+				}else if(key.equals("SKELETON_CRUSADER_1")){
+					for(int i=0;i<arrs.length;i++){
+						ElementObj element = new Skeleton_Crusader_1().createElement(key+","+arrs[i]);
 						((Enemy)element).setTargetList(em.getElementsByKey(GameElement.PLAYER));
 						em.addElement(element,GameElement.ENEMY);
 					}
@@ -71,6 +78,7 @@ public class GameLoad {
             pro.load(texts);
 			Set<Object> set =  pro.keySet();
 			for(Object key:set){
+				System.out.println(key.toString());
 				String url=pro.getProperty(key.toString());
 				List<ImageIcon> imageIcons=new ArrayList<>();
 				for(int i=1;;i++){
@@ -81,6 +89,7 @@ public class GameLoad {
 						break;
 					}
 					imageIcons.add(icon);
+
 				}
 				imgMaps.put(key.toString(),imageIcons);
 

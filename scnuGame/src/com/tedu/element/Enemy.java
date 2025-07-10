@@ -11,41 +11,50 @@ import java.util.Random;
 
 public class Enemy extends ElementObj{
 
-    private String name="steamMan";
+    private String name="";
     private int hp;
-    private int detectingDistance=250;
-    private ElementObj target=null;
-    private List<ElementObj> targetList=null;
+    protected int detectingDistance=250;
+    protected ElementObj target=null;
+    protected List<ElementObj> targetList=null;
 
 
     private long attackTime = 0L; // 攻击间隔
     private long attack1;
 
-    private boolean Enemy_left_idle = false;
-    private boolean Enemy_right_idle = true;
+    protected boolean Enemy_left_idle = false;
+    protected boolean Enemy_right_idle = true;
 //    private boolean Enemy_left_walk = false;
 //    private boolean Enemy_right_walk = false;
-    private boolean Enemy_left_jump=false;
-    private boolean Enemy_right_jump=false;
-    private boolean Enemy_left_run=false;
-    private boolean Enemy_right_run=false;
+    protected boolean Enemy_left_jump=false;
+    protected boolean Enemy_right_jump=false;
+    protected boolean Enemy_left_run=false;
+    protected boolean Enemy_right_run=false;
+    protected boolean Enemy_left_attack1=false;
+    protected boolean Enemy_right_attack1=false;
 
 
-    private Collider topCollider;
-    private Collider bottomCollider;
-    private Collider leftCollider;
-    private Collider rightCollider;
-    private int maxXSpeed=3;
-    private int maxYSpeed=-15;
-    private int XSpeed=0;
-    private int YSpeed=0;
+    protected Collider topCollider;
+    protected Collider bottomCollider;
+    protected Collider leftCollider;
+    protected Collider rightCollider;
+    protected int maxXSpeed=3;
+    protected int maxYSpeed=-15;
+    protected int XSpeed=0;
+    protected int YSpeed=0;
     private int g=1;
     private int maxXRunSpeed=10;
     private long pictureTime=0L;
 
-    private int pictureIndex=0;
+    protected int pictureIndex=0;
+    protected int attackPictureIndex=0;
+    protected boolean canMove=true;
 
-    private String fx = "right";
+    protected String fx = "right";
+
+    public Enemy(){
+
+    }
+
 
     @Override
     public void showElement(Graphics g) {
@@ -63,8 +72,8 @@ public class Enemy extends ElementObj{
         System.out.println(str);
         String []arr=str.split(",");
         ImageIcon icon=GameLoad.imgMaps.get(name+"_right_idle").get(0);
-        this.setH(icon.getIconHeight());
-        this.setW(icon.getIconWidth());
+        this.setH(100);
+        this.setW(100);
         this.setX(Integer.parseInt(arr[1]));
         this.setY(Integer.parseInt(arr[2]));
         this.setIcon(icon);
@@ -103,7 +112,8 @@ public class Enemy extends ElementObj{
         rightCollider.setLive(live);
     }
 
-    private void pathfinding() {
+    ///具体敌人需要重写
+    protected void behavioralControl() {
         if (target == null) {
             // 寻找目标（比如玩家）
             for(ElementObj tar:targetList){
@@ -114,69 +124,126 @@ public class Enemy extends ElementObj{
                 else{
                     Enemy_left_idle=true;
                 }
-
-
             }
             return;
         }
-
         // 简单追踪逻辑
         int targetX = target.getX();
         int currentX = this.getX();
-
-
-        if (targetX < currentX) {
-            // 目标在左边
-
-            if(leftCollider.getX()<targetX){}
-
-
+        if ((targetX < currentX)&&(Math.abs(leftCollider.getX()-(targetX+target.getRectangle().getWidth()/2))>=50)) {
+            // 目标在左边且不在攻击范围内
             XSpeed = -maxXSpeed;
-            Enemy_left_run = true;
             Enemy_right_run = false;
             Enemy_right_idle=false;
             Enemy_left_idle=false;
+            Enemy_left_run = true;
             fx="left";
-        } else if (targetX > currentX) {
-            // 目标在右边
+        } else if ((targetX > currentX)&&(Math.abs(rightCollider.getX()-(targetX+target.getRectangle().getWidth()/2))>=50)) {
+            // 目标在右边且不在攻击范围内
             XSpeed = maxXSpeed;
-            Enemy_right_run = true;
             Enemy_left_run = false;
             Enemy_right_idle=false;
             Enemy_left_idle=false;
+            Enemy_right_run = true;
             fx="right";
-        } else {
-            XSpeed = 0;
         }
 
     }
 
     @Override
     protected void move() {
-        pathfinding();
-        EnemyXMove();
-        EnemyYMove();
+        behavioralControl();
+        if(canMove){
+            EnemyXMove();
+            EnemyYMove();
+        }
         XSpeed=0;
         YSpeed=Math.min(20,YSpeed+g);
+    }
+
+    private int EnemyMove(int XDistance, int YDistance) {
+        int result=0;
+        if(EnemyXMove(XDistance)){
+            result+=1;
+        }
+        if(EnemyYMove(YDistance)){
+            result+=2;
+        }
+        return result;
+    }
+
+    private boolean EnemyXMove(int XDistance) {
+        Collider detectedCollision=null;
+        if(XDistance>0){
+            detectedCollision=rightCollider;
+        }else{
+            detectedCollision=leftCollider;
+        }
+
+        ColliderMove(XDistance,0);
+
+        if(detectedCollision!=null){
+            if(detectedCollision.isCollided()){
+                ColliderMove(-XDistance,0);
+                return false;
+            }else{
+                this.setX(this.getX()+XDistance);
+                return true;
+            }
+        }else{
+            System.out.println("ERROR：碰撞箱检测出错");
+            return false;
+        }
+
+    }
+    //YDistance正数表示向下边移动
+    private boolean EnemyYMove(int YDistance) {
+        Collider detectedCollision=null;
+        if(YDistance>0){
+            detectedCollision=bottomCollider;
+        }else{
+            //向上移动不予检测
+            detectedCollision=null;
+        }
+
+        ColliderMove(0,YDistance);
+
+        if(detectedCollision!=null){
+            //向下移动
+            if(detectedCollision.isCollided()){
+                ColliderMove(0,-YDistance);
+                return false;
+            }else{
+                this.setY(this.getY()+YDistance);
+                return true;
+            }
+        }else{
+            //向上移动不予检测，直接执行
+            this.setY(this.getY()+YDistance);
+            return true;
+        }
     }
     private void EnemyXMove(){
         if (this.Enemy_left_run && this.getX() > 0) {
             XSpeed=-maxXSpeed;
-            ColliderMove( XSpeed,0);
-            if(leftCollider.isCollided()){
-                ColliderMove( -XSpeed,0);
-                XSpeed=0;
-                //Enemy_left_attack;
-            }
+//            ColliderMove( XSpeed,0);
+//            if(leftCollider.isCollided()){
+//                ColliderMove( -XSpeed,0);
+//                XSpeed=0;
+//                //Enemy_left_attack;
+//            }
         } else if (this.Enemy_right_run && this.getX() < 1200-this.getW()) {
             XSpeed=maxXSpeed;
-            ColliderMove(XSpeed,0);
-            if(rightCollider.isCollided()){
-                ColliderMove( -XSpeed,0);
-                XSpeed=0;
-            }
+//            ColliderMove(XSpeed,0);
+//            if(rightCollider.isCollided()){
+//                ColliderMove( -XSpeed,0);
+//                XSpeed=0;
+//            }
         }
-        this.setX(this.getX() + XSpeed);
+//        this.setX(this.getX() + XSpeed);
+        if(!EnemyXMove(XSpeed)){
+            XSpeed=0;
+        }
     }
     private void EnemyYMove(){
         //按下跳跃键
@@ -187,44 +254,45 @@ public class Enemy extends ElementObj{
         }
 
         //默认下落
-        ColliderMove( 0,YSpeed);
-        if(YSpeed>0){
-            if(bottomCollider.isCollided()){
-                ColliderMove( 0,-YSpeed);
-                YSpeed=0;
-            }
-        }
+//        ColliderMove( 0,YSpeed);
+//        if(YSpeed>0){
+//            if(bottomCollider.isCollided()){
+//                ColliderMove( 0,-YSpeed);
+//                YSpeed=0;
+//            }
+//        }
 
-        this.setY(this.getY() + YSpeed);
+//        this.setY(this.getY() + YSpeed);
+        if(!EnemyYMove(YSpeed)){
+            YSpeed=0;
+        }
 
     }
 
     @Override
     protected void updateImage(long gameTime, int sleepTime) {
-        List<ImageIcon> imageIcons = null;
-        if(gameTime-this.pictureTime>=10){
-//            System.out.println(Enemy_left_idle);
-//            System.out.println(Enemy_left_run);
-            if(this.Enemy_left_idle||this.Enemy_right_idle){
-                imageIcons = GameLoad.imgMaps.get(name+"_"+fx+"_idle");
-                this.setIcon(imageIcons.get(pictureIndex));
-                pictureIndex++;
-                pictureIndex%=imageIcons.size();
-
-            }else if (this.Enemy_left_run||this.Enemy_right_run) {
-                imageIcons = GameLoad.imgMaps.get(name+"_"+fx+"_run");
-//                System.out.println(imageIcons);
-                this.setIcon(imageIcons.get(pictureIndex));
-                pictureIndex++;
-                pictureIndex%=imageIcons.size();
-            }
-
-
-
+        if(gameTime-this.pictureTime>=5){
+            updateImage();
             pictureTime = gameTime;
         }
+    }
+    ///具体敌人需要重写
+    protected void updateImage(){
+        if(this.Enemy_left_idle||this.Enemy_right_idle){
+            //左右待机动画
+            List<ImageIcon> imageIcons = GameLoad.imgMaps.get(name+"_"+fx+"_idle");
+            pictureIndex%=imageIcons.size();
+            this.setIcon(imageIcons.get(pictureIndex));
+            pictureIndex++;
 
+        }else if (this.Enemy_left_run||this.Enemy_right_run) {
+            //左右跑步动画
 
+            List<ImageIcon> imageIcons = GameLoad.imgMaps.get(name+"_"+fx+"_run");
+            pictureIndex%=imageIcons.size();
+            this.setIcon(imageIcons.get(pictureIndex));
+            pictureIndex++;
+        }
     }
     private void ColliderMove(int XMovement,int YMovement){
         topCollider.setX(topCollider.getX()+XMovement);
@@ -275,5 +343,13 @@ public class Enemy extends ElementObj{
 
     public void setTargetList(List<ElementObj> targetList) {
         this.targetList = targetList;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }

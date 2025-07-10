@@ -616,4 +616,13 @@ public class Player1 extends ElementObj{
 	public void setRightCollider(Collider rightCollider) {
 		this.rightCollider = rightCollider;
 	}
+
+	@Override
+	public void setLive(boolean live) {
+		super.setLive(live);
+		topCollider.setLive(live);
+		bottomCollider.setLive(live);
+		leftCollider.setLive(live);
+		rightCollider.setLive(live);
+	}
 }
