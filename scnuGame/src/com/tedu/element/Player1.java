@@ -37,7 +37,7 @@ public class Player1 extends ElementObj{
 	private int player1_max_mp = 10; //法力值
 	private int player1_mp =  player1_max_mp;
 	
-	private int attack = 2; // 攻击力
+	private int attack = 1; // 攻击力
 	
 	// 展示当前属性的状态条
 	// ......
@@ -555,20 +555,32 @@ public class Player1 extends ElementObj{
 
 	@Override
 	public void attack(long gameTime) {
-		if(pkType == 1){ // 控制两次普攻动作的间隔
+		if(player1_attack1_time){
 			// 碰撞箱
+			ElementObj element = new AttackCollider().createElement(this.toString());
+			AttackCollider e = (AttackCollider) element;
+			e.setAttackType(1);
+			e.fitAttackType();
+			ElementManager.getManager().addElement(e, GameElement.ATTACKCOLLIDER);
 			
-		}else if(pkType == 2){
+			
+			player1_attack1_time = false;
+		}else if(player1_attack2_time){
 			// 碰撞箱
+			ElementObj element = new AttackCollider().createElement(this.toString());
+			AttackCollider e = (AttackCollider) element;
+			e.setAttackType(2);
+			e.fitAttackType();
+			ElementManager.getManager().addElement(e, GameElement.ATTACKCOLLIDER);
 			
+			
+			player1_attack2_time = false;
 		}else if(player1_attack3_time){
 //			if(gameTime-this.pictureTime >= 5){}
 //			List<ImageIcon> imageIcons = GameLoad.imgMaps.get("player1_" + fx + "_attack1");
 			
 			// 发射子弹
-			// 将构造类的多个步骤封装成一个方法，返回值直接是这个对象
 			ElementObj element = new Bullet().createElement(this.toString());
-			// 装入集合当中
 			ElementManager.getManager().addElement(element, GameElement.BULLET);
 			
 			player1_attack3_time = false;
@@ -580,13 +592,11 @@ public class Player1 extends ElementObj{
 	public String toString() {
 		int x = this.getX();
 		int y = this.getY();
-		switch (this.fx) {
-			case "left": y+=50; break;
-			case "right": x+=100; y+=50; break;
-		}
+		int w = this.getW();
+		int h = this.getH();
 
 		// {x:3,y:1,f:right} json格式 弹药样式可拓展
-		return "x:"+x+",y:"+y+",fx:"+this.fx;
+		return "x:"+x+",y:"+y+",w:"+w+",h:"+h+",fx:"+fx+",attack:"+attack;
 	}
 
 	public Collider getTopCollider() {

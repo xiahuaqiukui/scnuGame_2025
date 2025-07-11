@@ -41,8 +41,16 @@ public class Bullet extends ElementObj{
 			case "x": this.setX(Integer.parseInt(split2[1])); break;
 			case "y": this.setY(Integer.parseInt(split2[1])); break;
 			case "fx": this.fx = split2[1]; break;
+			default: break;
 			}
 		}
+		
+		// 为了使得子弹从角色手中发射出去
+		switch (this.fx) {
+		case "left": this.setY(this.getY()+50); break;
+		case "right": this.setX(this.getX()+100); this.setY(this.getY()+50); break;
+		}
+		
 		this.setW(10);
 		this.setH(10);
 		

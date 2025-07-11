@@ -74,14 +74,16 @@ public class GameThread extends Thread{
 			List<ElementObj> bullets = em.getElementsByKey(GameElement.BULLET);
 			List<ElementObj> maps = em.getElementsByKey(GameElement.MAPS);
 			List<ElementObj> collider = em.getElementsByKey(GameElement.COLLIDER);
+			List<ElementObj> AttackCollider = em.getElementsByKey(GameElement.ATTACKCOLLIDER);
 			
 			// 更新
 			Update(all, gameTime);
 			
 			// 碰撞检测
 			ElementPK(enemys, bullets);
+			ElementPK(enemys, AttackCollider);
+			RemoveAttackCollider();
 			ColliderCollided(collider, maps);
-			
 			
 			gameTime++;
 			
@@ -145,6 +147,8 @@ public class GameThread extends Thread{
 			ElementObj enemy=listA.get(i);
 			for(int j=0;j<listB.size();j++){
 				ElementObj file=listB.get(j);
+				
+				// 如果碰撞
 				if(enemy.pk(file)){
 					enemy.setLive(false);
 					file.setLive(false);
@@ -173,5 +177,10 @@ public class GameThread extends Thread{
 		}
 	}
 
-
+	public void RemoveAttackCollider() {
+		List<ElementObj> AttackCollider = em.getElementsByKey(GameElement.ATTACKCOLLIDER);
+		for (ElementObj atkcol : AttackCollider) {
+			atkcol.setLive(false);
+		}
+	}
 }

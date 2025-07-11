@@ -51,9 +51,7 @@ public class Enemy extends ElementObj{
 
     protected String fx = "right";
 
-    public Enemy(){
-
-    }
+    public Enemy(){}
 
 
     @Override
