@@ -11,16 +11,27 @@ import java.util.Random;
 
 public class Enemy extends ElementObj{
 
+    /// 加载使用的属性
     private String name="";
-    private int hp;
+    protected List<ElementObj> targetList=null;
+    private long pictureTime=0L;
+    protected int pictureIndex=0;
+    protected int attackPictureIndex=0;
+
+    ///敌人基本属性
+    private int enemy_max_hp = 100; // 血量
+    private int enemy_hp = enemy_max_hp;
+    private int attack=10;
     protected int detectingDistance=250;
     protected ElementObj target=null;
-    protected List<ElementObj> targetList=null;
-
-
     private long attackTime = 0L; // 攻击间隔
-    private long attack1;
+    protected int maxXSpeed=3;
+    protected int maxYSpeed=-15;
+    protected int XSpeed=0;
+    protected int YSpeed=0;
 
+    /// 状态控制
+    protected String fx = "right";
     protected boolean Enemy_left_idle = false;
     protected boolean Enemy_right_idle = true;
 //    private boolean Enemy_left_walk = false;
@@ -32,26 +43,16 @@ public class Enemy extends ElementObj{
     protected boolean Enemy_left_attack1=false;
     protected boolean Enemy_right_attack1=false;
 
-
+    /// 碰撞箱
     protected Collider topCollider;
     protected Collider bottomCollider;
     protected Collider leftCollider;
     protected Collider rightCollider;
-    protected int maxXSpeed=3;
-    protected int maxYSpeed=-15;
-    protected int XSpeed=0;
-    protected int YSpeed=0;
+
+
+    /// 其他基本配置
     private int g=1;
-    private int maxXRunSpeed=10;
-    private long pictureTime=0L;
-
-    protected int pictureIndex=0;
-    protected int attackPictureIndex=0;
     protected boolean canMove=true;
-
-    protected String fx = "right";
-
-    public Enemy(){}
 
 
     @Override
@@ -95,8 +96,8 @@ public class Enemy extends ElementObj{
         getHurt(1);
     }
     public void getHurt(int demage){
-        hp-=demage;
-        if(hp<=0){
+        enemy_hp-=demage;
+        if(enemy_hp<=0){
             setLive(false);
         }
     }
