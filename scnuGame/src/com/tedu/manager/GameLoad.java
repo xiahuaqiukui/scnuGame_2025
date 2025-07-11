@@ -49,7 +49,7 @@ public class GameLoad {
 					for(int i=0;i<arrs.length;i++){
 						ElementObj element = new SteamMan().createElement(key+","+arrs[i]);
 						((Enemy)element).setTargetList(em.getElementsByKey(GameElement.PLAYER));
-						em.addElement(element,GameElement.ENEMY);
+						em.addElement(element,GameElement.BOSS);
 					}
 				}else if(key.equals("SKELETON_CRUSADER_1")){
 					for(int i=0;i<arrs.length;i++){

@@ -12,7 +12,6 @@ public class Skeleton_Crusader_1 extends Enemy{
 
     public Skeleton_Crusader_1(){
         setName("skeleton_Crusader_1");
-
     }
 
     @Override

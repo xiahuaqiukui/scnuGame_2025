@@ -473,7 +473,7 @@ public class Player1 extends ElementObj{
 //				ColliderMove( -XSpeed,0);
 //				XSpeed=0;
 //			}
-		} else if (this.player1_right_run && this.getX() < 1200-this.getW()) {
+		} else if (this.player1_right_run && this.getX() < 1800-this.getW()) {
 			XSpeed=maxXRunSpeed;
 //			ColliderMove(XSpeed,0);
 //			if(rightCollider.isCollided()){

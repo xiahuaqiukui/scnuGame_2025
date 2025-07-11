@@ -5,7 +5,7 @@ import com.tedu.element.Enemy;
 public class SteamMan extends Enemy {
 
     public SteamMan(){
-        setName("steamMan");
+        setName("plyer1");
     }
 
     @Override
