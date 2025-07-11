@@ -20,7 +20,7 @@ public class Enemy extends ElementObj{
     protected int attackPictureIndex=0;
 
     ///敌人基本属性
-    private int enemy_max_hp = 5; // 血量
+    private int enemy_max_hp = 10; // 血量
     private int enemy_hp = enemy_max_hp;
     private int attack=10;
     protected int detectingDistance=250;
@@ -108,7 +108,6 @@ public class Enemy extends ElementObj{
         ElementObj element = new FloatingText(fx, fy, this.getW(), this.getH()
         		, null, new String("-"+demage), Color.RED);
 		ElementManager.getManager().addElement(element, GameElement.FLOATINGTEXT);
-        
         
         if(enemy_hp<=0){
             setLive(false);

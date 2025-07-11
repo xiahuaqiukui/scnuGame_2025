@@ -6,7 +6,7 @@ import java.awt.Graphics;
 import javax.swing.ImageIcon;
 
 public class AttackCollider extends ElementObj{
-	private int attack; // 攻击力
+	private int attack; // 角色攻击力,不是实际造成的伤害
 	private String fx; // 角色朝向
 	private int attackType; // 攻击判定箱类型
 	
@@ -61,7 +61,13 @@ public class AttackCollider extends ElementObj{
 	}
 	
 	public int getAttack() {
-		// 暂时只返回攻击数值
+		// 不同攻击类型返回不同倍率
+		if (attackType==1) {
+			return attack;
+		} else if (attackType==2) {
+			return 3*attack;
+		}
+		
 		return attack;
 	}
 }

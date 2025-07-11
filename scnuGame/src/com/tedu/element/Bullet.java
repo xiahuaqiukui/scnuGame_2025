@@ -16,8 +16,8 @@ import javax.swing.ImageIcon;
  */
 
 public class Bullet extends ElementObj{
-	private int attack=1; // 攻击力
-	private int speed=10; // 速度
+	private int attack = 2; // 攻击力
+	private int speed = 10; // 速度
 	private String fx;
 	// 拓展其他属性  可拓展多种子弹类型：激光、导弹等（玩家类要有子弹类型）
 	
