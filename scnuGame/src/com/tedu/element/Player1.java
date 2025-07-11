@@ -28,11 +28,19 @@ public class Player1 extends ElementObj{
 	 */
 	
 	// 角色基本属性
-	private int player1_hp = 100; // 血量
-	private int player1_vit = 10; // 耐力
-	private int player1_mp = 10; //法力值
+	private int player1_max_hp = 100; // 血量
+	private int player1_hp = player1_max_hp;
+	
+	private int player1_max_vit = 10; // 耐力
+	private int player1_vit = player1_max_vit;
+	
+	private int player1_max_mp = 10; //法力值
+	private int player1_mp =  player1_max_mp;
+	
 	private int attack = 2; // 攻击力
 	
+	// 展示当前属性的状态条
+	// ......
 	
 	// 攻击控制
 	private int pkType = 0; // 1普攻  2重击  3远程
@@ -63,10 +71,10 @@ public class Player1 extends ElementObj{
 	private boolean player1_right_idle = true;
 	private boolean player1_left_walk = false;
 	private boolean player1_right_walk = false;
-	private boolean player1_left_jump=false;
-	private boolean player1_right_jump=false;
-	private boolean player1_left_run=false;
-	private boolean player1_right_run=false;
+	private boolean player1_left_jump = false;
+	private boolean player1_right_jump = false;
+	private boolean player1_left_run = false;
+	private boolean player1_right_run = false;
 	
 	
 	// 碰撞箱
@@ -77,20 +85,20 @@ public class Player1 extends ElementObj{
 	
 	
 	// 速度
-	private int maxXWalkSpeed=2; // x轴最大走路速度
-	private int maxXRunSpeed=7; // x轴最大奔跑速度
-	private int maxYSpeed=-15; // 最大下落/上升速度
-	private int XSpeed=0; // 当前x轴速度
-	private int YSpeed=0; // 当前y轴速度
+	private int maxXWalkSpeed = 2; // x轴最大走路速度
+	private int maxXRunSpeed = 7; // x轴最大奔跑速度
+	private int maxYSpeed = -15; // 最大下落/上升速度
+	private int XSpeed = 0; // 当前x轴速度
+	private int YSpeed = 0; // 当前y轴速度
 	
 	// 重力(下落速度相关)
 	private int g=1;
 	
 	// 换装图片轮播
-	private long pictureTime=0L; // 移动照片切换间隔时间
+	private long pictureTime = 0L; // 移动照片切换间隔时间
 	private long attackPictureTime = 0L; // 攻击照片切换间隔时间
-	private int pictureIndex=0; // 移动照片切换序号
-	private int attackPictureIndex=0; // 攻击照片切换序号
+	private int pictureIndex = 0; // 移动照片切换序号
+	private int attackPictureIndex = 0; // 攻击照片切换序号
 	
 	// 主角朝向(初始默认为右)
 	private String fx = "right"; // 左或右
@@ -114,14 +122,16 @@ public class Player1 extends ElementObj{
 		String[] strs = str.split(",");
 		this.setX(Integer.parseInt(strs[0]));
 		this.setY(Integer.parseInt(strs[1]));
-		ImageIcon icon2= GameLoad.imgMaps.get("player1_right_idle").get(0);
+		ImageIcon icon2 = GameLoad.imgMaps.get("player1_right_idle").get(0);
 		this.setH(100);
 		this.setW(100);
 		this.setIcon(icon2);
-		ElementObj topCollider=new Collider(getX(), getY()-5,getW(),5);
-		ElementObj bottomCollider=new Collider(getX(), getY()+100,getW(),5);
-		ElementObj leftCollider=new Collider(getX()-5, getY(),5,getH()-15);
-		ElementObj rightCollider=new Collider(getX()+100, getY(),5,getH()-15);
+		
+		ElementObj topCollider = new Collider(getX(), getY()-5, getW(), 5);
+		ElementObj bottomCollider = new Collider(getX(), getY()+100, getW(), 5);
+		ElementObj leftCollider = new Collider(getX()-5, getY(), 5, getH()-15);
+		ElementObj rightCollider = new Collider(getX()+100, getY(), 5, getH()-15);
+		
 		setTopCollider((Collider) topCollider);
 		setBottomCollider((Collider) bottomCollider);
 		setLeftCollider((Collider) leftCollider);
@@ -131,6 +141,7 @@ public class Player1 extends ElementObj{
 		ElementManager.getManager().addElement(bottomCollider,GameElement.COLLIDER);
 		ElementManager.getManager().addElement(leftCollider,GameElement.COLLIDER);
 		ElementManager.getManager().addElement(rightCollider,GameElement.COLLIDER);
+		
 		return this;
 	}
 
@@ -280,6 +291,7 @@ public class Player1 extends ElementObj{
 		}
 		return result;
 	}
+	
 	/**
 	 * @说明：false表示移动失败，true表示移动成功
 	 * @移动失败：位置不会移动，留在原地
@@ -309,8 +321,8 @@ public class Player1 extends ElementObj{
 			System.out.println("ERROR：碰撞箱检测出错");
 			return false;
 		}
-
 	}
+	
 	//YDistance正数表示向下边移动
 	private boolean playerYMove(int YDistance) {
 		Collider detectedCollision=null;
@@ -547,27 +559,19 @@ public class Player1 extends ElementObj{
 			// 碰撞箱
 			
 		}else if(pkType == 2){
-			if(gameTime-this.attackTime>=50){// 重击
-				attackTime=gameTime;
-				// 碰撞箱
-
-			}
+			// 碰撞箱
+			
 		}else if(player1_attack3_time){
-			if(gameTime-this.attackTime>=50){
-				attackTime=gameTime;
-				
-//				if(gameTime-this.pictureTime >= 5){}
-//				List<ImageIcon> imageIcons = GameLoad.imgMaps.get("player1_" + fx + "_attack1");
-				
-				
-				// 发射子弹
-				// 将构造类的多个步骤封装成一个方法，返回值直接是这个对象
-				ElementObj element = new Bullet().createElement(this.toString());
-				// 装入集合当中
-				ElementManager.getManager().addElement(element, GameElement.BULLET);
-				
-				player1_attack3_time = false;
-			}
+//			if(gameTime-this.pictureTime >= 5){}
+//			List<ImageIcon> imageIcons = GameLoad.imgMaps.get("player1_" + fx + "_attack1");
+			
+			// 发射子弹
+			// 将构造类的多个步骤封装成一个方法，返回值直接是这个对象
+			ElementObj element = new Bullet().createElement(this.toString());
+			// 装入集合当中
+			ElementManager.getManager().addElement(element, GameElement.BULLET);
+			
+			player1_attack3_time = false;
 		}
 
 	}

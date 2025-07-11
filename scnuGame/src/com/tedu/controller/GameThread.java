@@ -75,11 +75,14 @@ public class GameThread extends Thread{
 			List<ElementObj> maps = em.getElementsByKey(GameElement.MAPS);
 			List<ElementObj> collider = em.getElementsByKey(GameElement.COLLIDER);
 			
-			// 
+			// 更新
 			Update(all, gameTime);
+			
+			// 碰撞检测
 			ElementPK(enemys, bullets);
 			ColliderCollided(collider, maps);
-
+			
+			
 			gameTime++;
 			
 			// 游戏进程的刷新时间

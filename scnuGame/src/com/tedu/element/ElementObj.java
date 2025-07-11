@@ -87,6 +87,7 @@ public abstract class ElementObj {
 	public Rectangle getRectangle() {
 		return new Rectangle(x,y,w,h);
 	}
+	
 	//检测碰撞
 	public boolean pk(ElementObj obj) {
 		return this.getRectangle().intersects(obj.getRectangle());
