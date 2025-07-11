@@ -54,10 +54,6 @@ public class Enemy extends ElementObj{
     private int g=1;
     protected boolean canMove=true;
 
-    public Enemy(){
-
-    }
-
 
     @Override
     public void showElement(Graphics g) {
@@ -154,7 +150,7 @@ public class Enemy extends ElementObj{
     }
 
     @Override
-    protected void move() {
+    protected void move(long gameTime) {
         behavioralControl();
         if(canMove){
             EnemyXMove();

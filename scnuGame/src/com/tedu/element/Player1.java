@@ -1,5 +1,6 @@
 package com.tedu.element;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.util.List;
 
@@ -29,18 +30,20 @@ public class Player1 extends ElementObj{
 	
 	// 角色基本属性
 	private int player1_max_hp = 100; // 血量
-	private int player1_hp = player1_max_hp;
+	private int player1_hp = 50;
 	
-	private int player1_max_vit = 10; // 耐力
-	private int player1_vit = player1_max_vit;
+	private int player1_max_vit = 100; // 耐力
+	private int player1_vit = 50;
 	
-	private int player1_max_mp = 10; //法力值
-	private int player1_mp =  player1_max_mp;
+	private int player1_max_mp = 100; //法力值
+	private int player1_mp =  50;
 	
-	private int attack = 2; // 攻击力
+	private int attack = 1; // 攻击力
 	
 	// 展示当前属性的状态条
-	// ......
+	private Bar hpBar = new Bar(20, 100, 100, 10, null, player1_max_hp, player1_hp, Color.RED);
+	private Bar vitBar = new Bar(20, 120, 100, 10, null, player1_max_vit, player1_vit, Color.YELLOW);
+	private Bar mpBar = new Bar(20, 140, 100, 10, null, player1_max_vit, player1_vit, Color.BLUE);
 	
 	// 攻击控制
 	private int pkType = 0; // 1普攻  2重击  3远程
@@ -102,7 +105,16 @@ public class Player1 extends ElementObj{
 	
 	// 主角朝向(初始默认为右)
 	private String fx = "right"; // 左或右
-
+	
+	// 控制移动消耗体力的间隔(防止过快)
+	private long moveVitConsumeTime = 0;
+	
+	// 体力消耗+魔力消耗 数值
+	private final int vitRunConsume = 2;
+	private final int vitAttack1Consume = 5;
+	private final int vitAttack2Consume = 30;
+	
+	private final int mpAttack3Consume = 40;
 	
 	public Player1(){}
 	// 初始化玩家属性，目前仅继承父类属性
@@ -115,6 +127,11 @@ public class Player1 extends ElementObj{
 		g.drawImage(this.getIcon().getImage(), 
 				this.getX(), this.getY(), 
 				this.getW(), this.getH(), null);
+		
+		// 血量条+耐力条
+		hpBar.showElement(g);
+		vitBar.showElement(g);
+		mpBar.showElement(g);
 	}
 	
 	@Override
@@ -179,12 +196,27 @@ public class Player1 extends ElementObj{
 					pictureIndex=0;
 					break; // 右
 					
-				/**
-				 * @说明 战斗控制
-				 */
-				case 74: this.pkType = 1; break; // 开启攻击状态
-				case 76: this.pkType = 2; break;
-				case 73: this.pkType = 3; break;
+					/**
+					 * @说明 战斗控制
+					 */
+					case 74:
+						this.pkType = 1;
+						if (player1_vit < vitAttack1Consume) {
+							pkType = 0;
+						}
+						break;
+					case 76:
+						this.pkType = 2;
+						if (player1_vit < vitAttack2Consume) {
+							pkType = 0;
+						}
+						break;
+					case 73:
+						this.pkType = 3;
+						if (player1_mp < mpAttack3Consume) {
+							pkType = 0;
+						}
+						break;
 			}
 		} else if(bl==2){ // 双击
 			switch (key) {
@@ -199,6 +231,12 @@ public class Player1 extends ElementObj{
 				this.player1_left_run = true;
 				this.player1_right_run = false;
 				this.fx = "left";
+				
+//				if (player1_vit < vitRunConsume) {
+//					this.player1_left_run = false;
+//					this.player1_left_walk = true;
+//				}
+				
 				pictureIndex=0;
 				break; // 左
 			case 68:
@@ -209,15 +247,36 @@ public class Player1 extends ElementObj{
 				this.player1_left_run = false;
 				this.player1_right_run = true;
 				this.fx = "right";
+				
+//				if (player1_vit < vitRunConsume) {
+//					this.player1_right_run = false;
+//					this.player1_right_walk = true;
+//				}
+				
 				pictureIndex=0;
 				break; // 右
 
 			/**
 			 * @说明 战斗控制
 			 */
-			case 74: this.pkType = 1; break; // 开启攻击状态
-			case 76: this.pkType = 2; break;
-			case 73: this.pkType = 3; break;
+			case 74:
+				this.pkType = 1;
+				if (player1_vit < vitAttack1Consume) {
+					pkType = 0;
+				}
+				break;
+			case 76:
+				this.pkType = 2;
+				if (player1_vit < vitAttack2Consume) {
+					pkType = 0;
+				}
+				break;
+			case 73:
+				this.pkType = 3;
+				if (player1_mp < mpAttack3Consume) {
+					pkType = 0;
+				}
+				break;
 			}
 		} else { // 松开
 			switch (key) {
@@ -228,12 +287,18 @@ public class Player1 extends ElementObj{
 					this.player1_left_walk = false;
 					this.player1_left_idle = true;
 					this.player1_left_run = false;
+					this.player1_right_walk = false;
+					this.player1_right_idle = false;
+					this.player1_right_run = false;
 					pictureIndex = 0;
 					break; // 左
 				case 68:
 					this.player1_right_walk = false;
 					this.player1_right_idle = true;
 					this.player1_right_run = false;
+					this.player1_left_idle = false;
+					this.player1_left_walk = false;
+					this.player1_left_run = false;
 					pictureIndex = 0;
 					break; // 右
 
@@ -259,7 +324,7 @@ public class Player1 extends ElementObj{
 	
 	// 重写角色移动方式
 	@Override
-	protected void move() {
+	protected void move(long gameTime) {
 		// x轴和y轴移动
 		playerXMove();
 		playerYMove();
@@ -267,10 +332,28 @@ public class Player1 extends ElementObj{
 //		System.out.println(XSpeed);
 //		System.out.println(YSpeed);
 		
+		// 待机时恢复大量耐力值和法力值
+		// 行走时恢复少量耐力值
+		// 奔跑时消耗少量耐力值
+		if (gameTime - this.moveVitConsumeTime >= 10) {
+			moveVitConsumeTime = gameTime;
+			
+			if (player1_left_idle || player1_right_idle) {
+				player1_vit = Math.min(player1_max_vit, player1_vit + 2);
+				player1_mp = Math.min(player1_max_mp, player1_mp + 2);
+			} else if (player1_left_walk || player1_right_walk) {
+				player1_vit = Math.min(player1_max_vit, player1_vit + 1);
+			} else if (player1_left_run || player1_right_run) {
+				player1_vit = Math.max(0, player1_vit-vitRunConsume);
+			}
+			vitBar.setNowNum(player1_vit);
+			mpBar.setNowNum(player1_mp);
+		}
+		
+		
 		// 动完之后初始化
 		XSpeed = 0;
 		YSpeed = Math.min(20,YSpeed+g);
-
 	}
 
 	/**
@@ -352,8 +435,17 @@ public class Player1 extends ElementObj{
 	}
 	// X轴移动，走路、奔跑状态
 	private void playerXMove(){ 
-		// 根据移动方向和方式设置速度
-		// 走路
+		// 奔跑时体力不足 改为走路
+		if (player1_vit < vitRunConsume && player1_right_run==true) {
+			this.player1_right_run = false;
+			this.player1_right_walk = true;
+		}
+		if (player1_vit < vitRunConsume && player1_left_run==true) {
+			this.player1_left_run = false;
+			this.player1_left_walk = true;
+		}
+		
+		// 移动
 		if (this.player1_left_walk && this.getX() > 0) {
 			XSpeed=-maxXWalkSpeed;
 //			if(!playerXMove(XSpeed)){
@@ -555,40 +647,70 @@ public class Player1 extends ElementObj{
 
 	@Override
 	public void attack(long gameTime) {
-		if(pkType == 1){ // 控制两次普攻动作的间隔
-			// 碰撞箱
+		if(player1_attack1_time){
+			// 消耗体力
+			this.player1_vit -= vitAttack1Consume;
 			
-		}else if(pkType == 2){
 			// 碰撞箱
+			ElementObj element = new AttackCollider().createElement(this.toString());
+			AttackCollider e = (AttackCollider) element;
+			e.setAttackType(1);
+			e.fitAttackType();
+			ElementManager.getManager().addElement(e, GameElement.ATTACKCOLLIDER);
 			
+			
+			player1_attack1_time = false;
+		}else if(player1_attack2_time){
+			this.player1_vit -= vitAttack2Consume;
+			
+			// 碰撞箱
+			ElementObj element = new AttackCollider().createElement(this.toString());
+			AttackCollider e = (AttackCollider) element;
+			e.setAttackType(2);
+			e.fitAttackType();
+			ElementManager.getManager().addElement(e, GameElement.ATTACKCOLLIDER);
+			
+			
+			player1_attack2_time = false;
 		}else if(player1_attack3_time){
 //			if(gameTime-this.pictureTime >= 5){}
 //			List<ImageIcon> imageIcons = GameLoad.imgMaps.get("player1_" + fx + "_attack1");
+			this.player1_mp -= mpAttack3Consume;
 			
 			// 发射子弹
-			// 将构造类的多个步骤封装成一个方法，返回值直接是这个对象
 			ElementObj element = new Bullet().createElement(this.toString());
-			// 装入集合当中
 			ElementManager.getManager().addElement(element, GameElement.BULLET);
 			
 			player1_attack3_time = false;
 		}
-
+		
+		vitBar.setNowNum(this.player1_vit);
+		mpBar.setNowNum(this.player1_mp);
 	}
 	
 	@Override
 	public String toString() {
 		int x = this.getX();
 		int y = this.getY();
-		switch (this.fx) {
-			case "left": y+=50; break;
-			case "right": x+=100; y+=50; break;
-		}
+		int w = this.getW();
+		int h = this.getH();
 
 		// {x:3,y:1,f:right} json格式 弹药样式可拓展
-		return "x:"+x+",y:"+y+",fx:"+this.fx;
+		return "x:"+x+",y:"+y+",w:"+w+",h:"+h+",fx:"+fx+",attack:"+attack;
 	}
-
+	
+	// 受伤
+	public void getHurt(int damage) {
+		this.player1_hp = Math.max(0,this.player1_hp - damage);
+		hpBar.setNowNum(player1_hp);
+		
+		if (player1_hp <= 0) {
+			this.setLive(false);
+		}
+		
+	}
+	
+	
 	public Collider getTopCollider() {
 		return topCollider;
 	}
