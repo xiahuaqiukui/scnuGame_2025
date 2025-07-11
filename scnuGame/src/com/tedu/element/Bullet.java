@@ -16,13 +16,14 @@ import javax.swing.ImageIcon;
  */
 
 public class Bullet extends ElementObj{
-	private int attack; // 攻击力
+	private int attack=1; // 攻击力
 	private int speed=10; // 速度
 	private String fx;
 	// 拓展其他属性  可拓展多种子弹类型：激光、导弹等（玩家类要有子弹类型）
 	
 	public Bullet() {}
 	
+	// 不使用的函数
 	private Bullet(int x, int y, int w, int h, ImageIcon icon, String fx) {
 		super(x, y, w, h, icon);
 		
@@ -45,7 +46,7 @@ public class Bullet extends ElementObj{
 			}
 		}
 		
-		// 为了使得子弹从角色手中发射出去
+		// 为了使得子弹从角色手中发射出去，根据图片方位调整
 		switch (this.fx) {
 		case "left": this.setY(this.getY()+50); break;
 		case "right": this.setX(this.getX()+100); this.setY(this.getY()+50); break;
@@ -70,5 +71,10 @@ public class Bullet extends ElementObj{
 		case "left": this.setX(this.getX()-this.speed); break;
 		case "right": this.setX(this.getX()+this.speed); break;
 		}
+	}
+	
+	public int getAttack() {
+		// 暂时只返回攻击数值
+		return attack;
 	}
 }

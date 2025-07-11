@@ -59,4 +59,9 @@ public class AttackCollider extends ElementObj{
 			this.setX(this.getX()-25);
 		}
 	}
+	
+	public int getAttack() {
+		// 暂时只返回攻击数值
+		return attack;
+	}
 }

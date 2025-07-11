@@ -3,8 +3,11 @@ package com.tedu.controller;
 import java.util.List;
 import java.util.Map;
 
+import com.tedu.element.AttackCollider;
+import com.tedu.element.Bullet;
 import com.tedu.element.Collider;
 import com.tedu.element.ElementObj;
+import com.tedu.element.Enemy;
 import com.tedu.manager.ElementManager;
 import com.tedu.manager.GameElement;
 import com.tedu.manager.GameLoad;
@@ -151,7 +154,20 @@ public class GameThread extends Thread{
 				
 				// 如果碰撞
 				if(enemy.pk(file)){
-					enemy.setLive(false);
+					int hurt = 0;
+					if (file instanceof AttackCollider) {
+						AttackCollider t = (AttackCollider) file;
+						hurt = t.getAttack();
+					} else if (file instanceof Bullet) {
+						Bullet t = (Bullet) file;
+						hurt = t.getAttack();
+					}
+					
+					if (enemy instanceof Enemy) {
+						Enemy t = (Enemy) enemy;
+						t.getHurt(hurt);
+					}
+					
 					file.setLive(false);
 					break;
 				}

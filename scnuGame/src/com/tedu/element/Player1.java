@@ -128,7 +128,7 @@ public class Player1 extends ElementObj{
 				this.getX(), this.getY(), 
 				this.getW(), this.getH(), null);
 		
-		// 血量条+耐力条
+		// 血量条 耐力条 魔力条
 		hpBar.showElement(g);
 		vitBar.showElement(g);
 		mpBar.showElement(g);
@@ -709,7 +709,6 @@ public class Player1 extends ElementObj{
 		}
 		
 	}
-	
 	
 	public Collider getTopCollider() {
 		return topCollider;

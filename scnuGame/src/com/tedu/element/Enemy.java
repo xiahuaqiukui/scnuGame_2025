@@ -6,6 +6,7 @@ import com.tedu.manager.GameLoad;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -19,7 +20,7 @@ public class Enemy extends ElementObj{
     protected int attackPictureIndex=0;
 
     ///敌人基本属性
-    private int enemy_max_hp = 100; // 血量
+    private int enemy_max_hp = 5; // 血量
     private int enemy_hp = enemy_max_hp;
     private int attack=10;
     protected int detectingDistance=250;
@@ -53,7 +54,7 @@ public class Enemy extends ElementObj{
     /// 其他基本配置
     private int g=1;
     protected boolean canMove=true;
-
+    
 
     @Override
     public void showElement(Graphics g) {
@@ -95,8 +96,20 @@ public class Enemy extends ElementObj{
     public void getHurt(){
         getHurt(1);
     }
+    
     public void getHurt(int demage){
         enemy_hp-=demage;
+        
+        // 设置在敌人图像范围内随机弹出
+        int fx = (int) (this.getX() + (Math.random()*this.getW()));
+        int fy = (int) (this.getY() + (Math.random()*this.getH()));
+        
+        // 添加飘字效果
+        ElementObj element = new FloatingText(fx, fy, this.getW(), this.getH()
+        		, null, new String("-"+demage), Color.RED);
+		ElementManager.getManager().addElement(element, GameElement.FLOATINGTEXT);
+        
+        
         if(enemy_hp<=0){
             setLive(false);
         }
