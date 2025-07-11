@@ -150,7 +150,7 @@ public class Enemy extends ElementObj{
     }
 
     @Override
-    protected void move() {
+    protected void move(long gameTime) {
         behavioralControl();
         if(canMove){
             EnemyXMove();

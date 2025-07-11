@@ -40,7 +40,7 @@ public class AttackCollider extends ElementObj{
 	public void showElement(Graphics g) {}
 	
 	@Override
-	protected void move() {}
+	protected void move(long gameTime) {}
 	
 	public void setAttackType(int attackType) {
 		this.attackType = attackType;

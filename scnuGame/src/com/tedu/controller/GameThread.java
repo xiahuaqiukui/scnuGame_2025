@@ -75,6 +75,7 @@ public class GameThread extends Thread{
 			List<ElementObj> maps = em.getElementsByKey(GameElement.MAPS);
 			List<ElementObj> collider = em.getElementsByKey(GameElement.COLLIDER);
 			List<ElementObj> AttackCollider = em.getElementsByKey(GameElement.ATTACKCOLLIDER);
+			List<ElementObj> Bar = em.getElementsByKey(GameElement.BAR);
 			
 			// 更新
 			Update(all, gameTime);
@@ -176,7 +177,8 @@ public class GameThread extends Thread{
 			}
 		}
 	}
-
+	
+	// 清除攻击判定箱
 	public void RemoveAttackCollider() {
 		List<ElementObj> AttackCollider = em.getElementsByKey(GameElement.ATTACKCOLLIDER);
 		for (ElementObj atkcol : AttackCollider) {

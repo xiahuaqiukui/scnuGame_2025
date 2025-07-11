@@ -18,7 +18,7 @@ import javax.swing.ImageIcon;
 
 public class GameLoad {
 
-	private static ElementManager em=ElementManager.getManager();
+	private static ElementManager em = ElementManager.getManager();
 
 	// 图片集合 使用map来进行存储 枚举类型配合（拓展）
 	// 人物图像map
