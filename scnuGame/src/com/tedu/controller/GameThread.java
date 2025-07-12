@@ -8,6 +8,7 @@ import com.tedu.element.Bullet;
 import com.tedu.element.Collider;
 import com.tedu.element.ElementObj;
 import com.tedu.element.Enemy;
+import com.tedu.element.Player1;
 import com.tedu.manager.ElementManager;
 import com.tedu.manager.GameElement;
 import com.tedu.manager.GameLoad;
@@ -73,6 +74,7 @@ public class GameThread extends Thread{
 		while (true) {
 			// 加载所有变量 部分类
 			Map<GameElement, List<ElementObj>> all = em.getGameElements();
+			List<ElementObj> players = em.getElementsByKey(GameElement.PLAYER);
 			List<ElementObj> enemys = em.getElementsByKey(GameElement.ENEMY);
 			List<ElementObj> bullets = em.getElementsByKey(GameElement.BULLET);
 			List<ElementObj> maps = em.getElementsByKey(GameElement.MAPS);
@@ -84,9 +86,16 @@ public class GameThread extends Thread{
 			Update(all, gameTime);
 			
 			// 碰撞检测
-			ElementPK(enemys, bullets);
-			ElementPK(enemys, AttackCollider);
+			ElementPK(enemys, bullets); // 注意后面放的是判定箱或枪弹
+			ElementPK(enemys, AttackCollider); // 注意后面放的是判定箱或枪弹
+			
+//			ElementPK(players, bullets); // 注意后面放的是判定箱或枪弹
+//			ElementPK(players, AttackCollider); // 注意后面放的是判定箱或枪弹
+			
+			// 清空攻击判定箱
 			RemoveAttackCollider();
+			
+			// 碰撞检测
 			ColliderCollided(collider, maps);
 			
 			gameTime++;
@@ -145,37 +154,51 @@ public class GameThread extends Thread{
 		}
 	}
 	
-	// 碰撞检测(非碰撞箱)
+	// 碰撞检测
 	public void ElementPK(List<ElementObj> listA, List<ElementObj> listB) {
 		for(int i=0;i<listA.size();i++){
-			ElementObj enemy=listA.get(i);
+			ElementObj underAttack=listA.get(i);
 			for(int j=0;j<listB.size();j++){
-				ElementObj file=listB.get(j);
+				ElementObj attack=listB.get(j);
 				
 				// 如果碰撞
-				if(enemy.pk(file)){
+				if(underAttack.pk(attack)){
 					int hurt = 0;
-					if (file instanceof AttackCollider) {
-						AttackCollider t = (AttackCollider) file;
+					String from = "";
+					// 获取攻击的伤害和来源
+					if (attack instanceof AttackCollider) {
+						AttackCollider t = (AttackCollider) attack;
+						from = t.getFrom();
 						hurt = t.getAttack();
-					} else if (file instanceof Bullet) {
-						Bullet t = (Bullet) file;
+					} else if (attack instanceof Bullet) {
+						Bullet t = (Bullet) attack;
+						from = t.getFrom();
 						hurt = t.getAttack();
 					}
 					
-					if (enemy instanceof Enemy) {
-						Enemy t = (Enemy) enemy;
-						t.getHurt(hurt);
-					}
+					// 攻击判定(成功则消除子弹或判定箱子)
+					// 目前仅有 玩家攻击敌人 和 敌人攻击玩家
+					if (underAttack instanceof Player1) {
+						Player1 t = (Player1) underAttack;
+						if (from.equals("enemy") || from.equals("boss")) {
+							t.getHurt(hurt);
+							attack.setLive(false);
+						}
+					} else if (underAttack instanceof Enemy) {
+						Enemy t = (Enemy) underAttack;
+						if (from.equals("player1") || from.equals("player2")) {
+							t.getHurt(hurt);
+							attack.setLive(false);
+						}
+					}// 拓展BOSS类
 					
-					file.setLive(false);
 					break;
 				}
 			}
 		}
 	}
 	
-	// 碰撞检测(碰撞箱)
+	// 碰撞检测(防止出地图)
 	public void ColliderCollided(List<ElementObj> listA, List<ElementObj> listB) {
 		for(int i=0;i<listA.size();i++){
 			ElementObj collider=listA.get(i);

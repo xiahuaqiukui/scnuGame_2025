@@ -652,24 +652,24 @@ public class Player1 extends ElementObj{
 			this.player1_vit -= vitAttack1Consume;
 			
 			// 碰撞箱
-			ElementObj element = new AttackCollider().createElement(this.toString());
-			AttackCollider e = (AttackCollider) element;
-			e.setAttackType(1);
-			e.fitAttackType();
-			ElementManager.getManager().addElement(e, GameElement.ATTACKCOLLIDER);
+			AttackCollider element = new AttackCollider(this.getX(), this.getY(),
+					this.getW(), this.getH(), null, this.fx, this.attack,
+					1, "player1");
 			
+			element.fitAttackType();
+			ElementManager.getManager().addElement(element, GameElement.ATTACKCOLLIDER);
 			
 			player1_attack1_time = false;
 		}else if(player1_attack2_time){
 			this.player1_vit -= vitAttack2Consume;
 			
 			// 碰撞箱
-			ElementObj element = new AttackCollider().createElement(this.toString());
-			AttackCollider e = (AttackCollider) element;
-			e.setAttackType(2);
-			e.fitAttackType();
-			ElementManager.getManager().addElement(e, GameElement.ATTACKCOLLIDER);
+			AttackCollider element = new AttackCollider(this.getX(), this.getY(),
+					this.getW(), this.getH(), null, this.fx, this.attack,
+					2, "player1");
 			
+			element.fitAttackType();
+			ElementManager.getManager().addElement(element, GameElement.ATTACKCOLLIDER);
 			
 			player1_attack2_time = false;
 		}else if(player1_attack3_time){
@@ -679,7 +679,8 @@ public class Player1 extends ElementObj{
 			
 			// 发射子弹
 			Bullet element = new Bullet(this.getX(), this.getY(),
-					this.getW(), this.getH(), null, this.attack * 2, 10, this.fx);
+					this.getW(), this.getH(), null, this.attack * 2,
+					10, this.fx, "player1");
 			element.fitImage();
 			ElementManager.getManager().addElement(element, GameElement.BULLET);
 			
@@ -698,13 +699,16 @@ public class Player1 extends ElementObj{
 		int h = this.getH();
 
 		// {x:3,y:1,f:right} json格式 弹药样式可拓展
-		return "x:"+x+",y:"+y+",w:"+w+",h:"+h+",fx:"+fx+",attack:"+attack;
+		return "x:"+x+",y:"+y+",w:"+w+",h:"+h+",fx:"+fx+",attack:"+attack+
+				",from:player1";
 	}
 	
 	// 受伤
 	public void getHurt(int damage) {
 		this.player1_hp = Math.max(0,this.player1_hp - damage);
 		hpBar.setNowNum(player1_hp);
+		
+		// 受击图片
 		
 		if (player1_hp <= 0) {
 			this.setLive(false);

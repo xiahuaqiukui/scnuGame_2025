@@ -9,31 +9,18 @@ public class AttackCollider extends ElementObj{
 	private int attack; // 角色攻击力,不是实际造成的伤害
 	private String fx; // 角色朝向
 	private int attackType; // 攻击判定箱类型
+	private String from; // 攻击是由谁发出的
 	
 	public AttackCollider() {}
 	
-	private AttackCollider(int x, int y, int w, int h, ImageIcon icon, String str) {
+	public AttackCollider(int x, int y, int w, int h, ImageIcon icon, String fx,
+			int attack, int attackType, String from) {
 		super(x, y, w, h, icon);
-	}
-	
-	@Override
-	public ElementObj createElement(String str) { // 定义字符串的规则
-		String[] split = str.split(",");
-		for (String str1: split) {
-			String[] split2 = str1.split(":");
-			switch (split2[0]) {
-				case "x": this.setX(Integer.parseInt(split2[1])); break;
-				case "y": this.setY(Integer.parseInt(split2[1])); break;
-				case "w": this.setW(Integer.parseInt(split2[1])); break;
-				case "h": this.setH(Integer.parseInt(split2[1])); break;
-				case "fx": this.fx = split2[1]; break;
-				case "attack": this.attack = Integer.parseInt(split2[1]); break; // 角色攻击力
-				case "attackType": this.attackType = Integer.parseInt(split2[1]); break; // 角色攻击类型
-				default: break;
-			}
-		}
 		
-		return this;
+		this.fx = fx;
+		this.attack = attack;
+		this.attackType = attackType;
+		this.from = from;
 	}
 	
 	@Override
@@ -43,31 +30,48 @@ public class AttackCollider extends ElementObj{
 	protected void move(long gameTime) {}
 	
 	public void setAttackType(int attackType) {
-		this.attackType = attackType;
+		if (from.equals("player1")) {
+			this.attackType = attackType;
+		}
+		
+		// 设置敌人的攻击方式
 	}
 	
 	public void fitAttackType() {
-		if (attackType==1) {
-			this.setW(50);
-			
-			switch (this.fx) {
-				case "left": break;
-				case "right": this.setX(this.getX()+50); break;
+		// 角色的攻击判定箱和技能匹配
+		if (from.equals("player1")) {
+			if (attackType==1) {
+				this.setW(50);
+				
+				switch (this.fx) {
+					case "left": break;
+					case "right": this.setX(this.getX()+50); break;
+				}
+			} else if (attackType==2){
+				this.setW(150);
+				this.setX(this.getX()-25);
 			}
-		} else if (attackType==2){
-			this.setW(150);
-			this.setX(this.getX()-25);
 		}
+		
+		// 怪物的攻击判定箱和攻击方式匹配
 	}
 	
 	public int getAttack() {
 		// 不同攻击类型返回不同倍率
-		if (attackType==1) {
-			return attack;
-		} else if (attackType==2) {
-			return 3*attack;
+		// 玩家
+		if (from.equals("player1")) {
+			if (attackType==1) {
+				return attack;
+			} else if (attackType==2) {
+				return 3*attack;
+			}
 		}
+		// 敌人
 		
 		return attack;
+	}
+	
+	public String getFrom() {
+		return this.from;
 	}
 }
