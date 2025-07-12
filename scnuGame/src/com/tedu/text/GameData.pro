@@ -80,5 +80,14 @@ centipede_hurt=image/enemy/centipede/hurt
 centipede_idle=image/enemy/centipede/idle
 centipede_run=image/enemy/centipede/run
 
+big_bloated_attack4=image/enemy/big_bloated/attack4
+big_bloated_hurt=image/enemy/big_bloated/hurt
+big_bloated_idle=image/enemy/big_bloated/idle
+big_bloated_run=image/enemy/big_bloated/run
+
+battle_turtle_attack2=image/enemy/battle_turtle/attack2
+battle_turtle_hurt=image/enemy/battle_turtle/hurt
+battle_turtle_idle=image/enemy/battle_turtle/idle
+battle_turtle_run=image/enemy/battle_turtle/run
 
 

@@ -7,6 +7,8 @@ player1_left_jump=
 player1_left_attack1=image/1 Woodcutter/attack1/left
 player1_left_attack2=image/1 Woodcutter/attack2/left
 player1_left_attack3=image/1 Woodcutter/attack3/left
+player1_left_bullet1=image/bullet/bullet1/left
+
 player1_right_idle=image/1 Woodcutter/idle/right
 player1_right_walk=image/1 Woodcutter/walk/right
 player1_right_hurt=
@@ -16,6 +18,8 @@ player1_right_jump=
 player1_right_attack1=image/1 Woodcutter/attack1/right
 player1_right_attack2=image/1 Woodcutter/attack2/right
 player1_right_attack3=image/1 Woodcutter/attack3/right
+player1_right_bullet1=image/bullet/bullet1/right
+
 
 
 player2_left_idle=
@@ -76,5 +80,14 @@ centipede_hurt=image/enemy/centipede/hurt
 centipede_idle=image/enemy/centipede/idle
 centipede_run=image/enemy/centipede/run
 
+big_bloated_attack4=image/enemy/big_bloated/attack4
+big_bloated_hurt=image/enemy/big_bloated/hurt
+big_bloated_idle=image/enemy/big_bloated/idle
+big_bloated_run=image/enemy/big_bloated/run
+
+battle_turtle_attack2=image/enemy/battle_turtle/attack2
+battle_turtle_hurt=image/enemy/battle_turtle/hurt
+battle_turtle_idle=image/enemy/battle_turtle/idle
+battle_turtle_run=image/enemy/battle_turtle/run
 
 

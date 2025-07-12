@@ -304,7 +304,7 @@ public class Enemy extends ElementObj{
 
     @Override
     protected void updateImage(long gameTime, int sleepTime) {
-        if(gameTime-this.pictureTime>=10){
+        if(gameTime-this.pictureTime>=8){
             updateImage();
             pictureTime = gameTime;
         }
@@ -423,7 +423,7 @@ public class Enemy extends ElementObj{
         updateColliders();
     }
 
-    
+
     private void updateColliders() {
         int x = this.getX();
         int y = this.getY();

@@ -1,9 +1,7 @@
 package com.tedu.manager;
 
 import com.tedu.element.*;
-import com.tedu.element.enemys.Centipede;
-import com.tedu.element.enemys.Skeleton_Crusader_1;
-import com.tedu.element.enemys.SteamMan;
+import com.tedu.element.enemys.*;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -58,6 +56,18 @@ public class GameLoad {
 						((Enemy)element).setTargetList(em.getElementsByKey(GameElement.PLAYER));
 						em.addElement(element,GameElement.ENEMY);
 					}
+				}else if(key.equals("BIG_BLOATED")){
+					for(int i=0;i<arrs.length;i++){
+						ElementObj element = new Big_bloated().createElement(key+","+arrs[i]);
+						((Enemy)element).setTargetList(em.getElementsByKey(GameElement.PLAYER));
+						em.addElement(element,GameElement.ENEMY);
+					}
+				}else if(key.equals("BATTLE_TRUTLE")){
+					for(int i=0;i<arrs.length;i++){
+						ElementObj element = new Battle_turtle().createElement(key+","+arrs[i]);
+						((Enemy)element).setTargetList(em.getElementsByKey(GameElement.PLAYER));
+						em.addElement(element,GameElement.ENEMY);
+					}
 				}else{
 					for(int i=0;i<arrs.length;i++){
 						ElementObj element = new MapObj().createElement(key+","+arrs[i]);
@@ -79,7 +89,7 @@ public class GameLoad {
             pro.load(texts);
 			Set<Object> set =  pro.keySet();
 			for(Object key:set){
-				System.out.println(key.toString());
+//				System.out.println(key.toString());
 				String url=pro.getProperty(key.toString());
 				List<ImageIcon> imageIcons=new ArrayList<>();
 				for(int i=1;;i++){

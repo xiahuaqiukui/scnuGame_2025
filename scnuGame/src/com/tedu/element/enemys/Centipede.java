@@ -9,6 +9,7 @@ import java.util.List;
 
 public class Centipede extends Enemy{
 
+
     public Centipede(){
         setName("centipede");
     }
@@ -19,7 +20,6 @@ public class Centipede extends Enemy{
         if(Enemy_left_attack1||Enemy_right_attack1){
             canMove=false;
             List<ImageIcon> imageIcons = GameLoad.imgMaps.get(getName()+ "_attack");
-//            System.out.println(getName()+"_" + fx + "_attack");
             if(attackPictureIndex==imageIcons.size()-1){
                 attackPictureIndex=0;
                 canMove=true;
