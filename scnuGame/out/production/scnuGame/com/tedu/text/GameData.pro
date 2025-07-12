@@ -67,3 +67,14 @@ skeleton_Crusader_1_right_hurt=image/enemy/Skeleton_Crusader_1/hurt/right
 skeleton_Crusader_1_right_idle=image/enemy/Skeleton_Crusader_1/idle/right
 skeleton_Crusader_1_right_run=image/enemy/Skeleton_Crusader_1/run/right
 
+
+
+
+
+centipede_attack=image/enemy/centipede/attack
+centipede_hurt=image/enemy/centipede/hurt
+centipede_idle=image/enemy/centipede/idle
+centipede_run=image/enemy/centipede/run
+
+
+

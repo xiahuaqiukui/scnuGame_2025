@@ -54,14 +54,34 @@ public class Enemy extends ElementObj{
     /// 其他基本配置
     private int g=1;
     protected boolean canMove=true;
-    
 
     @Override
     public void showElement(Graphics g) {
-        g.drawImage(this.getIcon().getImage(),
-                this.getX(),this.getY(),
-                this.getH(),this.getH(),null );
+        Image img = this.getIcon().getImage();
+        int drawX = this.getX();
+        int drawY = this.getY();
+        int drawWidth = this.getW();
+        int drawHeight = this.getH();
+
+        if ("left".equals(fx)) {
+            // 朝向左边时，固定右下角坐标 (drawX + drawWidth, drawY + drawHeight)
+            g.drawImage(img,
+                    drawX + drawWidth, drawY,  // 绘制起点在右下角
+                    -drawWidth, drawHeight,   // 负宽度实现水平翻转
+                    null);
+        } else {
+            // 朝向右边时，正常绘制
+            g.drawImage(img,
+                    drawX, drawY,
+                    drawWidth, drawHeight,
+                    null);
+        }
     }
+
+
+
+
+
     @Override
     public ElementObj createElement(String str) {
         /**
@@ -69,18 +89,18 @@ public class Enemy extends ElementObj{
          * ENEMY=x坐标,y坐标;
          *
          * */
-        System.out.println(str);
+//        System.out.println(str);
         String []arr=str.split(",");
-        ImageIcon icon=GameLoad.imgMaps.get(name+"_right_idle").get(0);
-        this.setH(100);
-        this.setW(100);
+        ImageIcon icon=GameLoad.imgMaps.get(name+"_idle").get(0);
+        this.setH(icon.getIconHeight()*2);
+        this.setW(icon.getIconHeight()*2);
         this.setX(Integer.parseInt(arr[1]));
         this.setY(Integer.parseInt(arr[2]));
         this.setIcon(icon);
         ElementObj topCollider=new Collider(getX(), getY()-5,getW(),5);
-        ElementObj bottomCollider=new Collider(getX(), getY()+100,getW(),5);
+        ElementObj bottomCollider=new Collider(getX(), getY()+getH(),getW(),5);
         ElementObj leftCollider=new Collider(getX()-5, getY(),5,getH()-15);
-        ElementObj rightCollider=new Collider(getX()+100, getY(),5,getH()-15);
+        ElementObj rightCollider=new Collider(getX()+this.getW(), getY(),5,getH()-15);
         setTopCollider((Collider) topCollider);
         setBottomCollider((Collider) bottomCollider);
         setLeftCollider((Collider) leftCollider);
@@ -163,6 +183,8 @@ public class Enemy extends ElementObj{
 
     @Override
     protected void move(long gameTime) {
+
+
         behavioralControl();
         if(canMove){
             EnemyXMove();
@@ -282,7 +304,7 @@ public class Enemy extends ElementObj{
 
     @Override
     protected void updateImage(long gameTime, int sleepTime) {
-        if(gameTime-this.pictureTime>=5){
+        if(gameTime-this.pictureTime>=10){
             updateImage();
             pictureTime = gameTime;
         }
@@ -291,29 +313,41 @@ public class Enemy extends ElementObj{
     protected void updateImage(){
         if(this.Enemy_left_idle||this.Enemy_right_idle){
             //左右待机动画
-            List<ImageIcon> imageIcons = GameLoad.imgMaps.get(name+"_"+fx+"_idle");
+            List<ImageIcon> imageIcons = GameLoad.imgMaps.get(name+"_idle");
             pictureIndex%=imageIcons.size();
-            this.setIcon(imageIcons.get(pictureIndex));
+            setIcon(imageIcons,pictureIndex);
             pictureIndex++;
 
         }else if (this.Enemy_left_run||this.Enemy_right_run) {
             //左右跑步动画
 
-            List<ImageIcon> imageIcons = GameLoad.imgMaps.get(name+"_"+fx+"_run");
+            List<ImageIcon> imageIcons = GameLoad.imgMaps.get(name+"_run");
             pictureIndex%=imageIcons.size();
-            this.setIcon(imageIcons.get(pictureIndex));
+            setIcon(imageIcons,pictureIndex);
             pictureIndex++;
         }
     }
-    private void ColliderMove(int XMovement,int YMovement){
-        topCollider.setX(topCollider.getX()+XMovement);
-        bottomCollider.setX(bottomCollider.getX()+XMovement);
-        leftCollider.setX(leftCollider.getX()+XMovement);
-        rightCollider.setX(rightCollider.getX()+XMovement);
-        topCollider.setY(topCollider.getY()+YMovement);
-        bottomCollider.setY(bottomCollider.getY()+YMovement);
-        leftCollider.setY(leftCollider.getY()+YMovement);
-        rightCollider.setY(rightCollider.getY()+YMovement);
+    /**
+     * 移动所有碰撞箱（统一使用此方法移动碰撞箱）
+     * @param deltaX X轴移动距离（正数向右，负数向左）
+     * @param deltaY Y轴移动距离（正数向下，负数向上）
+     */
+    private void ColliderMove(int deltaX, int deltaY) {
+        // 移动顶部碰撞箱
+        topCollider.setX(topCollider.getX() + deltaX);
+        topCollider.setY(topCollider.getY() + deltaY);
+
+        // 移动底部碰撞箱
+        bottomCollider.setX(bottomCollider.getX() + deltaX);
+        bottomCollider.setY(bottomCollider.getY() + deltaY);
+
+        // 移动左侧碰撞箱
+        leftCollider.setX(leftCollider.getX() + deltaX);
+        leftCollider.setY(leftCollider.getY() + deltaY);
+
+        // 移动右侧碰撞箱
+        rightCollider.setX(rightCollider.getX() + deltaX);
+        rightCollider.setY(rightCollider.getY() + deltaY);
     }
 
     public Collider getTopCollider() {
@@ -362,5 +396,59 @@ public class Enemy extends ElementObj{
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    protected void setIcon(List<ImageIcon> imageIcons, int index) {
+        ImageIcon t = imageIcons.get(index);
+        this.setIcon(t);
+
+        int newWidth = t.getIconWidth() * 2;
+        int newHeight = t.getIconHeight() * 2;
+
+        // 记录旧的右下角坐标
+        int oldRightX = this.getX() + this.getW();
+        int oldBottomY = this.getY() + this.getH();
+
+        // 更新宽高
+        this.setW(newWidth);
+        this.setH(newHeight);
+
+        // 调整坐标，使右下角不变
+        if ("left".equals(fx)) {
+            this.setX(oldRightX - newWidth);  // 新X = 旧右下角X - 新宽度
+        }
+        this.setY(oldBottomY - newHeight);    // 新Y = 旧底部Y - 新高度
+
+        // 更新碰撞箱
+        updateColliders();
+    }
+
+    
+    private void updateColliders() {
+        int x = this.getX();
+        int y = this.getY();
+        int w = this.getW();
+        int h = this.getH();
+
+        // 更新碰撞箱（跟随缩放后的位置）
+        topCollider.setX(x);
+        topCollider.setY(y - 5);       // 顶部碰撞箱（稍微超出）
+        topCollider.setW(w);
+        topCollider.setH(5);
+
+        bottomCollider.setX(x);
+        bottomCollider.setY(y + h);    // 底部碰撞箱（保持底部不变）
+        bottomCollider.setW(w);
+        bottomCollider.setH(5);
+
+        leftCollider.setX(x - 5);
+        leftCollider.setY(y);
+        leftCollider.setW(5);
+        leftCollider.setH(h - 15);     // 稍微减少高度，避免脚部碰撞太敏感
+
+        rightCollider.setX(x + w);
+        rightCollider.setY(y);
+        rightCollider.setW(5);
+        rightCollider.setH(h - 15);
     }
 }

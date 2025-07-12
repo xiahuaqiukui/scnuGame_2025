@@ -1,6 +1,7 @@
 package com.tedu.manager;
 
 import com.tedu.element.*;
+import com.tedu.element.enemys.Centipede;
 import com.tedu.element.enemys.Skeleton_Crusader_1;
 import com.tedu.element.enemys.SteamMan;
 
@@ -51,9 +52,9 @@ public class GameLoad {
 						((Enemy)element).setTargetList(em.getElementsByKey(GameElement.PLAYER));
 						em.addElement(element,GameElement.BOSS);
 					}
-				}else if(key.equals("SKELETON_CRUSADER_1")){
+				}else if(key.equals("CENTIPEDE")){
 					for(int i=0;i<arrs.length;i++){
-						ElementObj element = new Skeleton_Crusader_1().createElement(key+","+arrs[i]);
+						ElementObj element = new Centipede().createElement(key+","+arrs[i]);
 						((Enemy)element).setTargetList(em.getElementsByKey(GameElement.PLAYER));
 						em.addElement(element,GameElement.ENEMY);
 					}
