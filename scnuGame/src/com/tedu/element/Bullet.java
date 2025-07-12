@@ -5,6 +5,8 @@ import java.awt.Graphics;
 
 import javax.swing.ImageIcon;
 
+import com.tedu.manager.GameLoad;
+
 /**
  * @说明 玩家子弹类，由玩家对象调用创建
  */
@@ -16,20 +18,26 @@ import javax.swing.ImageIcon;
  */
 
 public class Bullet extends ElementObj{
-	private int attack = 2; // 攻击力
-	private int speed = 10; // 速度
+	private int attack; // 攻击力
+	private int speed; // 速度
 	private String fx;
 	// 拓展其他属性  可拓展多种子弹类型：激光、导弹等（玩家类要有子弹类型）
 	
 	public Bullet() {}
 	
 	// 不使用的函数
-	private Bullet(int x, int y, int w, int h, ImageIcon icon, String fx) {
+	public Bullet(int x, int y, int w, int h, ImageIcon icon, int attack, int speed, String fx) {
 		super(x, y, w, h, icon);
-		
-		this.attack = 1;
-		this.speed = 10;
+		this.attack = attack;
+		this.speed = speed;
 		this.fx = fx;
+		
+		ImageIcon icon2 = null;
+		if (fx.equals("right"))
+			icon2 = GameLoad.imgMaps.get("player1_right_bullet1").get(0);
+		else
+			icon2 = GameLoad.imgMaps.get("player1_left_bullet1").get(0);
+		this.setIcon(icon2);
 	}
 	
 	// 传输参数，返回对应参数的对象
@@ -46,35 +54,43 @@ public class Bullet extends ElementObj{
 			}
 		}
 		
-		// 为了使得子弹从角色手中发射出去，根据图片方位调整
-		switch (this.fx) {
-		case "left": this.setY(this.getY()+50); break;
-		case "right": this.setX(this.getX()+100); this.setY(this.getY()+50); break;
-		}
-		
-		this.setW(10);
-		this.setH(10);
-		
 		return this;
 	}
 	
 	@Override
 	public void showElement(Graphics g) {
-		g.setColor(Color.red);
-		g.fillOval(this.getX(), this.getY(), this.getW(), this.getH());
+//		g.setColor(Color.red);
+//		g.fillOval(this.getX(), this.getY(), this.getW(), this.getH());
+		g.drawImage(this.getIcon().getImage(), 
+				this.getX(), this.getY(), 
+				this.getW(), this.getH(), null);
 	}
 	
 	@Override
 	protected void move(long gameTime) {
 		//System.out.println(this.fx);
 		switch (this.fx) {
-		case "left": this.setX(this.getX()-this.speed); break;
-		case "right": this.setX(this.getX()+this.speed); break;
+			case "left": this.setX(this.getX()-this.speed); break;
+			case "right": this.setX(this.getX()+this.speed); break;
 		}
 	}
 	
 	public int getAttack() {
 		// 暂时只返回攻击数值
 		return attack;
+	}
+	
+	public void fitImage() {
+		// 为了使得子弹从角色手中发射出去，根据图片方位调整
+		switch (this.fx) {
+			case "left": this.setY(this.getY()+50); break;
+			case "right": this.setX(this.getX()+100); this.setY(this.getY()+50); break;
+		}
+		
+		// 设置子弹长宽
+		this.setW(60);
+		this.setH(20);
+		
+		return;
 	}
 }
