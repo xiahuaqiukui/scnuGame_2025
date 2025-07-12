@@ -10,7 +10,9 @@ public enum GameElement {
 	 * BOSS  boss
 	 * 子弹。。。。。。
 	 */
-	MAPS, ENEMY, BOSS, BULLET, DIE, PLAYER, BAR, FLOATINGTEXT, COLLIDER, ATTACKCOLLIDER;  //枚举类型的顺序是 声明的顺序
+	// 前面的会背后面的覆盖
+	MAPS, ENEMY, BOSS, BULLET, DIE, PLAYER,
+	BAR, FLOATINGTEXT, COLLIDER, ATTACKCOLLIDER;
 //	我们定义的枚举类型，在编译的时候，虚拟机会自动帮助生成class文件，并且会
 //	加载很多的代码和方法
 //	private GameElement() {
