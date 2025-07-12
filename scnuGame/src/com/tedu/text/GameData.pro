@@ -85,9 +85,14 @@ big_bloated_hurt=image/enemy/big_bloated/hurt
 big_bloated_idle=image/enemy/big_bloated/idle
 big_bloated_run=image/enemy/big_bloated/run
 
+battle_turtle_attack1=image/enemy/battle_turtle/attack1
 battle_turtle_attack2=image/enemy/battle_turtle/attack2
 battle_turtle_hurt=image/enemy/battle_turtle/hurt
 battle_turtle_idle=image/enemy/battle_turtle/idle
 battle_turtle_run=image/enemy/battle_turtle/run
+battle_turtle_bullet1=image/enemy/battle_turtle/bullet1
+battle_turtle_bullet2=image/enemy/battle_turtle/bullet2
+battle_turtle_bullet3=image/enemy/battle_turtle/bullet3
+battle_turtle_bullet4=image/enemy/battle_turtle/bullet4
 
 

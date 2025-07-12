@@ -15,8 +15,8 @@ public class Big_bloated extends Enemy{
     }
 
     @Override
-    protected void updateImage() {
-        super.updateImage();
+    protected void updateImage(long gameTime) {
+        super.updateImage(gameTime);
         if(Enemy_left_attack1||Enemy_right_attack1){
             canMove=false;
             List<ImageIcon> imageIcons = GameLoad.imgMaps.get(getName()+ "_attack4");

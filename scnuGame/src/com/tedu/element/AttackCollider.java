@@ -24,7 +24,10 @@ public class AttackCollider extends ElementObj{
 	}
 	
 	@Override
-	public void showElement(Graphics g) {}
+	public void showElement(Graphics g) {
+		g.setColor(Color.red);
+		g.fillOval(this.getX(), this.getY(), this.getW(), this.getH());
+	}
 	
 	@Override
 	protected void move(long gameTime) {}

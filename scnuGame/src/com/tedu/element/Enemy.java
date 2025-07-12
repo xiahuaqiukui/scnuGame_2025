@@ -22,7 +22,6 @@ public class Enemy extends ElementObj{
     ///敌人基本属性
     private int enemy_max_hp = 10; // 血量
     private int enemy_hp = enemy_max_hp;
-    private int attack=10;
     protected int detectingDistance=250;
     protected ElementObj target=null;
     private long attackTime = 0L; // 攻击间隔
@@ -43,6 +42,8 @@ public class Enemy extends ElementObj{
     protected boolean Enemy_right_run=false;
     protected boolean Enemy_left_attack1=false;
     protected boolean Enemy_right_attack1=false;
+    protected boolean Enemy_left_attack2=false;
+    protected boolean Enemy_right_attack2=false;
 
     /// 碰撞箱
     protected Collider topCollider;
@@ -54,6 +55,11 @@ public class Enemy extends ElementObj{
     /// 其他基本配置
     private int g=1;
     protected boolean canMove=true;
+    protected boolean isUsingSkill;
+    /**
+     * 通过随机数决定使用哪种攻击方式
+     */
+    protected int skillSeed;
 
     @Override
     public void showElement(Graphics g) {
@@ -305,12 +311,12 @@ public class Enemy extends ElementObj{
     @Override
     protected void updateImage(long gameTime, int sleepTime) {
         if(gameTime-this.pictureTime>=8){
-            updateImage();
+            updateImage(gameTime);
             pictureTime = gameTime;
         }
     }
     ///具体敌人需要重写
-    protected void updateImage(){
+    protected void updateImage(long gameTime){
         if(this.Enemy_left_idle||this.Enemy_right_idle){
             //左右待机动画
             List<ImageIcon> imageIcons = GameLoad.imgMaps.get(name+"_idle");

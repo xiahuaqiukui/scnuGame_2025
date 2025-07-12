@@ -9,8 +9,8 @@ public class SteamMan extends Enemy {
     }
 
     @Override
-    protected void updateImage() {
-        super.updateImage();
+    protected void updateImage(long gameTime) {
+        super.updateImage(gameTime);
     }
 
     @Override
