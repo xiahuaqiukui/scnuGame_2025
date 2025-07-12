@@ -15,8 +15,8 @@ public class Skeleton_Crusader_1 extends Enemy{
     }
 
     @Override
-    protected void updateImage() {
-        super.updateImage();
+    protected void updateImage(long gameTime) {
+        super.updateImage(gameTime);
         if(Enemy_left_attack1||Enemy_right_attack1){
             canMove=false;
             List<ImageIcon> imageIcons = GameLoad.imgMaps.get(getName()+"_" + fx + "_attack");
