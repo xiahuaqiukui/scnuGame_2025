@@ -9,7 +9,7 @@ public class Collider extends ElementObj {
 
     @Override
     public void showElement(Graphics g) {
-        g.setColor(Color.red);
+        g.setColor(Color.blue);
         g.fillOval(this.getX(), this.getY(), this.getW(), this.getH());
     }
     public Collider(){}

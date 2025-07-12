@@ -163,8 +163,7 @@ public class Battle_turtle extends Enemy{
 
 
     private void attack1(){
-        Bullet element = new Bullet(this.getX(), this.getY(),
-                this.getW(), this.getH(), null, this.attack1, 10, this.fx);
+
     }
 
 }
