@@ -678,7 +678,9 @@ public class Player1 extends ElementObj{
 			this.player1_mp -= mpAttack3Consume;
 			
 			// 发射子弹
-			ElementObj element = new Bullet().createElement(this.toString());
+			Bullet element = new Bullet(this.getX(), this.getY(),
+					this.getW(), this.getH(), null, this.attack * 2, 10, this.fx);
+			element.fitImage();
 			ElementManager.getManager().addElement(element, GameElement.BULLET);
 			
 			player1_attack3_time = false;

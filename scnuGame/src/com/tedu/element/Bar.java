@@ -29,6 +29,18 @@ public class Bar extends ElementObj{
 		
 		g.setColor(Color.GRAY);
 		g.fillRect(this.getX() + realNumW, this.getY(), this.getW() - realNumW, this.getH());
+		
+		// 3. 画文本（居中显示 nowNum / maxNum）
+	    String text = nowNum + " / " + maxNum;
+	    g.setColor(Color.BLACK);
+	    int textWidth = g.getFontMetrics().stringWidth(text);
+	    int textHeight = g.getFontMetrics().getAscent();
+
+	    // 计算居中位置
+	    int textX = this.getX() + (this.getW() - textWidth) / 2;
+	    int textY = this.getY() + (this.getH() + textHeight) / 2 - 2;
+
+	    g.drawString(text, textX, textY);
     }
 	
 	public void setNowNum(int nowNum) {
