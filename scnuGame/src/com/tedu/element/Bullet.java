@@ -1,7 +1,6 @@
 package com.tedu.element;
 
-import java.awt.Color;
-import java.awt.Graphics;
+import java.awt.*;
 import java.text.Normalizer.Form;
 
 import javax.swing.ImageIcon;
@@ -37,14 +36,21 @@ public class Bullet extends ElementObj{
 		this.from = from;
 		
 		if (from.equals("player1")) {
-			ImageIcon icon2 = null;
-			if (fx.equals("right"))
-				icon2 = GameLoad.imgMaps.get("player1_right_bullet1").get(0);
-			else
-				icon2 = GameLoad.imgMaps.get("player1_left_bullet1").get(0);
-			this.setIcon(icon2);
+			this.setIcon(GameLoad.imgMaps.get("player1_bullet1").get(0));
 		}
 		
+	}
+	public Bullet(int x, int y, int w, int h, ImageIcon icon, int attack, int speed, String fx,
+				  String from,String key) {
+		super(x, y, w, h, icon);
+		this.attack = attack;
+		this.speed = speed;
+		this.fx = fx;
+		this.from = from;
+
+		this.setIcon(GameLoad.imgMaps.get(key).get(0));
+
+
 	}
 	
 	// 传输参数，返回对应参数的对象
@@ -63,14 +69,30 @@ public class Bullet extends ElementObj{
 //		
 //		return this;
 //	}
-	
+
+
 	@Override
+	//只需要一张图片的绘画
 	public void showElement(Graphics g) {
-//		g.setColor(Color.red);
-//		g.fillOval(this.getX(), this.getY(), this.getW(), this.getH());
-		g.drawImage(this.getIcon().getImage(), 
-				this.getX(), this.getY(), 
-				this.getW(), this.getH(), null);
+		Image img = this.getIcon().getImage();
+		int drawX = this.getX();
+		int drawY = this.getY();
+		int drawWidth = this.getW();
+		int drawHeight = this.getH();
+
+		if ("left".equals(fx)) {
+			// 朝向左边时，固定右下角坐标 (drawX + drawWidth, drawY + drawHeight)
+			g.drawImage(img,
+					drawX + drawWidth, drawY,  // 绘制起点在右下角
+					-drawWidth, drawHeight,   // 负宽度实现水平翻转
+					null);
+		} else {
+			// 朝向右边时，正常绘制
+			g.drawImage(img,
+					drawX, drawY,
+					drawWidth, drawHeight,
+					null);
+		}
 	}
 	
 	@Override
@@ -102,8 +124,20 @@ public class Bullet extends ElementObj{
 			// 设置子弹长宽
 			this.setW(60);
 			this.setH(20);
+		} else if (from.equals("enemy")) {
+			switch (this.fx) {
+				case "left": this.setY(this.getY()+50); break;
+				case "right":
+					this.setX(this.getX()+100);
+					this.setY(this.getY()+50);
+					break;
+			}
+
+			// 设置子弹长宽
+			this.setW(icon.getIconHeight());
+			this.setH(icon.getIconHeight());
 		}
-		
+
 		return;
 	}
 	

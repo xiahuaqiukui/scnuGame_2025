@@ -89,8 +89,8 @@ public class GameThread extends Thread{
 			ElementPK(enemys, bullets); // 注意后面放的是判定箱或枪弹
 			ElementPK(enemys, AttackCollider); // 注意后面放的是判定箱或枪弹
 			
-//			ElementPK(players, bullets); // 注意后面放的是判定箱或枪弹
-//			ElementPK(players, AttackCollider); // 注意后面放的是判定箱或枪弹
+			ElementPK(players, bullets); // 注意后面放的是判定箱或枪弹
+			ElementPK(players, AttackCollider); // 注意后面放的是判定箱或枪弹
 			
 			// 清空攻击判定箱
 			RemoveAttackCollider();

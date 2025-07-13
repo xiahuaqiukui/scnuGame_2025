@@ -35,6 +35,8 @@ public class AttackCollider extends ElementObj{
 	public void setAttackType(int attackType) {
 		if (from.equals("player1")) {
 			this.attackType = attackType;
+		}else if(from.equals("enemy")) {
+			this.attackType=attackType;
 		}
 		
 		// 设置敌人的攻击方式
@@ -45,7 +47,6 @@ public class AttackCollider extends ElementObj{
 		if (from.equals("player1")) {
 			if (attackType==1) {
 				this.setW(50);
-				
 				switch (this.fx) {
 					case "left": break;
 					case "right": this.setX(this.getX()+50); break;
@@ -55,8 +56,18 @@ public class AttackCollider extends ElementObj{
 				this.setX(this.getX()-25);
 			}
 		}
-		
 		// 怪物的攻击判定箱和攻击方式匹配
+		else if(from.equals("enemy")){
+			if (attackType==1) {
+				this.setW(50);
+				switch (this.fx) {
+					case "left": this.setX(this.getX()-25);break;
+					case "right": this.setX(this.getX()+100); break;
+				}
+			}
+		}
+		
+
 	}
 	
 	public int getAttack() {
@@ -70,6 +81,14 @@ public class AttackCollider extends ElementObj{
 			}
 		}
 		// 敌人
+		else if (from.equals("enemy")) {
+			if(attackType==1){
+				return attack;
+			}
+		}else if(from.equals("boss")){
+
+		}
+
 		
 		return attack;
 	}

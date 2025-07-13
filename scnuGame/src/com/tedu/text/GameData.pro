@@ -7,7 +7,6 @@ player1_left_jump=
 player1_left_attack1=image/1 Woodcutter/attack1/left
 player1_left_attack2=image/1 Woodcutter/attack2/left
 player1_left_attack3=image/1 Woodcutter/attack3/left
-player1_left_bullet1=image/bullet/bullet1/left
 
 player1_right_idle=image/1 Woodcutter/idle/right
 player1_right_walk=image/1 Woodcutter/walk/right
@@ -18,7 +17,7 @@ player1_right_jump=
 player1_right_attack1=image/1 Woodcutter/attack1/right
 player1_right_attack2=image/1 Woodcutter/attack2/right
 player1_right_attack3=image/1 Woodcutter/attack3/right
-player1_right_bullet1=image/bullet/bullet1/right
+player1_bullet1=image/bullet/bullet1
 
 
 
