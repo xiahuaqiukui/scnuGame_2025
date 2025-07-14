@@ -126,16 +126,16 @@ public class Bullet extends ElementObj{
 			this.setH(20);
 		} else if (from.equals("enemy")) {
 			switch (this.fx) {
-				case "left": this.setY(this.getY()+50); break;
+				case "left": this.setX(this.getX()+50); break;
 				case "right":
 					this.setX(this.getX()+100);
-					this.setY(this.getY()+50);
 					break;
 			}
+			this.setY(this.getY()+13);
 
 			// 设置子弹长宽
-			this.setW(icon.getIconHeight());
-			this.setH(icon.getIconHeight());
+			this.setW(icon.getIconHeight()*2);
+			this.setH(icon.getIconHeight()*2);
 		}
 
 		return;

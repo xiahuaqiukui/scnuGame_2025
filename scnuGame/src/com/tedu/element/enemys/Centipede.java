@@ -1,7 +1,10 @@
 package com.tedu.element.enemys;
 
+import com.tedu.element.AttackCollider;
 import com.tedu.element.ElementObj;
 import com.tedu.element.Enemy;
+import com.tedu.manager.ElementManager;
+import com.tedu.manager.GameElement;
 import com.tedu.manager.GameLoad;
 
 import javax.swing.*;
@@ -9,17 +12,52 @@ import java.util.List;
 
 public class Centipede extends Enemy{
 
+    private boolean attack1_time = false; // 控制第1种攻击状态的判定时间
+    private long SkillOccupationTime=0;
+    private int attack=4;//技能一的攻击力
 
     public Centipede(){
         setName("centipede");
+        setEnemy_max_hp(10);
+    }
+
+    @Override
+    protected void attack(long gameTime) {
+        if(attack1_time){
+            AttackCollider element = new AttackCollider(this.getX(), this.getY(),
+                    this.getW(), this.getH(), null, this.fx, this.attack,
+                    1, "enemy");
+            element.fitAttackType();
+            ElementManager.getManager().addElement(element, GameElement.ATTACKCOLLIDER);
+            attack1_time=false;
+        }
     }
 
     @Override
     protected void updateImage(long gameTime) {
         super.updateImage( gameTime);
-        if(Enemy_left_attack1||Enemy_right_attack1){
+        if(ishurt==true){
+            List<ImageIcon> imageIcons = GameLoad.imgMaps.get(getName()+"_hurt");
+            pictureIndex%=imageIcons.size();
+            setIcon(imageIcons,pictureIndex);
+            pictureIndex++;
+            if(attackPictureIndex==imageIcons.size()-1){
+                attackPictureIndex=0;
+                canMove=true;
+                ishurt=false;
+                isUsingSkill=false;
+            }
+            attackPictureIndex%=imageIcons.size();
+            ImageIcon t = imageIcons.get(attackPictureIndex);
+            setIcon(imageIcons,attackPictureIndex);
+            attackPictureIndex++;
+        }
+        else if(Enemy_left_attack1||Enemy_right_attack1){
             canMove=false;
             List<ImageIcon> imageIcons = GameLoad.imgMaps.get(getName()+ "_attack");
+            if (attackPictureIndex == 3) {
+                attack1_time = true; // 控制攻击1判定箱何时出现
+            }
             if(attackPictureIndex==imageIcons.size()-1){
                 attackPictureIndex=0;
                 canMove=true;

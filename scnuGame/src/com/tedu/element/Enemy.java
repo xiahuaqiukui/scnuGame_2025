@@ -32,6 +32,7 @@ public class Enemy extends ElementObj{
 
     /// 状态控制
     protected String fx = "right";
+    protected boolean ishurt = false;
     protected boolean Enemy_left_idle = false;
     protected boolean Enemy_right_idle = true;
 //    private boolean Enemy_left_walk = false;
@@ -138,6 +139,8 @@ public class Enemy extends ElementObj{
         if(enemy_hp<=0){
             setLive(false);
         }
+        canMove=false;
+        ishurt=true;
     }
 
     @Override
@@ -392,6 +395,14 @@ public class Enemy extends ElementObj{
         return targetList;
     }
 
+    public int getEnemy_max_hp() {
+        return enemy_max_hp;
+    }
+
+    public void setEnemy_max_hp(int enemy_max_hp) {
+        this.enemy_max_hp = enemy_max_hp;
+    }
+
     public void setTargetList(List<ElementObj> targetList) {
         this.targetList = targetList;
     }
@@ -457,4 +468,5 @@ public class Enemy extends ElementObj{
         rightCollider.setW(5);
         rightCollider.setH(h - 15);
     }
+
 }
