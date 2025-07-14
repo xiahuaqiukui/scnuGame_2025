@@ -9,6 +9,7 @@ import com.tedu.element.Collider;
 import com.tedu.element.ElementObj;
 import com.tedu.element.Enemy;
 import com.tedu.element.Player1;
+import com.tedu.element.Player2;
 import com.tedu.manager.ElementManager;
 import com.tedu.manager.GameElement;
 import com.tedu.manager.GameLoad;
@@ -180,6 +181,12 @@ public class GameThread extends Thread{
 					// 目前仅有 玩家攻击敌人 和 敌人攻击玩家
 					if (underAttack instanceof Player1) {
 						Player1 t = (Player1) underAttack;
+						if (from.equals("enemy") || from.equals("boss")) {
+							t.getHurt(hurt);
+							attack.setLive(false);
+						}
+					} else if (underAttack instanceof Player2) {
+						Player2 t = (Player2) underAttack;
 						if (from.equals("enemy") || from.equals("boss")) {
 							t.getHurt(hurt);
 							attack.setLive(false);

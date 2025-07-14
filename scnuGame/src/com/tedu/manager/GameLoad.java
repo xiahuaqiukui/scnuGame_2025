@@ -110,9 +110,13 @@ public class GameLoad {
         }
     }
 	public static void playerLoad(){
-		String playerStr="100,700";
-		ElementObj player = new Player1().createElement(playerStr);
-		em.addElement(player,GameElement.PLAYER);
+		String player1Str="100,700";
+		ElementObj player1 = new Player1().createElement(player1Str);
+		em.addElement(player1,GameElement.PLAYER);
+		
+		String player2Str="300,700";
+		ElementObj player2 = new Player2().createElement(player2Str);
+		em.addElement(player2,GameElement.PLAYER);
 	}
 
 
