@@ -44,9 +44,9 @@ public class GameLoad {
 			while(names.hasMoreElements()){
 				String key= names.nextElement().toString();
 				String []arrs=pro.getProperty(key).split(";");
-				if(key.equals("STEAMMAN")){
+				if(key.equals("SWORDMAN")){
 					for(int i=0;i<arrs.length;i++){
-						ElementObj element = new SteamMan().createElement(key+","+arrs[i]);
+						ElementObj element = new Swordman().createElement(key+","+arrs[i]);
 						((Enemy)element).setTargetList(em.getElementsByKey(GameElement.PLAYER));
 						em.addElement(element,GameElement.BOSS);
 					}
