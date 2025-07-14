@@ -13,13 +13,13 @@ import com.tedu.manager.GameLoad;
 public class Player2 extends ElementObj{
 	// 角色基本属性
 	private int player2_max_hp = 70; // 血量
-	private int player2_hp = 50;
+	private int player2_hp = 70;
 		
 	private int player2_max_vit = 80; // 耐力
-	private int player2_vit = 50;
+	private int player2_vit = 80;
 	
 	private int player2_max_mp = 150; //法力值
-	private int player2_mp =  50;
+	private int player2_mp =  150;
 		
 	private int attack = 1; // 攻击力
 		
@@ -91,7 +91,7 @@ public class Player2 extends ElementObj{
 	private final int vitAttack2Consume = 20;
 	private final int mpAttack2Consume = 10;
 		
-	private final int mpAttack3Consume = 35;
+	private final int mpAttack3Consume = 45;
 	
 	
 	public Player2(){}
