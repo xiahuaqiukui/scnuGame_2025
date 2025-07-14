@@ -37,6 +37,8 @@ public class Bullet extends ElementObj{
 		
 		if (from.equals("player1")) {
 			this.setIcon(GameLoad.imgMaps.get("player1_bullet1").get(0));
+		} else if (from.equals("player2")) {
+			this.setIcon(GameLoad.imgMaps.get("player2_bullet2").get(0));
 		}
 		
 	}
@@ -49,8 +51,6 @@ public class Bullet extends ElementObj{
 		this.from = from;
 
 		this.setIcon(GameLoad.imgMaps.get(key).get(0));
-
-
 	}
 	
 	// 传输参数，返回对应参数的对象
@@ -105,14 +105,21 @@ public class Bullet extends ElementObj{
 	}
 	
 	public int getAttack() {
-		// 暂时只返回攻击数值
-		return attack;
+		// 不同类型敌人发射的子弹有不同倍率
+		int at = this.attack;
+		if (from.equals("player1")) {
+			at = 2 * this.attack;
+		} else if (from.equals("player2")) {
+			at = 3 * this.attack;
+		}
+		
+		return at;
 	}
 	
 	public void fitImage() {
 		// 为了使得子弹从角色手中发射出去，根据图片方位调整
-		// 角色1
-		if (from.equals("player1")) {
+		// 角色1 角色二
+		if (from.equals("player1") || from.equals("player2")) {
 			switch (this.fx) {
 				case "left": this.setY(this.getY()+50); break;
 				case "right": 

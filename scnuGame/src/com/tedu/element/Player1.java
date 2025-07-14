@@ -679,7 +679,7 @@ public class Player1 extends ElementObj{
 			
 			// 发射子弹
 			Bullet element = new Bullet(this.getX(), this.getY(),
-					this.getW(), this.getH(), null, this.attack * 2,
+					this.getW(), this.getH(), null, this.attack,
 					10, this.fx, "player1");
 			element.fitImage();
 			ElementManager.getManager().addElement(element, GameElement.BULLET);
