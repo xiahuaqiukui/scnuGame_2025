@@ -77,7 +77,7 @@ public class Big_bloated extends Enemy{
     @Override
     protected void behavioralControl() {
         super.behavioralControl();
-        if (target == null) {
+        if (target == null|| !target.isLive()) {
             // 寻找目标（比如玩家）
             for(ElementObj tar:targetList){
                 if(Math.abs(tar.getX()-this.getX())<detectingDistance){
