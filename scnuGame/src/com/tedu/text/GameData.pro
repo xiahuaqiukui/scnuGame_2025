@@ -17,28 +17,33 @@ player1_right_jump=
 player1_right_attack1=image/1 Woodcutter/attack1/right
 player1_right_attack2=image/1 Woodcutter/attack2/right
 player1_right_attack3=image/1 Woodcutter/attack3/right
+
 player1_bullet1=image/bullet/bullet1
 
 
 
-player2_left_idle=
-player2_left_walk=
+player2_left_idle=image/2 GraveRobber/idle/left
+player2_left_walk=image/2 GraveRobber/walk/left
 player2_left_hurt=
 player2_left_death=
-player2_left_run=
+player2_left_run=image/2 GraveRobber/run/left
 player2_left_jump=
-player2_left_attack1=
-player2_left_attack2=
-player2_left_attack3=
-player2_right_idle=
-player2_right_walk=
+player2_left_attack1=image/2 GraveRobber/attack1/left
+player2_left_attack2=image/2 GraveRobber/attack2/left
+player2_left_attack3=image/2 GraveRobber/attack3/left
+
+player2_right_idle=image/2 GraveRobber/idle/right
+player2_right_walk=image/2 GraveRobber/walk/right
 player2_right_hurt=
 player2_right_death=
-player2_right_run=
+player2_right_run=image/2 GraveRobber/run/right
 player2_right_jump=
-player2_right_attack1=
-player2_right_attack2=
-player2_right_attack3=
+player2_right_attack1=image/2 GraveRobber/attack1/right
+player2_right_attack2=image/2 GraveRobber/attack2/right
+player2_right_attack3=image/2 GraveRobber/attack3/right
+
+player2_bullet2=image/bullet/bullet2
+
 
 
 steamMan_left_idle=image/3 SteamMan/idle/left
