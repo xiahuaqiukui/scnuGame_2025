@@ -60,19 +60,6 @@ steamMan_right_attack1=image/3 SteamMan/attack1/right
 steamMan_right_attack2=
 steamMan_right_attack3=
 
-skeleton_Crusader_1_left_attack=image/enemy/Skeleton_Crusader_1/attack/left
-skeleton_Crusader_1_left_hurt=image/enemy/Skeleton_Crusader_1/hurt/left
-skeleton_Crusader_1_left_idle=image/enemy/Skeleton_Crusader_1/idle/left
-skeleton_Crusader_1_left_run=image/enemy/Skeleton_Crusader_1/run/left
-
-skeleton_Crusader_1_right_attack=image/enemy/Skeleton_Crusader_1/attack/right
-skeleton_Crusader_1_right_hurt=image/enemy/Skeleton_Crusader_1/hurt/right
-skeleton_Crusader_1_right_idle=image/enemy/Skeleton_Crusader_1/idle/right
-skeleton_Crusader_1_right_run=image/enemy/Skeleton_Crusader_1/run/right
-
-
-
-
 
 centipede_attack=image/enemy/centipede/attack
 centipede_hurt=image/enemy/centipede/hurt
@@ -93,5 +80,16 @@ battle_turtle_bullet1=image/enemy/battle_turtle/bullet1
 battle_turtle_bullet2=image/enemy/battle_turtle/bullet2
 battle_turtle_bullet3=image/enemy/battle_turtle/bullet3
 battle_turtle_bullet4=image/enemy/battle_turtle/bullet4
+
+swordman_attack1=image/boss/swordsman/attack1
+swordman_attack2=image/boss/swordsman/attack2
+swordman_dead=image/boss/swordsman/dead
+swordman_hurt=image/boss/swordsman/hurt
+swordman_idle=image/boss/swordsman/idle
+swordman_lunge=image/boss/swordsman/lunge
+swordman_shot=image/boss/swordsman/shot
+swordman_shutdown=image/boss/swordsman/shutdown
+swordman_ultimate_skill=image/boss/swordsman/ultimate_skill
+swordman_walk=image/boss/swordsman/walk
 
 
