@@ -1,9 +1,12 @@
 package com.tedu.game;
 
+import javax.swing.SwingUtilities;
+
 import com.tedu.controller.GameListener;
 import com.tedu.controller.GameThread;
 import com.tedu.show.GameJFrame;
 import com.tedu.show.GameMainJPanel;
+import com.tedu.show.GameStartMenu;
 
 public class GameStart {
 	/**
@@ -11,22 +14,12 @@ public class GameStart {
 	 */
 	public static void main(String[] args) {
 //		实例化框架
-		GameJFrame gj = new GameJFrame();
+		GameStartMenu gsm = new GameStartMenu();
 		
-//		实例化面板
-		GameMainJPanel jp = new GameMainJPanel();
-//      实例化监听
-		GameListener listener = new GameListener();
-//      实例化主线程
-		GameThread th = new GameThread();
-		
-//		注入
-		gj.setjPanel(jp);
-		gj.setKeyListener(listener);
-		gj.setMainThread(th);
-
-//		开始游戏
-		gj.start();
+		SwingUtilities.invokeLater(() -> {
+            GameStartMenu menu = new GameStartMenu();
+            menu.setVisible(true);
+        });
 	}
 
 }

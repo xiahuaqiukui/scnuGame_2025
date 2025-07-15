@@ -1,4 +1,4 @@
-package com.tedu.game;
+package com.tedu.show;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -10,9 +10,13 @@ import java.awt.GradientPaint;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.GridLayout;
+import java.awt.Image;
+import java.awt.Toolkit;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+import java.io.File;
+import java.io.IOException;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
@@ -29,6 +33,11 @@ import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 
+import com.tedu.controller.GameListener;
+import com.tedu.controller.GameThread;
+import com.tedu.show.GameJFrame;
+import com.tedu.show.GameMainJPanel;
+
 public class GameStartMenu extends JFrame{
 	// 窗口属性
 	public static int GameX = 1700; // 横向长度
@@ -38,6 +47,8 @@ public class GameStartMenu extends JFrame{
 	private MouseMotionListener mouseMotionListener = null;  //鼠标监听
 	private MouseListener mouseListener = null;
 	private Thread mainThread = null;  // 游戏主线程
+	
+	private Image backgroundImage = null;
 	
 	// 按钮
     private JButton singlePlayerBtn; // 单人游戏按钮
@@ -55,19 +66,27 @@ public class GameStartMenu extends JFrame{
         // 主面板
         JLayeredPane layeredPane = new JLayeredPane();
         layeredPane.setPreferredSize(new Dimension(GameX, GameY));
-
+        
+        // 加载背景图片
+        try {
+            // 从文件加载图片（替换为你的图片路径）
+            backgroundImage = Toolkit.getDefaultToolkit().getImage("image/background/1.jpg");
+//          System.out.println(backgroundImage);
+        } catch (Exception e) {
+            e.printStackTrace();
+            // 如果加载失败，可以设置一个默认颜色
+            setBackground(Color.BLACK);
+        }
+        
         // 背景面板
         JPanel backgroundPanel = new JPanel() {
             @Override
             protected void paintComponent(Graphics g) {
                 super.paintComponent(g);
                 // 绘制背景
-                Graphics2D g2d = (Graphics2D) g;
-                Color color1 = new Color(20, 30, 48);
-                Color color2 = new Color(36, 59, 85);
-                GradientPaint gp = new GradientPaint(0, 0, color1, getWidth(), getHeight(), color2);
-                g2d.setPaint(gp);
-                g2d.fillRect(0, 0, getWidth(), getHeight());
+                if (backgroundImage != null) {
+                	g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
+                }
             }
         };
         backgroundPanel.setBounds(0, 0, GameX, GameY);
@@ -92,6 +111,7 @@ public class GameStartMenu extends JFrame{
         titleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         titleLabel.setBorder(BorderFactory.createEmptyBorder(0, 0, 40, 0));
 
+        
         // 创建按钮面板
         JPanel buttonPanel = new JPanel();
         buttonPanel.setOpaque(false);
@@ -99,15 +119,15 @@ public class GameStartMenu extends JFrame{
         buttonPanel.setMaximumSize(new Dimension(300, 250));
 
         // 单人游戏按钮
-        singlePlayerBtn = createMenuButton("单人模式");
+        singlePlayerBtn = addButton("单人模式");
         singlePlayerBtn.addActionListener(e -> startGame(1));
 
         // 双人游戏按钮
-        twoPlayerBtn = createMenuButton("双人对战");
+        twoPlayerBtn = addButton("双人对战");
         twoPlayerBtn.addActionListener(e -> startGame(2));
 
         // 退出按钮
-        exitBtn = createMenuButton("退出游戏");
+        exitBtn = addButton("退出游戏");
         exitBtn.addActionListener(e -> System.exit(0));
 
         buttonPanel.add(singlePlayerBtn);
@@ -123,7 +143,7 @@ public class GameStartMenu extends JFrame{
         this.add(layeredPane);
     }
 	
-    private JButton createMenuButton(String text) {
+    private JButton addButton(String text) {
         JButton button = new JButton(text);
         button.setFont(new Font("微软雅黑", Font.BOLD, 24));
         button.setBackground(new Color(70, 130, 180, 200));
@@ -154,33 +174,22 @@ public class GameStartMenu extends JFrame{
         SwingUtilities.invokeLater(() -> {
             this.dispose(); // 关闭菜单界面
             // 启动主游戏窗口
-            com.tedu.show.GameJFrame gj = new com.tedu.show.GameJFrame();
-            com.tedu.show.GameMainJPanel jp = new com.tedu.show.GameMainJPanel();
-            com.tedu.controller.GameListener listener = new com.tedu.controller.GameListener();
-            com.tedu.controller.GameThread th = new com.tedu.controller.GameThread();
+            GameJFrame gj = new GameJFrame();
+            GameMainJPanel jp = new GameMainJPanel();
+            GameListener listener = new GameListener();
+            GameThread th = new GameThread();
             
             gj.setjPanel(jp);
             gj.setKeyListener(listener);
             gj.setMainThread(th);
-            gj.start();
-            // 可在此处将playerCount和selectedMap传递给后续逻辑
             
+            // 可在此处将playerCount和selectedMap传递给后续逻辑
+            gj.start();
         });
     }
 	
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
-            try {
-                // 设置系统风格
-                UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-                // 设置UI全局字体
-                UIManager.put("Button.font", new Font("微软雅黑", Font.PLAIN, 14));
-                UIManager.put("Label.font", new Font("微软雅黑", Font.PLAIN, 14));
-                UIManager.put("ComboBox.font", new Font("微软雅黑", Font.PLAIN, 14));
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
             GameStartMenu menu = new GameStartMenu();
             menu.setVisible(true);
         });
