@@ -74,7 +74,7 @@ public class GameStartMenu extends JFrame{
 //          System.out.println(backgroundImage);
         } catch (Exception e) {
             e.printStackTrace();
-            // 如果加载失败，可以设置一个默认颜色
+            // 如果加载失败，设置默认颜色为黑色
             setBackground(Color.BLACK);
         }
         
@@ -98,7 +98,7 @@ public class GameStartMenu extends JFrame{
         JPanel contentPanel = new JPanel();
         contentPanel.setOpaque(false); // 透明背景
         contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.Y_AXIS));
-        contentPanel.setBounds(150, 100, 600, 400);
+        contentPanel.setBounds(GameX/2-300, GameY/2-200, 600, 400);
         
         // 将内容面板加入主面板
         layeredPane.add(contentPanel, JLayeredPane.PALETTE_LAYER);
@@ -106,16 +106,16 @@ public class GameStartMenu extends JFrame{
         
         // 添加游戏标题
         JLabel titleLabel = new JLabel("像素乱斗");
-        titleLabel.setFont(new Font("微软雅黑", Font.BOLD, 48));
+        titleLabel.setFont(new Font("微软雅黑", Font.BOLD, 64));
         titleLabel.setForeground(Color.WHITE);
         titleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-        titleLabel.setBorder(BorderFactory.createEmptyBorder(0, 0, 40, 0));
+        titleLabel.setBorder(BorderFactory.createEmptyBorder(0, 0, 30, 0)); // 控制与下方的距离
 
         
         // 创建按钮面板
         JPanel buttonPanel = new JPanel();
         buttonPanel.setOpaque(false);
-        buttonPanel.setLayout(new GridLayout(3, 1, 0, 20));
+        buttonPanel.setLayout(new GridLayout(3, 1, 0, 30));
         buttonPanel.setMaximumSize(new Dimension(300, 250));
 
         // 单人游戏按钮
@@ -145,7 +145,7 @@ public class GameStartMenu extends JFrame{
 	
     private JButton addButton(String text) {
         JButton button = new JButton(text);
-        button.setFont(new Font("微软雅黑", Font.BOLD, 24));
+        button.setFont(new Font("微软雅黑", Font.BOLD, 28));
         button.setBackground(new Color(70, 130, 180, 200));
         button.setForeground(Color.BLACK);
         button.setFocusPainted(false);
@@ -183,7 +183,7 @@ public class GameStartMenu extends JFrame{
             gj.setKeyListener(listener);
             gj.setMainThread(th);
             
-            // 可在此处将playerCount和selectedMap传递给后续逻辑
+            // 可在此处将playerCount传递给后续逻辑
             gj.start();
         });
     }

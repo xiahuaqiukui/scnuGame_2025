@@ -93,6 +93,14 @@ public class Player2 extends ElementObj{
 		
 	private final int mpAttack3Consume = 45;
 	
+	// 玩家头像
+	private ImageIcon headIcon = null;
+	
+	// 受到攻击状态
+	private boolean underattacking = false;
+	private long underAttackPictureTime = 0L;
+	private int underAttackPictureIndex = 0;
+	
 	
 	public Player2(){}
 	// 初始化玩家属性，目前仅继承父类属性
@@ -110,6 +118,13 @@ public class Player2 extends ElementObj{
 		hpBar.showElement(g);
 		vitBar.showElement(g);
 		mpBar.showElement(g);
+		
+		// 玩家头像
+		if (headIcon != null) {
+			g.drawImage(this.headIcon.getImage(), 
+					230, 10, 
+					80, 80, null);
+		}
 	}
 	
 	@Override
@@ -118,6 +133,7 @@ public class Player2 extends ElementObj{
 		this.setX(Integer.parseInt(strs[0]));
 		this.setY(Integer.parseInt(strs[1]));
 		ImageIcon icon2 = GameLoad.imgMaps.get("player2_right_idle").get(0);
+		this.headIcon = GameLoad.imgMaps.get("player2_head").get(0);
 		
 		// 设置图片大小和形状
 		this.setH(100);
@@ -582,7 +598,23 @@ public class Player2 extends ElementObj{
 			
 			attackPictureTime = gameTime;
 		}
-
+		
+		if(gameTime-this.underAttackPictureTime >= 5){
+			if (underattacking) {
+				imageIcons = GameLoad.imgMaps.get("player2_" + fx + "_hurt");
+				this.setIcon(imageIcons.get(underAttackPictureIndex));
+				underAttackPictureIndex++;
+				
+				// 结束受击设置
+				if (underAttackPictureIndex >= imageIcons.size()) {
+					underAttackPictureIndex = 0;
+					underattacking = false;
+				}
+			}
+			
+			underAttackPictureTime = gameTime;
+		}
+		
 	}
 	
 	@Override
@@ -638,10 +670,15 @@ public class Player2 extends ElementObj{
 	
 	// 受伤
 		public void getHurt(int damage) {
-			this.player2_hp = Math.max(0,this.player2_hp - damage);
-			hpBar.setNowNum(player2_hp);
-			
-			// 受击图片
+			if (!player2_attack2_time && !player2_attack3_time) {
+				this.player2_hp = Math.max(0,this.player2_hp - damage);
+				hpBar.setNowNum(player2_hp);
+				
+				// 受击状态设置
+				underattacking = true;
+				// 打断
+				player2_attack1_time = false;
+			}
 			
 			if (player2_hp <= 0) {
 				this.setLive(false);

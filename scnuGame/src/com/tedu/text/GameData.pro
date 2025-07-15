@@ -18,7 +18,11 @@ player1_right_attack1=image/1 Woodcutter/attack1/right
 player1_right_attack2=image/1 Woodcutter/attack2/right
 player1_right_attack3=image/1 Woodcutter/attack3/right
 
+player1_left_hurt=image/1 Woodcutter/hurt/left
+player1_right_hurt=image/1 Woodcutter/hurt/right
+
 player1_bullet1=image/bullet/bullet1
+player1_head=image/1 Woodcutter/head
 
 
 
@@ -42,6 +46,10 @@ player2_right_attack1=image/2 GraveRobber/attack1/right
 player2_right_attack2=image/2 GraveRobber/attack2/right
 player2_right_attack3=image/2 GraveRobber/attack3/right
 
+player2_left_hurt=image/2 GraveRobber/hurt/left
+player2_right_hurt=image/2 GraveRobber/hurt/right
+
+player2_head=image/2 GraveRobber/head
 player2_bullet2=image/bullet/bullet2
 
 
