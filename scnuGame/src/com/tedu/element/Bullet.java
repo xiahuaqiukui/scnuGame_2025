@@ -2,6 +2,8 @@ package com.tedu.element;
 
 import java.awt.*;
 import java.text.Normalizer.Form;
+import java.util.List;
+import java.util.Random;
 
 import javax.swing.ImageIcon;
 
@@ -18,10 +20,20 @@ import com.tedu.manager.GameLoad;
  */
 
 public class Bullet extends ElementObj{
+
+	private int pictureIndex=0;
+	private long pictureTime=0L;
+
 	private int attack; // 攻击力
 	private int speed; // 速度
 	private String fx;
 	private String from; // 子弹是由谁发出的
+	private String key=null;
+
+	private int startX=0;
+	private int startY=0;
+	private int endX=0;
+	private int endY=0;
 	// 拓展其他属性  可拓展多种子弹类型：激光、导弹等（玩家类要有子弹类型）
 	
 	public Bullet() {}
@@ -49,8 +61,19 @@ public class Bullet extends ElementObj{
 		this.speed = speed;
 		this.fx = fx;
 		this.from = from;
-
+		this.key = key;
 		this.setIcon(GameLoad.imgMaps.get(key).get(0));
+	}
+	public Bullet(int x, int y, int w, int h, int attack, int speed,int endX,int endY,
+				  String from) {
+		super(x, y, w, h, null);
+		this.attack = attack;
+		this.speed = speed;
+		this.from = from;
+		this.startX=x;
+		this.startY=y;
+		this.endX=endX;
+		this.endY=endY;
 	}
 	
 	// 传输参数，返回对应参数的对象
@@ -74,6 +97,14 @@ public class Bullet extends ElementObj{
 	@Override
 	//只需要一张图片的绘画
 	public void showElement(Graphics g) {
+		if(icon==null){
+			if(from.equals("boss")){
+				Random random = new Random();
+				g.setColor(new Color(random.nextInt(256),random.nextInt(256),random.nextInt(256)));
+				g.drawOval(this.getX(), this.getY(), this.getW(), this.getH());
+				return;
+			}
+		}
 		Image img = this.getIcon().getImage();
 		int drawX = this.getX();
 		int drawY = this.getY();
@@ -94,14 +125,41 @@ public class Bullet extends ElementObj{
 					null);
 		}
 	}
-	
+
+	@Override
+	protected void updateImage(long gameTime, int sleepTime) {
+		if(gameTime-this.pictureTime>=7)
+		if(key!=null){
+			List<ImageIcon> imageIcons = GameLoad.imgMaps.get(key);
+			pictureIndex%=imageIcons.size();
+			setIcon(imageIcons,pictureIndex);
+			pictureTime=gameTime;
+			pictureIndex++;
+		}
+	}
+
 	@Override
 	protected void move(long gameTime) {
 		//System.out.println(this.fx);
+		if(fx==null){
+			if(from.equals("boss")){
+				double angle=Math.atan2(endY - startY, endX - startX);
+				// 计算方向向量（单位向量）
+				double dx = Math.cos(angle);
+				double dy = Math.sin(angle);
+
+				// 按速度移动
+				this.setX(this.getX() + (int) (this.speed * dx));
+				this.setY(this.getY() + (int) (this.speed * dy));
+			}
+			return;
+		}
 		switch (this.fx) {
 			case "left": this.setX(this.getX()-this.speed); break;
 			case "right": this.setX(this.getX()+this.speed); break;
 		}
+
+
 	}
 	
 	public int getAttack() {
@@ -143,6 +201,18 @@ public class Bullet extends ElementObj{
 			// 设置子弹长宽
 			this.setW(icon.getIconHeight()*2);
 			this.setH(icon.getIconHeight()*2);
+		}else if (from.equals("boss")) {
+			switch (this.fx) {
+				case "left": this.setX(this.getX()+50); break;
+				case "right":
+					this.setX(this.getX()+100);
+					break;
+			}
+			this.setY(this.getY()+5);
+
+			// 设置子弹长宽
+			this.setW(icon.getIconHeight()*2);
+			this.setH(icon.getIconHeight()*2);
 		}
 
 		return;
@@ -150,5 +220,29 @@ public class Bullet extends ElementObj{
 	
 	public String getFrom() {
 		return this.from;
+	}
+
+	protected void setIcon(List<ImageIcon> imageIcons, int index) {
+		ImageIcon t = imageIcons.get(index);
+		this.setIcon(t);
+
+		int newWidth = t.getIconWidth() * 2;
+		int newHeight = t.getIconHeight() * 2;
+
+		// 记录旧的右下角坐标
+		int oldRightX = this.getX() + this.getW();
+		int oldBottomY = this.getY() + this.getH();
+
+		// 更新宽高
+		this.setW(newWidth);
+		this.setH(newHeight);
+
+		// 调整坐标，使右下角不变
+		if ("left".equals(fx)) {
+			this.setX(oldRightX - newWidth);  // 新X = 旧右下角X - 新宽度
+		}
+		this.setY(oldBottomY - newHeight);    // 新Y = 旧底部Y - 新高度
+
+		// 更新碰撞箱
 	}
 }

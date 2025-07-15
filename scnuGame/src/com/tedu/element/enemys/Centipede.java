@@ -25,7 +25,7 @@ public class Centipede extends Enemy{
     protected void attack(long gameTime) {
         if(attack1_time){
             AttackCollider element = new AttackCollider(this.getX(), this.getY(),
-                    this.getW(), this.getH(), null, this.fx, this.attack,
+                    this.getW(), this.getH(), null, this.getFx(), this.attack,
                     1, "enemy");
             element.fitAttackType();
             ElementManager.getManager().addElement(element, GameElement.ATTACKCOLLIDER);
@@ -37,18 +37,17 @@ public class Centipede extends Enemy{
     protected void updateImage(long gameTime) {
         super.updateImage( gameTime);
         if(ishurt==true){
+            canMove=false;
+            canTurn=false;
             List<ImageIcon> imageIcons = GameLoad.imgMaps.get(getName()+"_hurt");
-            pictureIndex%=imageIcons.size();
-            setIcon(imageIcons,pictureIndex);
-            pictureIndex++;
             if(attackPictureIndex==imageIcons.size()-1){
                 attackPictureIndex=0;
                 canMove=true;
+                canTurn=true;
                 ishurt=false;
                 isUsingSkill=false;
             }
             attackPictureIndex%=imageIcons.size();
-            ImageIcon t = imageIcons.get(attackPictureIndex);
             setIcon(imageIcons,attackPictureIndex);
             attackPictureIndex++;
         }

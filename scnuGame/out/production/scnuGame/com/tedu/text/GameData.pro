@@ -95,6 +95,8 @@ swordman_lunge=image/boss/swordsman/lunge
 swordman_shot=image/boss/swordsman/shot
 swordman_shutdown=image/boss/swordsman/shutdown
 swordman_ultimate_skill=image/boss/swordsman/ultimate_skill
-swordman_walk=image/boss/swordsman/walk
+swordman_ultimate_skill_charging=image/boss/swordsman/ultimate_skill_charging
+swordman_run=image/boss/swordsman/walk
+swordman_bullet=image/boss/swordsman/bullet
 
 

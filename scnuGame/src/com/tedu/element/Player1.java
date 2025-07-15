@@ -715,7 +715,9 @@ public class Player1 extends ElementObj{
 		}
 		
 	}
-	
+
+
+
 	public Collider getTopCollider() {
 		return topCollider;
 	}

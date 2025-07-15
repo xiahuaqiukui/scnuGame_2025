@@ -31,14 +31,14 @@ public class Battle_turtle extends Enemy{
             if(attackPictureIndex==2){
                 Bullet element = new Bullet(this.getX(), this.getY(),
                         this.getW(), this.getH(), null, this.attack * 2,
-                        10, this.fx, "enemy","battle_turtle_bullet1");
+                        10, this.getFx(), "enemy","battle_turtle_bullet1");
                 element.fitImage();
                 ElementManager.getManager().addElement(element, GameElement.BULLET);
                 attack1_time = false;
             }else if(attackPictureIndex==3){
                 Bullet element = new Bullet(this.getX(), this.getY(),
                         this.getW(), this.getH(), null, this.attack * 2,
-                        10, this.fx, "enemy","battle_turtle_bullet1");
+                        10, this.getFx(), "enemy","battle_turtle_bullet1");
                 element.fitImage();
                 ElementManager.getManager().addElement(element, GameElement.BULLET);
                 attack1_time = false;
@@ -48,7 +48,7 @@ public class Battle_turtle extends Enemy{
 
         }else if(attack2_time){
             AttackCollider element = new AttackCollider(this.getX(), this.getY(),
-                    this.getW(), this.getH(), null, this.fx, this.attack,
+                    this.getW(), this.getH(), null, this.getFx(), this.attack,
                     1, "enemy");
             element.fitAttackType();
             ElementManager.getManager().addElement(element, GameElement.ATTACKCOLLIDER);
@@ -61,23 +61,22 @@ public class Battle_turtle extends Enemy{
     protected void updateImage(long gameTime) {
         super.updateImage(gameTime);
         if(ishurt==true){
+            canMove=false;
+            canTurn=false;
             List<ImageIcon> imageIcons = GameLoad.imgMaps.get(getName()+"_hurt");
-            pictureIndex%=imageIcons.size();
-            setIcon(imageIcons,pictureIndex);
-            pictureIndex++;
             if(attackPictureIndex==imageIcons.size()-1){
                 attackPictureIndex=0;
                 canMove=true;
+                canTurn=true;
                 ishurt=false;
                 isUsingSkill=false;
             }
             attackPictureIndex%=imageIcons.size();
-            ImageIcon t = imageIcons.get(attackPictureIndex);
             setIcon(imageIcons,attackPictureIndex);
             attackPictureIndex++;
         }
         else if(Enemy_left_attack2||Enemy_right_attack2){
-            SkillOccupationTime=0;
+
             canMove=false;
             List<ImageIcon> imageIcons = GameLoad.imgMaps.get(getName()+ "_attack2");
             if (attackPictureIndex == 3) {
@@ -89,6 +88,7 @@ public class Battle_turtle extends Enemy{
                 Enemy_left_attack2=false;
                 Enemy_right_attack2=false;
                 isUsingSkill=false;
+                SkillOccupationTime=0;
             }
             attackPictureIndex%=imageIcons.size();
             ImageIcon t = imageIcons.get(attackPictureIndex);
@@ -96,7 +96,7 @@ public class Battle_turtle extends Enemy{
             attackPictureIndex++;
         }
         else if(Enemy_left_attack1||Enemy_right_attack1){
-            SkillOccupationTime=0;
+
             canMove=false;
             List<ImageIcon> imageIcons = GameLoad.imgMaps.get(getName()+ "_attack1");
 //            System.out.println(imageIcons);
@@ -113,7 +113,6 @@ public class Battle_turtle extends Enemy{
             }
 
             attackPictureIndex%=imageIcons.size();
-            ImageIcon t = imageIcons.get(attackPictureIndex);
             setIcon(imageIcons,attackPictureIndex);
             attackPictureIndex++;
         }
@@ -142,7 +141,9 @@ public class Battle_turtle extends Enemy{
         int currentX = this.getX();
         int currentY = this.getY();
 
-        if(SkillOccupationTime>100)isUsingSkill=false;
+        if(SkillOccupationTime>100){
+            isUsingSkill=false;
+        }
         if(isUsingSkill==false){
             Random rand = new Random();
             skillSeed=rand.nextInt(2);
@@ -161,7 +162,7 @@ public class Battle_turtle extends Enemy{
                     Enemy_left_idle=false;
                     Enemy_right_idle=false;
                     Enemy_right_run = true;
-                    fx="right";
+                    setFx("right");
                 }else if ((targetX >= currentX)&&(Math.abs(rightCollider.getX()-(targetX+target.getRectangle().getWidth()/2))<=100)){
                     SkillOccupationTime++;
                     XSpeed = maxXSpeed;
@@ -169,15 +170,15 @@ public class Battle_turtle extends Enemy{
                     Enemy_right_idle=false;
                     Enemy_left_idle=false;
                     Enemy_left_run = true;
-                    fx="left";
+                    setFx("left");
                 }else if((targetX < currentX)&&(Math.abs(leftCollider.getX()-(targetX+target.getRectangle().getWidth()/2))>=100)){
                     // 目标在左边
-                    fx="left";
+                    setFx("left");
                     Enemy_left_run=false;
                     Enemy_left_attack1=true;
                 }else if((targetX >= currentX)&&(Math.abs(rightCollider.getX()-(targetX+target.getRectangle().getWidth()/2))>=100)){
                     // 目标在右边
-                    fx="right";
+                    setFx("right");
                     Enemy_right_run = false;
                     Enemy_right_attack1=true;
                 }
@@ -191,7 +192,7 @@ public class Battle_turtle extends Enemy{
                     Enemy_right_idle=false;
                     Enemy_left_idle=false;
                     Enemy_left_run = true;
-                    fx="left";
+                    setFx("left");
                 } else if ((targetX > currentX)&&(Math.abs(rightCollider.getX()-(targetX+target.getRectangle().getWidth()/2))>=30)) {
                     // 目标在右边且不在攻击范围内
                     XSpeed = maxXSpeed;
@@ -199,16 +200,16 @@ public class Battle_turtle extends Enemy{
                     Enemy_left_idle=false;
                     Enemy_right_idle=false;
                     Enemy_right_run = true;
-                    fx="right";
+                    setFx("right");
                 }
                 else if((targetX < currentX)&&(Math.abs(leftCollider.getX()-(targetX+target.getRectangle().getWidth()/2))<30)){
                     // 目标在左边且在攻击1范围内
-                    fx="left";
+                    setFx("left");
                     Enemy_left_run=false;
                     Enemy_left_attack2=true;
                 }else if((targetX > currentX)&&(Math.abs(rightCollider.getX()-(targetX+target.getRectangle().getWidth()/2))<30)){
                     // 目标在右边且在攻击1范围内
-                    fx="right";
+                    setFx("right");
                     Enemy_right_run = false;
                     Enemy_right_attack2=true;
                 }

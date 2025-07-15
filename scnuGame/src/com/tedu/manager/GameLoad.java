@@ -62,7 +62,7 @@ public class GameLoad {
 						((Enemy)element).setTargetList(em.getElementsByKey(GameElement.PLAYER));
 						em.addElement(element,GameElement.ENEMY);
 					}
-				}else if(key.equals("BATTLE_TRUTLE")){
+				}else if(key.equals("BATTLE_TURTLE")){
 					for(int i=0;i<arrs.length;i++){
 						ElementObj element = new Battle_turtle().createElement(key+","+arrs[i]);
 						((Enemy)element).setTargetList(em.getElementsByKey(GameElement.PLAYER));

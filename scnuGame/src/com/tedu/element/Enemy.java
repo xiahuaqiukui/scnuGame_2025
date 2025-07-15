@@ -31,7 +31,7 @@ public class Enemy extends ElementObj{
     protected int YSpeed=0;
 
     /// 状态控制
-    protected String fx = "right";
+    private String fx = "right";
     protected boolean ishurt = false;
     protected boolean Enemy_left_idle = false;
     protected boolean Enemy_right_idle = true;
@@ -56,6 +56,7 @@ public class Enemy extends ElementObj{
     /// 其他基本配置
     private int g=1;
     protected boolean canMove=true;
+    protected boolean canTurn=true;
     protected boolean isUsingSkill;
     /**
      * 通过随机数决定使用哪种攻击方式
@@ -214,7 +215,7 @@ public class Enemy extends ElementObj{
         return result;
     }
 
-    private boolean EnemyXMove(int XDistance) {
+    protected boolean EnemyXMove(int XDistance) {
         Collider detectedCollision=null;
         if(XDistance>0){
             detectedCollision=rightCollider;
@@ -239,7 +240,7 @@ public class Enemy extends ElementObj{
 
     }
     //YDistance正数表示向下边移动
-    private boolean EnemyYMove(int YDistance) {
+    protected boolean EnemyYMove(int YDistance) {
         Collider detectedCollision=null;
         if(YDistance>0){
             detectedCollision=bottomCollider;
@@ -265,7 +266,7 @@ public class Enemy extends ElementObj{
             return true;
         }
     }
-    private void EnemyXMove(){
+    protected void EnemyXMove(){
         if (this.Enemy_left_run && this.getX() > 0) {
             XSpeed=-maxXSpeed;
 //            ColliderMove( XSpeed,0);
@@ -287,7 +288,7 @@ public class Enemy extends ElementObj{
             XSpeed=0;
         }
     }
-    private void EnemyYMove(){
+    protected void EnemyYMove(){
         //按下跳跃键
         if(this.Enemy_left_jump||this.Enemy_right_jump){
             this.Enemy_left_jump=false;
@@ -313,7 +314,7 @@ public class Enemy extends ElementObj{
 
     @Override
     protected void updateImage(long gameTime, int sleepTime) {
-        if(gameTime-this.pictureTime>=8){
+        if(gameTime-this.pictureTime>=10){
             updateImage(gameTime);
             pictureTime = gameTime;
         }
@@ -397,6 +398,24 @@ public class Enemy extends ElementObj{
 
     public int getEnemy_max_hp() {
         return enemy_max_hp;
+    }
+
+    public int getG() {
+        return g;
+    }
+
+    public void setG(int g) {
+        this.g = g;
+    }
+
+    public String getFx() {
+        return fx;
+    }
+
+    public void setFx(String fx) {
+        if(canTurn){
+            this.fx = fx;
+        }
     }
 
     public void setEnemy_max_hp(int enemy_max_hp) {

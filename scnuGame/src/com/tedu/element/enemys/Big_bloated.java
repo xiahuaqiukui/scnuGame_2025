@@ -26,7 +26,7 @@ public class Big_bloated extends Enemy{
     protected void attack(long gameTime) {
         if(attack1_time){
             AttackCollider element = new AttackCollider(this.getX(), this.getY(),
-                    this.getW(), this.getH(), null, this.fx, this.attack,
+                    this.getW(), this.getH(), null, this.getFx(), this.attack,
                     1, "enemy");
             element.fitAttackType();
             ElementManager.getManager().addElement(element, GameElement.ATTACKCOLLIDER);
@@ -38,23 +38,23 @@ public class Big_bloated extends Enemy{
     protected void updateImage(long gameTime) {
         super.updateImage(gameTime);
         if(ishurt==true){
+            canMove=false;
+            canTurn=false;
             List<ImageIcon> imageIcons = GameLoad.imgMaps.get(getName()+"_hurt");
-            pictureIndex%=imageIcons.size();
-            setIcon(imageIcons,pictureIndex);
-            pictureIndex++;
             if(attackPictureIndex==imageIcons.size()-1){
                 attackPictureIndex=0;
                 canMove=true;
+                canTurn=true;
                 ishurt=false;
                 isUsingSkill=false;
             }
             attackPictureIndex%=imageIcons.size();
-            ImageIcon t = imageIcons.get(attackPictureIndex);
             setIcon(imageIcons,attackPictureIndex);
             attackPictureIndex++;
         }
         else if(Enemy_left_attack1||Enemy_right_attack1){
             canMove=false;
+            canTurn=false;
             List<ImageIcon> imageIcons = GameLoad.imgMaps.get(getName()+ "_attack4");
             if (attackPictureIndex == 3||attackPictureIndex==4) {
                 attack1_time = true; // 控制攻击1判定箱何时出现
@@ -67,7 +67,6 @@ public class Big_bloated extends Enemy{
             }
 
             attackPictureIndex%=imageIcons.size();
-            ImageIcon t = imageIcons.get(attackPictureIndex);
             setIcon(imageIcons,attackPictureIndex);
             attackPictureIndex++;
         }

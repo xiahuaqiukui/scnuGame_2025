@@ -127,6 +127,7 @@ public abstract class ElementObj {
 	public void setIcon(ImageIcon icon) {
 		this.icon = icon;
 	}
+
 	public void setLive(boolean live) {this.live = live;}
 	public boolean isLive(){
 		return live;
