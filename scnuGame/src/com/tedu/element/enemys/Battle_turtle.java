@@ -145,7 +145,7 @@ public class Battle_turtle extends Enemy{
         if(SkillOccupationTime>100)isUsingSkill=false;
         if(isUsingSkill==false){
             Random rand = new Random();
-            skillSeed=rand.nextInt(4);
+            skillSeed=rand.nextInt(2);
 //            skillSeed=0;
 
         }

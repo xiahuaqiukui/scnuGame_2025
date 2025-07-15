@@ -403,6 +403,14 @@ public class Enemy extends ElementObj{
         this.enemy_max_hp = enemy_max_hp;
     }
 
+    public int getEnemy_hp() {
+        return enemy_hp;
+    }
+
+    public void setEnemy_hp(int enemy_hp) {
+        this.enemy_hp = enemy_hp;
+    }
+
     public void setTargetList(List<ElementObj> targetList) {
         this.targetList = targetList;
     }
