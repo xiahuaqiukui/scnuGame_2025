@@ -1,4 +1,4 @@
-package com.tedu.game;
+package com.tedu.show;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -28,6 +28,11 @@ import javax.swing.JProgressBar;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
+
+import com.tedu.controller.GameListener;
+import com.tedu.controller.GameThread;
+import com.tedu.show.GameJFrame;
+import com.tedu.show.GameMainJPanel;
 
 public class GameStartMenu extends JFrame{
 	// 窗口属性
@@ -92,6 +97,7 @@ public class GameStartMenu extends JFrame{
         titleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         titleLabel.setBorder(BorderFactory.createEmptyBorder(0, 0, 40, 0));
 
+        
         // 创建按钮面板
         JPanel buttonPanel = new JPanel();
         buttonPanel.setOpaque(false);
@@ -99,15 +105,15 @@ public class GameStartMenu extends JFrame{
         buttonPanel.setMaximumSize(new Dimension(300, 250));
 
         // 单人游戏按钮
-        singlePlayerBtn = createMenuButton("单人模式");
+        singlePlayerBtn = addButton("单人模式");
         singlePlayerBtn.addActionListener(e -> startGame(1));
 
         // 双人游戏按钮
-        twoPlayerBtn = createMenuButton("双人对战");
+        twoPlayerBtn = addButton("双人对战");
         twoPlayerBtn.addActionListener(e -> startGame(2));
 
         // 退出按钮
-        exitBtn = createMenuButton("退出游戏");
+        exitBtn = addButton("退出游戏");
         exitBtn.addActionListener(e -> System.exit(0));
 
         buttonPanel.add(singlePlayerBtn);
@@ -123,7 +129,7 @@ public class GameStartMenu extends JFrame{
         this.add(layeredPane);
     }
 	
-    private JButton createMenuButton(String text) {
+    private JButton addButton(String text) {
         JButton button = new JButton(text);
         button.setFont(new Font("微软雅黑", Font.BOLD, 24));
         button.setBackground(new Color(70, 130, 180, 200));
@@ -154,33 +160,22 @@ public class GameStartMenu extends JFrame{
         SwingUtilities.invokeLater(() -> {
             this.dispose(); // 关闭菜单界面
             // 启动主游戏窗口
-            com.tedu.show.GameJFrame gj = new com.tedu.show.GameJFrame();
-            com.tedu.show.GameMainJPanel jp = new com.tedu.show.GameMainJPanel();
-            com.tedu.controller.GameListener listener = new com.tedu.controller.GameListener();
-            com.tedu.controller.GameThread th = new com.tedu.controller.GameThread();
+            GameJFrame gj = new GameJFrame();
+            GameMainJPanel jp = new GameMainJPanel();
+            GameListener listener = new GameListener();
+            GameThread th = new GameThread();
             
             gj.setjPanel(jp);
             gj.setKeyListener(listener);
             gj.setMainThread(th);
-            gj.start();
-            // 可在此处将playerCount和selectedMap传递给后续逻辑
             
+            // 可在此处将playerCount和selectedMap传递给后续逻辑
+            gj.start();
         });
     }
 	
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
-            try {
-                // 设置系统风格
-                UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-                // 设置UI全局字体
-                UIManager.put("Button.font", new Font("微软雅黑", Font.PLAIN, 14));
-                UIManager.put("Label.font", new Font("微软雅黑", Font.PLAIN, 14));
-                UIManager.put("ComboBox.font", new Font("微软雅黑", Font.PLAIN, 14));
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
             GameStartMenu menu = new GameStartMenu();
             menu.setVisible(true);
         });
