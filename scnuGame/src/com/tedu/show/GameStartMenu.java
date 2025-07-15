@@ -10,9 +10,13 @@ import java.awt.GradientPaint;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.GridLayout;
+import java.awt.Image;
+import java.awt.Toolkit;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+import java.io.File;
+import java.io.IOException;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
@@ -44,6 +48,8 @@ public class GameStartMenu extends JFrame{
 	private MouseListener mouseListener = null;
 	private Thread mainThread = null;  // 游戏主线程
 	
+	private Image backgroundImage = null;
+	
 	// 按钮
     private JButton singlePlayerBtn; // 单人游戏按钮
     private JButton twoPlayerBtn; // 双人游戏按钮
@@ -60,19 +66,27 @@ public class GameStartMenu extends JFrame{
         // 主面板
         JLayeredPane layeredPane = new JLayeredPane();
         layeredPane.setPreferredSize(new Dimension(GameX, GameY));
-
+        
+        // 加载背景图片
+        try {
+            // 从文件加载图片（替换为你的图片路径）
+            backgroundImage = Toolkit.getDefaultToolkit().getImage("image/background/1.jpg");
+//          System.out.println(backgroundImage);
+        } catch (Exception e) {
+            e.printStackTrace();
+            // 如果加载失败，可以设置一个默认颜色
+            setBackground(Color.BLACK);
+        }
+        
         // 背景面板
         JPanel backgroundPanel = new JPanel() {
             @Override
             protected void paintComponent(Graphics g) {
                 super.paintComponent(g);
                 // 绘制背景
-                Graphics2D g2d = (Graphics2D) g;
-                Color color1 = new Color(20, 30, 48);
-                Color color2 = new Color(36, 59, 85);
-                GradientPaint gp = new GradientPaint(0, 0, color1, getWidth(), getHeight(), color2);
-                g2d.setPaint(gp);
-                g2d.fillRect(0, 0, getWidth(), getHeight());
+                if (backgroundImage != null) {
+                	g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
+                }
             }
         };
         backgroundPanel.setBounds(0, 0, GameX, GameY);
