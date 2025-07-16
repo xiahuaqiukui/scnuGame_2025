@@ -25,11 +25,15 @@ public class GameThread extends Thread{
 	// 获取资源管理器
 	private ElementManager em;
 	// 设置刷新时间
-	public static int sleepTime=15; // 15ms一刷
+	public static int sleepTime = 15; // 15ms一帧
+	
+	// 游玩人数,决定游戏模式
+	private int playerCount;
 	
 	// 初始构造函数
-	public GameThread() {
+	public GameThread(int playerCount) {
 		em = ElementManager.getManager();
+		this.playerCount = playerCount;
 	}
 	
 	// 重写run函数, 执行的进程
@@ -57,8 +61,12 @@ public class GameThread extends Thread{
 	 */
 	private void gameLoad() {
 		GameLoad.ImgLoad(); // 加载图片
-		GameLoad.playerLoad(); // 可以带参数表示几个人(目前仅有1人)
-		GameLoad.MapLoad(1); // 加载地图
+		GameLoad.playerLoad(playerCount); // 可以带参数表示几个人(目前仅有1人)
+		if (playerCount == 1) {
+			GameLoad.MapLoad(1); // 加载地图
+		} else if (playerCount == 2){
+			GameLoad.MapLoad(3); // 加载地图
+		}
 	}
 	
 	/**
@@ -182,13 +190,13 @@ public class GameThread extends Thread{
 					// 目前仅有 玩家攻击敌人 和 敌人攻击玩家
 					if (underAttack instanceof Player1) {
 						Player1 t = (Player1) underAttack;
-						if (from.equals("enemy") || from.equals("boss")) {
+						if (from.equals("enemy") || from.equals("boss") || from.equals("player2")) {
 							t.getHurt(hurt);
 							attack.setLive(false);
 						}
 					} else if (underAttack instanceof Player2) {
 						Player2 t = (Player2) underAttack;
-						if (from.equals("enemy") || from.equals("boss")) {
+						if (from.equals("enemy") || from.equals("boss") ||from.equals("player1")) {
 							t.getHurt(hurt);
 							attack.setLive(false);
 						}

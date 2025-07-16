@@ -177,8 +177,9 @@ public class GameStartMenu extends JFrame{
             GameJFrame gj = new GameJFrame();
             GameMainJPanel jp = new GameMainJPanel();
             GameListener listener = new GameListener();
-            GameThread th = new GameThread();
+            GameThread th = new GameThread(playerCount);
             
+            // 注入
             gj.setjPanel(jp);
             gj.setKeyListener(listener);
             gj.setMainThread(th);

@@ -24,9 +24,9 @@ public class Player2 extends ElementObj{
 	private int attack = 1; // 攻击力
 		
 	// 展示当前属性的状态条
-	private Bar hpBar = new Bar(220, 100, 100, 10, null, player2_max_hp, player2_hp, Color.RED);
-	private Bar vitBar = new Bar(220, 120, 100, 10, null, player2_max_vit, player2_vit, Color.YELLOW);
-	private Bar mpBar = new Bar(220, 140, 100, 10, null, player2_max_mp, player2_mp, Color.BLUE);
+	private Bar hpBar = new Bar(1560, 100, 100, 10, null, player2_max_hp, player2_hp, Color.RED);
+	private Bar vitBar = new Bar(1560, 120, 100, 10, null, player2_max_vit, player2_vit, Color.YELLOW);
+	private Bar mpBar = new Bar(1560, 140, 100, 10, null, player2_max_mp, player2_mp, Color.BLUE);
 		
 	// 攻击控制
 	private int pkType = 0; // 1普攻  2瞬身  3远程
@@ -79,7 +79,7 @@ public class Player2 extends ElementObj{
 	private int attackPictureIndex = 0; // 攻击照片切换序号
 		
 	// 主角朝向(初始默认为右)
-	private String fx = "right"; // 左或右
+	private String fx = "left"; // 左或右
 		
 	// 控制移动消耗体力的间隔(防止过快)
 	private long moveVitConsumeTime = 0;
@@ -122,7 +122,7 @@ public class Player2 extends ElementObj{
 		// 玩家头像
 		if (headIcon != null) {
 			g.drawImage(this.headIcon.getImage(), 
-					230, 10, 
+					1570, 10, 
 					80, 80, null);
 		}
 	}

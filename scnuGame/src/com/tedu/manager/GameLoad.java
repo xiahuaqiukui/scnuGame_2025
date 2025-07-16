@@ -109,14 +109,22 @@ public class GameLoad {
             throw new RuntimeException(e);
         }
     }
-	public static void playerLoad(){
-//		String player1Str="100,700";
-//		ElementObj player1 = new Player1().createElement(player1Str);
-//		em.addElement(player1,GameElement.PLAYER);
-		
-		String player2Str="100,700";
-		ElementObj player2 = new Player2().createElement(player2Str);
-		em.addElement(player2,GameElement.PLAYER);
+	public static void playerLoad(int playerCount){
+		if (playerCount == 1) {
+			// 暂为player1后续可能做选择
+			String player1Str="100,700";
+			ElementObj player1 = new Player1().createElement(player1Str);
+			em.addElement(player1,GameElement.PLAYER);
+			
+		} else if (playerCount == 2) {
+			String player1Str="100,700";
+			ElementObj player1 = new Player1().createElement(player1Str);
+			em.addElement(player1,GameElement.PLAYER);
+			
+			String player2Str="1500,700";
+			ElementObj player2 = new Player2().createElement(player2Str);
+			em.addElement(player2,GameElement.PLAYER);
+		}
 	}
 
 	public static void main(String[] args) {
