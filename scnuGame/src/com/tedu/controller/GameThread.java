@@ -8,6 +8,7 @@ import com.tedu.element.Bullet;
 import com.tedu.element.Collider;
 import com.tedu.element.ElementObj;
 import com.tedu.element.Enemy;
+import com.tedu.element.Medicine;
 import com.tedu.element.Player1;
 import com.tedu.element.Player2;
 import com.tedu.manager.ElementManager;
@@ -90,7 +91,7 @@ public class GameThread extends Thread{
 			List<ElementObj> collider = em.getElementsByKey(GameElement.COLLIDER);
 			List<ElementObj> AttackCollider = em.getElementsByKey(GameElement.ATTACKCOLLIDER);
 			List<ElementObj> Bar = em.getElementsByKey(GameElement.BAR);
-			
+			List<ElementObj> Medicine = em.getElementsByKey(GameElement.MEDICINE);
 
 			// 更新
 			Update(all, gameTime);
@@ -101,6 +102,8 @@ public class GameThread extends Thread{
 			
 			ElementPK(players, bullets); // 注意后面放的是判定箱或枪弹
 			ElementPK(players, AttackCollider); // 注意后面放的是判定箱或枪弹
+			
+			ElementPK(players, Medicine);
 			
 			// 清空攻击判定箱
 			RemoveAttackCollider();
@@ -184,6 +187,31 @@ public class GameThread extends Thread{
 						Bullet t = (Bullet) attack;
 						from = t.getFrom();
 						hurt = t.getAttack();
+					} else if (attack instanceof Medicine) {
+						Medicine te = (Medicine) attack;
+						String medType = te.getMedType();
+						
+						if (underAttack instanceof Player1) {
+							Player1 t = (Player1) underAttack;
+							if (medType.equals("small_hp")) {
+								t.gethpRecover(te.getRecoverHp());
+							} else if (medType.equals("small_mix")){
+								t.gethpRecover(te.getRecoverHp());
+								t.getmpRecover(te.getRecoverMp());
+							}
+						} else if (underAttack instanceof Player2) {
+							Player2 t = (Player2) underAttack;
+							if (medType.equals("small_hp")) {
+								t.gethpRecover(te.getRecoverHp());
+							} else if (medType.equals("small_mix")){
+								t.gethpRecover(te.getRecoverHp());
+								t.getmpRecover(te.getRecoverMp());
+							}
+						} else {
+							break;
+						}
+						
+						te.setLive(false);
 					}
 					
 					// 攻击判定(成功则消除子弹或判定箱子)
@@ -206,7 +234,7 @@ public class GameThread extends Thread{
 							t.getHurt(hurt);
 							attack.setLive(false);
 						}
-					}// 拓展BOSS类
+					}
 					
 					break;
 				}

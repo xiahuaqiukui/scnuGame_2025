@@ -44,7 +44,7 @@ public class Medicine extends ElementObj{
 			this.setH(25);
 		}
 		
-		System.out.println(this.getIcon());
+//		System.out.println(this.getIcon());
 		
 		topCollider=new Collider(getX(), getY()-5,getW(),5);
         bottomCollider=new Collider(getX(), getY()+getH(),getW(),5);
@@ -136,4 +136,26 @@ public class Medicine extends ElementObj{
         leftCollider.setLive(live);
         rightCollider.setLive(live);
     }
+	
+	public String getMedType() {
+		return this.medType;
+	}
+	
+	public int getRecoverHp() {
+		int t = 0;
+		if (medType.equals("small_hp")) {
+			t = this.small_recover_hp;
+		} else if (medType.equals("small_mix")) {
+			t = this.mix_small_recover_hp;
+		}
+		return t;
+	}
+	
+	public int getRecoverMp() {
+		int t = 0;
+		if (medType.equals("small_mix")) {
+			t = this.mix_small_recover_mp;
+		}
+		return t;
+	}
 }

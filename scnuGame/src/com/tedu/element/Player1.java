@@ -747,6 +747,15 @@ public class Player1 extends ElementObj{
 		
 	}
 
+	// 恢复
+	public void gethpRecover(int recover) {
+		player1_hp = Math.min(player1_max_hp, player1_hp + recover);
+		hpBar.setNowNum(this.player1_hp);
+	}
+	public void getmpRecover(int recover) {
+		player1_mp = Math.min(player1_max_mp, player1_mp + recover);
+		mpBar.setNowNum(this.player1_mp);
+	}
 
 
 	public Collider getTopCollider() {

@@ -669,23 +669,32 @@ public class Player2 extends ElementObj{
 	}
 	
 	// 受伤
-		public void getHurt(int damage) {
-			if (!player2_attack2_time && !player2_attack3_time) {
-				this.player2_hp = Math.max(0,this.player2_hp - damage);
-				hpBar.setNowNum(player2_hp);
+	public void getHurt(int damage) {
+		if (!player2_attack2_time && !player2_attack3_time) {
+			this.player2_hp = Math.max(0,this.player2_hp - damage);
+			hpBar.setNowNum(player2_hp);
 				
-				// 受击状态设置
-				underattacking = true;
-				// 打断
-				player2_attack1_time = false;
-			}
-			
-			if (player2_hp <= 0) {
-				this.setLive(false);
-			}
-			
+			// 受击状态设置
+			underattacking = true;
+			// 打断
+			player2_attack1_time = false;
 		}
+			
+		if (player2_hp <= 0) {
+			this.setLive(false);
+		}
+			
+	}
 	
+	// 恢复
+	public void gethpRecover(int recover) {
+		player2_hp = Math.min(player2_max_hp, player2_hp + recover);
+		hpBar.setNowNum(this.player2_hp);
+	}
+	public void getmpRecover(int recover) {
+		player2_mp = Math.min(player2_max_mp, player2_mp + recover);
+		mpBar.setNowNum(this.player2_mp);
+	}
 	
 	public Collider getTopCollider() {
 		return topCollider;
