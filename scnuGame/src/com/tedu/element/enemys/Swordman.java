@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Random;
 
 public class Swordman extends Enemy {
-    private int attack=1;
+    private int attack=10;
     private int UltimateAttackTimes=0;//大招连段次数
     private int MaxUltimateAttackTimes=3;//大招连段次数
 
@@ -55,7 +55,7 @@ public class Swordman extends Enemy {
 
     public Swordman(){
         setName("swordman");
-        setEnemy_max_hp(10);
+        setEnemy_max_hp(100);
         setEnemy_hp(getEnemy_max_hp());
         setScore(5);
         resilience = 20;

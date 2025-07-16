@@ -7,6 +7,8 @@ import java.util.Map;
 
 import com.tedu.element.ElementObj;
 
+import javax.swing.*;
+
 /**
  * @说明 本类是元素管理器，专门存储所有的元素，同时，提供方法
  * 		给予视图和控制获取数据
@@ -29,6 +31,7 @@ public class ElementManager {
 
 	/// 得分
 	private int score=0;
+	private JPanel gamePanel;
 
 	// 用Map配合Enum和List结构化存储元素
 	private Map<GameElement, List<ElementObj>> gameElements;
@@ -98,6 +101,17 @@ public class ElementManager {
 		// 其他各种实体+效果......
 	}
 
+	public static void clearAllElements() {
+		for (GameElement ge : GameElement.values()) {
+			List<ElementObj> list = EM.getGameElements().get(ge);
+			if (list != null) {
+				list.clear();
+			}
+		}
+
+	}
+
+
 	public void addScore(int score) {
 		this.score += score;
 	}
@@ -109,4 +123,14 @@ public class ElementManager {
 	public int getScore() {
 		return score;
 	}
+
+
+	public void setGamePanel(JPanel panel) {
+		this.gamePanel = panel;
+	}
+
+	public JPanel getGamePanel() {
+		return gamePanel;
+	}
+
 }

@@ -1,5 +1,7 @@
 package com.tedu.show;
 
+import com.tedu.manager.ElementManager;
+
 import java.awt.event.KeyListener;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
@@ -51,6 +53,7 @@ public class GameJFrame extends JFrame{
 	public void start() {
 		if(jPanel!=null) {
 			this.add(jPanel);
+			ElementManager.getManager().setGamePanel(jPanel);
 		}
 		if(keyListener !=null) {
 			this.addKeyListener(keyListener);
@@ -87,5 +90,9 @@ public class GameJFrame extends JFrame{
 	}
 	public void setMainThread(Thread mainThread) {
 		this.mainThread = mainThread;
+	}
+
+	public void close() {
+		this.dispose();
 	}
 }
