@@ -41,9 +41,9 @@ public class Player1 extends ElementObj{
 	private int attack = 1; // 攻击力
 	
 	// 展示当前属性的状态条
-	private Bar hpBar = new Bar(20, 100, 100, 10, null, player1_max_hp, player1_hp, Color.RED);
-	private Bar vitBar = new Bar(20, 120, 100, 10, null, player1_max_vit, player1_vit, Color.YELLOW);
-	private Bar mpBar = new Bar(20, 140, 100, 10, null, player1_max_vit, player1_vit, Color.BLUE);
+	private Bar hpBar = new Bar(70, 100, 100, 10, null, player1_max_hp, player1_hp, Color.RED);
+	private Bar vitBar = new Bar(70, 120, 100, 10, null, player1_max_vit, player1_vit, Color.YELLOW);
+	private Bar mpBar = new Bar(70, 140, 100, 10, null, player1_max_vit, player1_vit, Color.BLUE);
 	
 	// 攻击控制
 	private int pkType = 0; // 1普攻  2重击  3远程
@@ -136,7 +136,7 @@ public class Player1 extends ElementObj{
 		// 玩家头像
 		if (headIcon != null) {
 			g.drawImage(this.headIcon.getImage(), 
-					30, 10, 
+					80, 10, 
 					80, 80, null);
 		}
 	}

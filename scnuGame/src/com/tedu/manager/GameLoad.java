@@ -116,15 +116,12 @@ public class GameLoad {
 			ElementObj player1 = new Player1().createElement(player1Str);
 			em.addElement(player1,GameElement.PLAYER);
 			
-			// 暂时加入一个药瓶测试
-//			ElementObj medicine = new Medicine(100, 500, 10, 10, null);
-//			em.addElement(player1,GameElement.MEDICINE);
 		} else if (playerCount == 2) {
 			String player1Str="100,700";
 			ElementObj player1 = new Player1().createElement(player1Str);
 			em.addElement(player1,GameElement.PLAYER);
 			
-			String player2Str="1500,700";
+			String player2Str="200,700";
 			ElementObj player2 = new Player2().createElement(player2Str);
 			em.addElement(player2,GameElement.PLAYER);
 		}

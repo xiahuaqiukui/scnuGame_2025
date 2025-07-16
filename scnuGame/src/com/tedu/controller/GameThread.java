@@ -149,13 +149,13 @@ public class GameThread extends Thread{
 
 		if (underAttack instanceof Player1) {
 			Player1 t = (Player1) underAttack;
-			if (from.equals("enemy") || from.equals("boss") || from.equals("player2")) {
+			if (from.equals("enemy") || from.equals("boss")) {
 				t.getHurt(hurt);
 				attack.setLive(false);
 			}
 		} else if (underAttack instanceof Player2) {
 			Player2 t = (Player2) underAttack;
-			if (from.equals("enemy") || from.equals("boss") ||from.equals("player1")) {
+			if (from.equals("enemy") || from.equals("boss")) {
 				t.getHurt(hurt);
 				attack.setLive(false);
 			}
