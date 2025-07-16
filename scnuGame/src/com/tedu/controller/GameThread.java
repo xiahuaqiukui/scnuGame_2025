@@ -57,8 +57,8 @@ public class GameThread extends Thread{
 	 */
 	private void gameLoad() {
 		GameLoad.ImgLoad(); // 加载图片
-		GameLoad.MapLoad(1); // 加载地图
 		GameLoad.playerLoad(); // 可以带参数表示几个人(目前仅有1人)
+		GameLoad.MapLoad(1); // 加载地图
 	}
 	
 	/**
@@ -82,7 +82,8 @@ public class GameThread extends Thread{
 			List<ElementObj> collider = em.getElementsByKey(GameElement.COLLIDER);
 			List<ElementObj> AttackCollider = em.getElementsByKey(GameElement.ATTACKCOLLIDER);
 			List<ElementObj> Bar = em.getElementsByKey(GameElement.BAR);
-			
+
+
 			// 更新
 			Update(all, gameTime);
 			

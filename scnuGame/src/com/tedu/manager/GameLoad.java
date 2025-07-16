@@ -48,7 +48,7 @@ public class GameLoad {
 					for(int i=0;i<arrs.length;i++){
 						ElementObj element = new Swordman().createElement(key+","+arrs[i]);
 						((Enemy)element).setTargetList(em.getElementsByKey(GameElement.PLAYER));
-						em.addElement(element,GameElement.BOSS);
+						em.addElement(element,GameElement.ENEMY);
 					}
 				}else if(key.equals("CENTIPEDE")){
 					for(int i=0;i<arrs.length;i++){
@@ -117,6 +117,12 @@ public class GameLoad {
 		String player2Str="100,700";
 		ElementObj player2 = new Player2().createElement(player2Str);
 		em.addElement(player2,GameElement.PLAYER);
+	}
+
+	public static void main(String[] args) {
+		for (int i=0;i<2000;i+=20){
+			System.out.print(i+",800;");
+		}
 	}
 
 

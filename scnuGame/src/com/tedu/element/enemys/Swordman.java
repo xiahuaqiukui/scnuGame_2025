@@ -24,6 +24,7 @@ public class Swordman extends Enemy {
     private boolean lunge_time = false;
     private boolean shot_time = false;
     private boolean ultimate_time = false;
+    private int shutdown_time=0;
 
 
     //状态
@@ -32,6 +33,8 @@ public class Swordman extends Enemy {
     private boolean ultimate=false;
     private boolean ultimateAttacking=false;
     private boolean alreadyChargingUltimate=false;
+    private boolean shutDown=false;
+    private boolean shutDown2=false;
 
 
 
@@ -53,9 +56,8 @@ public class Swordman extends Enemy {
     public Swordman(){
         setName("swordman");
         setEnemy_max_hp(100);
+        setEnemy_hp(getEnemy_max_hp());
         resilience = 20;
-
-
     }
 
 
@@ -91,6 +93,7 @@ public class Swordman extends Enemy {
             ElementManager.getManager().addElement(element, GameElement.BULLET);
             shot_time = false;
         }else if (ultimate_time){
+            canMove=false;
 
             //获取target的当前位置，
             // 画一条从屏幕外射向该位置的线
@@ -101,12 +104,14 @@ public class Swordman extends Enemy {
                 endX=target.getX()+ target.getW()/2;
                 endY=target.getY()+ target.getH()/2;
             }else if(attackPictureIndex>=5&&attackPictureIndex<=7){
+                canMove=false;
                 AttackCollider element = new AttackCollider(startX, startY,
                         5, this.getH(), null, this.getFx(), 0,
                         3, "boss",endX,endY);
                 ElementManager.getManager().addElement(element, GameElement.ATTACKCOLLIDER);
             }
             if(attackPictureIndex>7&&attackPictureIndex<=9){
+                canMove=false;
                 Bullet ele = new Bullet(startX,startY,30,30,attack*3,80,endX,endY,"boss");
                 ElementManager.getManager().addElement(ele, GameElement.BULLET);
 //                AttackCollider element = new AttackCollider(startX, startY,
@@ -117,6 +122,7 @@ public class Swordman extends Enemy {
 //                System.out.println(element.pk(target));
             }
             if(attackPictureIndex==10){
+                canMove=true;
                 ultimate_time=false;
             }
 
@@ -126,7 +132,62 @@ public class Swordman extends Enemy {
     @Override
     protected void updateImage(long gameTime) {
         super.updateImage(gameTime);
-        if(Enemy_left_attack1||Enemy_right_attack1){
+        if(ishurt&&shutDown){
+            setG(1);
+            canMove=false;
+            canTurn=false;
+            List<ImageIcon> imageIcons = GameLoad.imgMaps.get(getName()+"_hurt");
+            if(attackPictureIndex==imageIcons.size()-1){
+                attackPictureIndex=0;
+                canMove=true;
+                canTurn=true;
+                ishurt=false;
+                isUsingSkill=false;
+            }
+            attackPictureIndex%=imageIcons.size();
+            setIcon(imageIcons,attackPictureIndex);
+            attackPictureIndex++;
+        }else if(shutDown){
+            canMove=false;
+            canTurn=false;
+            lunge=false;
+            shot=false;
+            Enemy_left_attack1=false;
+            Enemy_left_attack2=false;
+            ultimate_time=false;
+
+            setG(1);
+            if(!shutDown2){
+                List<ImageIcon> imageIcons = GameLoad.imgMaps.get(getName()+ "_shutdown");
+                attackPictureIndex%=imageIcons.size();
+                setIcon(imageIcons,attackPictureIndex);
+                attackPictureIndex++;
+                if(attackPictureIndex==imageIcons.size()){
+                    attackPictureIndex=0;
+                    shutDown2=true;
+                }
+            }else{
+                List<ImageIcon> imageIcons = GameLoad.imgMaps.get(getName()+ "_shutdown2");
+                attackPictureIndex%=imageIcons.size();
+                setIcon(imageIcons,attackPictureIndex);
+                attackPictureIndex++;
+                shutdown_time++;
+//                System.out.println(shutdown_time);
+                if(shutdown_time>40){
+                    resilience=20;
+                    shutDown2=false;
+                    shutDown=false;
+                    canMove=true;
+                    canTurn=true;
+                    shutdown_time=0;
+                    skillSeed=5;
+                    isUsingSkill=false;
+                }
+            }
+
+
+        }
+        else if(Enemy_left_attack1||Enemy_right_attack1){
             canMove=false;
             canTurn=false;
             List<ImageIcon> imageIcons = GameLoad.imgMaps.get(getName()+ "_attack1");
@@ -137,7 +198,8 @@ public class Swordman extends Enemy {
             ImageIcon t = imageIcons.get(attackPictureIndex);
             setIcon(imageIcons,attackPictureIndex);
             //如果是最后一张图片
-            if(attackPictureIndex==imageIcons.size()-1){
+            attackPictureIndex++;
+            if(attackPictureIndex==imageIcons.size()){
                 isUsingSkill=false;
                 attackPictureIndex=0;
                 canMove=true;
@@ -147,12 +209,13 @@ public class Swordman extends Enemy {
                 int XDis = Math.max(Math.abs(this.getX())/2,Math.abs(GameJFrame.GameX-this.getX())/2);
                 EnemyXMove(XDis-this.getX());
             }
-            attackPictureIndex++;
+
         }
         else if(lunge){
             List<ImageIcon> imageIcons = GameLoad.imgMaps.get(getName()+ "_lunge");
 
             if(attackPictureIndex==1||attackPictureIndex==2){
+                canMove=true;
                 lunge_time=true;
             }
             attackPictureIndex%=imageIcons.size();
@@ -177,9 +240,11 @@ public class Swordman extends Enemy {
             }
             attackPictureIndex%=imageIcons.size();
             setIcon(imageIcons,attackPictureIndex);
+
             attackPictureIndex++;
         }
         else if(ultimate){
+            canMove=false;
             //没有充能动画
             if(!alreadyChargingUltimate){
                 List<ImageIcon> imageIcons = GameLoad.imgMaps.get(getName()+ "_ultimate_skill_charging");
@@ -217,8 +282,11 @@ public class Swordman extends Enemy {
 
     @Override
     protected void behavioralControl() {
+        System.out.println(getEnemy_hp());
+
         if (target == null|| !target.isLive()) {
             // 寻找目标（比如玩家）
+
             for(ElementObj tar:targetList){
                 if(Math.abs(tar.getX()-this.getX())<detectingDistance){
                     target=tar;
@@ -236,10 +304,17 @@ public class Swordman extends Enemy {
         int currentY = this.getY();
 
 
-        if(isUsingSkill==false){
+
+        if(resilience<=0){
+            shutDown=true;
+            return;
+        }
+        if(isUsingSkill==false&&shutDown==false){
+            setG(1);
             Random rand  =  new Random();
             skillSeed=rand.nextInt(4);
-//            skillSeed=3;
+            target=targetList.get(rand.nextInt(targetList.size()));
+//            skillSeed=2;
         }
 
         switch(skillSeed){
@@ -247,20 +322,28 @@ public class Swordman extends Enemy {
                 isUsingSkill=true;
                 if ((targetX < currentX)&&(Math.abs(leftCollider.getX()-targetX)>80)) {
                     // 目标在左边且不在攻击范围内
+                    canMove=true;
                     XSpeed = -maxXSpeed;
                     Enemy_right_run = false;
                     Enemy_right_idle=false;
                     Enemy_left_idle=false;
                     Enemy_left_run = true;
                     setFx("left");
+                    if(Enemy_left_attack1||Enemy_right_attack1){
+                        canMove=false;
+                    }
                 } else if ((targetX > currentX)&&(Math.abs(rightCollider.getX()-targetX)>80)) {
                     // 目标在右边且不在攻击范围内
+                    canMove=true;
                     XSpeed = maxXSpeed;
                     Enemy_left_run = false;
                     Enemy_left_idle=false;
                     Enemy_right_idle=false;
                     Enemy_right_run = true;
                     setFx("right");
+                    if(Enemy_left_attack1||Enemy_right_attack1){
+                        canMove=false;
+                    }
                 }else{
                     Attack1(target);
                 }
@@ -320,7 +403,10 @@ public class Swordman extends Enemy {
                 lunge(target);
                 break;
             case 3://大招
-                SkillOccupationTime++;
+                if(1.0*getEnemy_hp()/getEnemy_max_hp()>0.5){
+                    break;
+                }
+                    SkillOccupationTime++;
                 //初始化
                 if(!isUsingSkill){
 
@@ -340,6 +426,8 @@ public class Swordman extends Enemy {
         }
 
 
+
+
     }
     /**
      *
@@ -351,6 +439,7 @@ public class Swordman extends Enemy {
 
     private void Attack1(ElementObj target){
         setG(1);
+
         int targetX = target.getX()+ target.getW()/2;
         int targeY = target.getY();
         int currentX = this.getX()+this.getW()/2;
@@ -360,11 +449,15 @@ public class Swordman extends Enemy {
         if((targetX < currentX)&&(Math.abs(leftCollider.getX()-targetX)<=80)){
             // 目标在左边且在攻击范围内
             setFx("left");
+            canMove=false;
+            XSpeed=0;
             Enemy_left_run=false;
             Enemy_left_attack1=true;
         }else if((targetX > currentX)&&(Math.abs(rightCollider.getX()-targetX)<=80)){
             // 目标在右边且在攻击1范围内
             setFx("right");
+            canMove=false;
+            XSpeed=0;
             Enemy_right_run = false;
             Enemy_right_attack1=true;
         }
