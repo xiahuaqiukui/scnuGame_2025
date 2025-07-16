@@ -20,6 +20,7 @@ public class Big_bloated extends Enemy{
     public Big_bloated(){
         setName("big_bloated");
         setEnemy_max_hp(25);
+        setScore(1);
     }
 
     @Override

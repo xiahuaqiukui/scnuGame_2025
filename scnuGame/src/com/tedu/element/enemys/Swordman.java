@@ -55,8 +55,9 @@ public class Swordman extends Enemy {
 
     public Swordman(){
         setName("swordman");
-        setEnemy_max_hp(100);
+        setEnemy_max_hp(10);
         setEnemy_hp(getEnemy_max_hp());
+        setScore(5);
         resilience = 20;
     }
 
@@ -282,7 +283,7 @@ public class Swordman extends Enemy {
 
     @Override
     protected void behavioralControl() {
-        System.out.println(getEnemy_hp());
+//        System.out.println(getEnemy_hp());
 
         if (target == null|| !target.isLive()) {
             // 寻找目标（比如玩家）

@@ -1,6 +1,6 @@
 package com.tedu.show;
 
-import java.awt.Graphics;
+import java.awt.*;
 import java.util.List;
 import java.util.Map;
 
@@ -47,6 +47,7 @@ public class GameMainJPanel extends JPanel implements Runnable{
 			}
 		}
 
+		drawScore(g);
 //		Set<GameElement> set = all.keySet(); //得到所有的key集合
 //		for(GameElement ge:set) { //迭代器
 //			List<ElementObj> list = all.get(ge);
@@ -69,5 +70,18 @@ public class GameMainJPanel extends JPanel implements Runnable{
 			}
 
 		}
+	}
+
+	private void drawScore(Graphics g) {
+		// 设置字体和颜色
+		g.setColor(Color.black); // 文字颜色
+		g.setFont(new Font("Arial", Font.BOLD, 24)); // 字体样式
+
+		// 在屏幕右上角显示分数
+		String scoreText = "Score: " + em.getScore();
+		int x = getWidth()/2 - 80; // 距离右侧 150 像素
+		int y = 30; // 距离顶部 30 像素
+
+		g.drawString(scoreText, x, y);
 	}
 }

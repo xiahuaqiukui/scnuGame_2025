@@ -22,6 +22,7 @@ public class Battle_turtle extends Enemy{
     public Battle_turtle(){
         setName("battle_turtle");
         setEnemy_max_hp(20);
+        setScore(2);
     }
 
 

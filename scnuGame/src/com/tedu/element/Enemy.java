@@ -18,6 +18,7 @@ public class Enemy extends ElementObj{
     private long pictureTime=0L;
     protected int pictureIndex=0;
     protected int attackPictureIndex=0;
+    protected int score=0;
 
     ///敌人基本属性
     private int enemy_max_hp = 10; // 血量
@@ -147,6 +148,7 @@ public class Enemy extends ElementObj{
 		}
         
         if(enemy_hp<=0){
+            ElementManager.getManager().addScore(score);
             setLive(false);
         }
         canMove=false;
@@ -449,6 +451,14 @@ public class Enemy extends ElementObj{
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public int getScore() {
+        return score;
+    }
+
+    public void setScore(int score) {
+        this.score = score;
     }
 
     protected void setIcon(List<ImageIcon> imageIcons, int index) {

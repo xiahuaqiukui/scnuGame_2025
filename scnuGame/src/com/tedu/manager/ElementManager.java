@@ -26,7 +26,10 @@ public class ElementManager {
 	// List中元素的泛型应该是元素的基类
 	// 所有元素都可以存放到map集合中，显示模块只需要获得这个map就可以
 	// 显示是有的界面需要显示的函数（调用元素基类的方法 showElement()）
-	
+
+	/// 得分
+	private int score=0;
+
 	// 用Map配合Enum和List结构化存储元素
 	private Map<GameElement, List<ElementObj>> gameElements;
 	
@@ -67,6 +70,7 @@ public class ElementManager {
 		}
 		return EM;
 	}
+
 	
 	// 构造函数+初始化
 	private ElementManager() { // 构造方法私有化
@@ -92,5 +96,17 @@ public class ElementManager {
 			gameElements.put(ge,new ArrayList<>());
 		}
 		// 其他各种实体+效果......
+	}
+
+	public void addScore(int score) {
+		this.score += score;
+	}
+
+	public void setScore(int score) {
+		this.score = score;
+	}
+
+	public int getScore() {
+		return score;
 	}
 }

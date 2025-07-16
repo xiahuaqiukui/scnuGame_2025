@@ -19,6 +19,7 @@ public class Centipede extends Enemy{
     public Centipede(){
         setName("centipede");
         setEnemy_max_hp(10);
+        setScore(1);
     }
 
     @Override
