@@ -23,6 +23,7 @@ public class Battle_turtle extends Enemy{
         setName("battle_turtle");
         setEnemy_max_hp(20);
         setScore(2);
+        detectingDistance=650;
     }
 
 

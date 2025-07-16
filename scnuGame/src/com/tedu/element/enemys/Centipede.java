@@ -20,6 +20,7 @@ public class Centipede extends Enemy{
         setName("centipede");
         setEnemy_max_hp(10);
         setScore(1);
+        detectingDistance=600;
     }
 
     @Override

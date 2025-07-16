@@ -21,6 +21,7 @@ public class Big_bloated extends Enemy{
         setName("big_bloated");
         setEnemy_max_hp(25);
         setScore(1);
+        detectingDistance=550;
     }
 
     @Override

@@ -1,5 +1,7 @@
 package com.tedu.show;
 
+import com.tedu.manager.ElementManager;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -16,7 +18,8 @@ public class GameOverPanel extends JPanel {
         setLayout(new GridBagLayout());
         setBackground(Color.BLACK);
 
-        JLabel gameOverLabel = new JLabel("游戏结束", SwingConstants.CENTER);
+
+        JLabel gameOverLabel = new JLabel("游戏结束，\n得分:"+ElementManager.getManager().getScore(), SwingConstants.CENTER);
         gameOverLabel.setFont(new Font("微软雅黑", Font.BOLD, 48));
         gameOverLabel.setForeground(Color.RED);
 

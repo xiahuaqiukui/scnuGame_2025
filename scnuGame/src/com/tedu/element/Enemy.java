@@ -23,7 +23,7 @@ public class Enemy extends ElementObj{
     ///敌人基本属性
     private int enemy_max_hp = 10; // 血量
     private int enemy_hp = enemy_max_hp;
-    protected int detectingDistance=250;
+    protected int detectingDistance=600;
     protected ElementObj target=null;
     private long attackTime = 0L; // 攻击间隔
     protected int maxXSpeed=3;

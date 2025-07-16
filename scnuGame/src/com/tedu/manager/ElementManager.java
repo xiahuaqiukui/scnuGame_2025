@@ -31,6 +31,8 @@ public class ElementManager {
 
 	/// 得分
 	private int score=0;
+	/// 轮次
+	private int round=1;
 	private JPanel gamePanel;
 
 	// 用Map配合Enum和List结构化存储元素
@@ -108,7 +110,8 @@ public class ElementManager {
 				list.clear();
 			}
 		}
-
+		EM.setScore(0);
+		EM.setRound(1);
 	}
 
 
@@ -122,6 +125,17 @@ public class ElementManager {
 
 	public int getScore() {
 		return score;
+	}
+	public void addround() {
+		this.round++;
+	}
+
+	public void setRound(int round) {
+		this.round = round;
+	}
+
+	public int getRound() {
+		return round;
 	}
 
 

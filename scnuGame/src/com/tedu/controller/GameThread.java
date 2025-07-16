@@ -2,6 +2,7 @@ package com.tedu.controller;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 import com.tedu.element.AttackCollider;
 import com.tedu.element.Bullet;
@@ -25,6 +26,7 @@ public class GameThread extends Thread{
 	public static int sleepTime = 15;
 	private int playerCount;
 	private boolean gameRunning = true;
+	private Random random = new Random();
 
 	public GameThread(int playerCount) {
 		em = ElementManager.getManager();
@@ -40,9 +42,13 @@ public class GameThread extends Thread{
 
 	private void gameLoad() {
 		System.out.println("game loading");
+		em.clearAllElements();
 		GameLoad.ImgLoad();
 		GameLoad.playerLoad(playerCount);
-		GameLoad.MapLoad(playerCount == 1 ? 1 : 3);
+//		GameLoad.MapLoad(playerCount == 1 ? 1 : 3);
+		int randomMap = random.nextInt(3) + 1; // 1-3
+		GameLoad.MapLoad(randomMap);
+
 	}
 
 	private void gameRun() {
@@ -52,10 +58,17 @@ public class GameThread extends Thread{
 		while (gameRunning) {
 			Map<GameElement, List<ElementObj>> all = em.getGameElements();
 			List<ElementObj> players = em.getElementsByKey(GameElement.PLAYER);
+			List<ElementObj> enemies = em.getElementsByKey(GameElement.ENEMY);
 
 			if(players.isEmpty()) {
 				gameRunning = false;
 				break;
+			}
+
+			// 检查是否所有敌人都被消灭
+			if(enemies.isEmpty()) {
+				loadNewMap();
+				continue;
 			}
 
 			Update(all, gameTime);
@@ -67,6 +80,47 @@ public class GameThread extends Thread{
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
+		}
+	}
+
+	private void loadNewMap() {
+		// 保存玩家信息和分数
+
+		List<ElementObj> players = em.getElementsByKey(GameElement.PLAYER);
+		int currentScore = em.getScore();
+		int currentRound = em.getRound();
+
+		// 清除所有元素(除了玩家)
+		for (GameElement ge : GameElement.values()) {
+			if (ge != GameElement.PLAYER&&ge!=GameElement.COLLIDER) { // 保留玩家元素和玩家碰撞箱
+				List<ElementObj> list = em.getElementsByKey(ge);
+				for (ElementObj e : list) {
+					e.setLive(false);
+				}
+			}
+		}
+
+		// 恢复分数
+		em.setScore(currentScore);
+		em.setRound(currentRound);
+
+		// 随机选择新地图
+		/**
+		 * @说明：
+		 * 0.map:boss
+		 * 1.map:小怪地图
+		 * 2.map:小怪地图
+		 * 3.map:小怪地图
+		 * 4.map:小怪地图
+		 * 5.map:小怪地图
+		 */
+		em.addround();
+		//每四把一个boss
+		if(em.getRound()%4==0) {
+			GameLoad.MapLoad(0);
+		}else{
+			int randomMap = random.nextInt(3) + 1; // 1-3
+			GameLoad.MapLoad(randomMap);
 		}
 	}
 
@@ -90,7 +144,7 @@ public class GameThread extends Thread{
 
 	private void gameOver() {
 		System.out.println("Game Over!");
-		em.clearAllElements();
+
 		SwingUtilities.invokeLater(() -> {
 			GameJFrame currentFrame = (GameJFrame) SwingUtilities.getWindowAncestor(em.getGamePanel());
 			currentFrame.getContentPane().removeAll();

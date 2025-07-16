@@ -55,10 +55,11 @@ public class Swordman extends Enemy {
 
     public Swordman(){
         setName("swordman");
-        setEnemy_max_hp(100);
+        setEnemy_max_hp(1);
         setEnemy_hp(getEnemy_max_hp());
         setScore(5);
         resilience = 20;
+        detectingDistance=2000;
     }
 
 

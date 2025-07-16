@@ -38,7 +38,7 @@ public class Player1 extends ElementObj{
 	private int player1_max_mp = 100; //法力值
 	private int player1_mp =  100;
 	
-	private int attack = 1; // 攻击力
+	private int attack = 10; // 攻击力
 	
 	// 展示当前属性的状态条
 	private Bar hpBar = new Bar(70, 100, 100, 10, null, player1_max_hp, player1_hp, Color.RED);
