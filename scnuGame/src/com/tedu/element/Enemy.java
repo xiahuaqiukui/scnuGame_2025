@@ -136,6 +136,15 @@ public class Enemy extends ElementObj{
         ElementObj element = new FloatingText(fx, fy, this.getW(), this.getH()
         		, null, new String("-"+demage), Color.RED);
 		ElementManager.getManager().addElement(element, GameElement.FLOATINGTEXT);
+		
+		// 击打敌人随机掉落药瓶
+		// 测试暂时掉率100%
+		Random r = new Random();
+		int t = r.nextInt(100);
+		if (t<=3) {
+			ElementObj med = new Medicine(this.getX(),this.getY(),0,0,null);
+			ElementManager.getManager().addElement(med, GameElement.MEDICINE);
+		}
         
         if(enemy_hp<=0){
             setLive(false);

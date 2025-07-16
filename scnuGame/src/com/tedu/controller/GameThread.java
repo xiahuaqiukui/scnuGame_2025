@@ -90,7 +90,7 @@ public class GameThread extends Thread{
 			List<ElementObj> collider = em.getElementsByKey(GameElement.COLLIDER);
 			List<ElementObj> AttackCollider = em.getElementsByKey(GameElement.ATTACKCOLLIDER);
 			List<ElementObj> Bar = em.getElementsByKey(GameElement.BAR);
-
+			
 
 			// 更新
 			Update(all, gameTime);

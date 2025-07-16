@@ -109,3 +109,5 @@ swordman_run=image/boss/swordsman/walk
 swordman_bullet=image/boss/swordsman/bullet
 
 
+medicine1=image/medicine/medicine1
+medicine2=image/medicine/medicine2
