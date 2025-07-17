@@ -21,7 +21,8 @@ public class Battle_turtle extends Enemy{
 
     public Battle_turtle(){
         setName("battle_turtle");
-        setEnemy_max_hp(20);
+        setEnemy_max_hp(35);
+        setEnemy_hp(getEnemy_max_hp());
         setScore(2);
         detectingDistance=650;
     }
@@ -32,14 +33,14 @@ public class Battle_turtle extends Enemy{
         if(attack1_time){
             if(attackPictureIndex==2){
                 Bullet element = new Bullet(this.getX(), this.getY(),
-                        this.getW(), this.getH(), null, this.attack * 2,
+                        this.getW(), this.getH(), null, 3*this.attack,
                         10, this.getFx(), "enemy","battle_turtle_bullet1");
                 element.fitImage();
                 ElementManager.getManager().addElement(element, GameElement.BULLET);
                 attack1_time = false;
             }else if(attackPictureIndex==3){
                 Bullet element = new Bullet(this.getX(), this.getY(),
-                        this.getW(), this.getH(), null, this.attack * 2,
+                        this.getW(), this.getH(), null, 3*this.attack,
                         10, this.getFx(), "enemy","battle_turtle_bullet1");
                 element.fitImage();
                 ElementManager.getManager().addElement(element, GameElement.BULLET);
@@ -50,7 +51,7 @@ public class Battle_turtle extends Enemy{
 
         }else if(attack2_time){
             AttackCollider element = new AttackCollider(this.getX(), this.getY(),
-                    this.getW(), this.getH(), null, this.getFx(), this.attack,
+                    this.getW(), this.getH(), null, this.getFx(), this.attack*5,
                     1, "enemy");
             element.fitAttackType();
             ElementManager.getManager().addElement(element, GameElement.ATTACKCOLLIDER);

@@ -12,16 +12,16 @@ import com.tedu.manager.GameLoad;
 
 public class Player2 extends ElementObj{
 	// 角色基本属性
-	private int player2_max_hp = 70; // 血量
-	private int player2_hp = 70;
+	private int player2_max_hp = 90; // 血量
+	private int player2_hp = 90;
 		
-	private int player2_max_vit = 80; // 耐力
-	private int player2_vit = 80;
+	private int player2_max_vit = 90; // 耐力
+	private int player2_vit = 90;
 	
 	private int player2_max_mp = 150; //法力值
 	private int player2_mp =  150;
 		
-	private int attack = 1; // 攻击力
+	private int attack = 3; // 攻击力
 		
 	// 展示当前属性的状态条
 	private Bar hpBar = new Bar(220, 100, 100, 10, null, player2_max_hp, player2_hp, Color.RED);
@@ -89,7 +89,7 @@ public class Player2 extends ElementObj{
 	private final int vitAttack1Consume = 5;
 	
 	private final int vitAttack2Consume = 20;
-	private final int mpAttack2Consume = 10;
+	private final int mpAttack2Consume = 20;
 		
 	private final int mpAttack3Consume = 45;
 	
@@ -634,6 +634,9 @@ public class Player2 extends ElementObj{
 		}else if(player2_attack2_time){
 			this.player2_vit -= vitAttack2Consume;
 			this.player2_mp -= mpAttack2Consume;
+			
+			// 恢复少量血量
+			this.gethpRecover(3);
 			
 			player2_attack2_time = false;
 		}else if(player2_attack3_time){

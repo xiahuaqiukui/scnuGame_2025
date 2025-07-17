@@ -29,16 +29,16 @@ public class Player1 extends ElementObj{
 	 */
 	
 	// 角色基本属性
-	private int player1_max_hp = 100; // 血量
-	private int player1_hp = 100;
+	private int player1_max_hp = 150; // 血量
+	private int player1_hp = 150;
 	
-	private int player1_max_vit = 100; // 耐力
-	private int player1_vit = 100;
+	private int player1_max_vit = 120; // 耐力
+	private int player1_vit = 120;
 	
-	private int player1_max_mp = 100; //法力值
-	private int player1_mp =  100;
+	private int player1_max_mp = 90; //法力值
+	private int player1_mp =  90;
 	
-	private int attack = 10; // 攻击力
+	private int attack = 5; // 攻击力
 	
 	// 展示当前属性的状态条
 	private Bar hpBar = new Bar(70, 100, 100, 10, null, player1_max_hp, player1_hp, Color.RED);
@@ -106,7 +106,7 @@ public class Player1 extends ElementObj{
 	private final int vitAttack1Consume = 5;
 	private final int vitAttack2Consume = 30;
 	
-	private final int mpAttack3Consume = 40;
+	private final int mpAttack3Consume = 35;
 	
 	// 玩家头像
 	private ImageIcon headIcon = null;
@@ -347,10 +347,10 @@ public class Player1 extends ElementObj{
 			moveVitConsumeTime = gameTime;
 			
 			if (player1_left_idle || player1_right_idle) {
-				player1_vit = Math.min(player1_max_vit, player1_vit + 2);
+				player1_vit = Math.min(player1_max_vit, player1_vit + 3);
 				player1_mp = Math.min(player1_max_mp, player1_mp + 2);
 			} else if (player1_left_walk || player1_right_walk) {
-				player1_vit = Math.min(player1_max_vit, player1_vit + 1);
+				player1_vit = Math.min(player1_max_vit, player1_vit + 2);
 			} else if (player1_left_run || player1_right_run) {
 				player1_vit = Math.max(0, player1_vit-vitRunConsume);
 			}

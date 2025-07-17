@@ -166,7 +166,7 @@ public class Bullet extends ElementObj{
 		// 不同类型敌人发射的子弹有不同倍率
 		int at = this.attack;
 		if (from.equals("player1")) {
-			at = 2 * this.attack;
+			at = this.attack;
 		} else if (from.equals("player2")) {
 			at = 3 * this.attack;
 		}

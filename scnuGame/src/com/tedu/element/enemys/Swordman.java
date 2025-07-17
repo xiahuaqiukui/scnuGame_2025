@@ -15,9 +15,9 @@ import java.util.List;
 import java.util.Random;
 
 public class Swordman extends Enemy {
-    private int attack=10;
-    private int UltimateAttackTimes=0;//大招连段次数
-    private int MaxUltimateAttackTimes=3;//大招连段次数
+    private int attack = 4;
+    private int UltimateAttackTimes = 0;//大招连段次数
+    private int MaxUltimateAttackTimes = 3;//大招连段次数
 
     //attack时间
     private boolean attack1_time = false;
@@ -55,9 +55,9 @@ public class Swordman extends Enemy {
 
     public Swordman(){
         setName("swordman");
-        setEnemy_max_hp(1);
+        setEnemy_max_hp(200);
         setEnemy_hp(getEnemy_max_hp());
-        setScore(5);
+        setScore(10);
         resilience = 20;
         detectingDistance=2000;
     }
@@ -74,7 +74,7 @@ public class Swordman extends Enemy {
     protected void attack(long gameTime) {
         if(attack1_time){
             AttackCollider element = new AttackCollider(this.getX(), this.getY(),
-                    this.getW(), this.getH(), null, this.getFx(), this.attack,
+                    this.getW(), this.getH(), null, this.getFx(), 2 * this.attack,
                     1, "boss");
             element.fitAttackType();
             ElementManager.getManager().addElement(element, GameElement.ATTACKCOLLIDER);

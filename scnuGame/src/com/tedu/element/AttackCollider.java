@@ -129,7 +129,7 @@ public class AttackCollider extends ElementObj{
 			if (attackType==1) {
 				return attack;
 			} else if (attackType==2) {
-				return 3*attack;
+				return 4*attack;
 			}
 		}
 		// 敌人

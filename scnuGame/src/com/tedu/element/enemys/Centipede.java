@@ -14,11 +14,12 @@ public class Centipede extends Enemy{
 
     private boolean attack1_time = false; // 控制第1种攻击状态的判定时间
     private long SkillOccupationTime=0;
-    private int attack=4;//技能一的攻击力
+    private int attack = 7;//技能一的攻击力
 
     public Centipede(){
         setName("centipede");
-        setEnemy_max_hp(10);
+        setEnemy_max_hp(55);
+        setEnemy_hp(getEnemy_max_hp());
         setScore(1);
         detectingDistance=600;
     }

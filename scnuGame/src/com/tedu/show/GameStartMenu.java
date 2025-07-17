@@ -123,7 +123,7 @@ public class GameStartMenu extends JFrame{
         singlePlayerBtn.addActionListener(e -> startGame(1));
 
         // 双人游戏按钮
-        twoPlayerBtn = addButton("双人对战");
+        twoPlayerBtn = addButton("双人模式");
         twoPlayerBtn.addActionListener(e -> startGame(2));
 
         // 退出按钮
