@@ -730,7 +730,9 @@ public class Player1 extends ElementObj{
 	// 受伤
 	public void getHurt(int damage) {
 		// 冲刺和施法技能期间无敌
-		if (!player1_attack2_time && !player1_attack3_time) {
+		if (player1_attacking2 || player1_attacking3) {
+			;
+		} else {
 			this.player1_hp = Math.max(0,this.player1_hp - damage);
 			hpBar.setNowNum(player1_hp);
 			

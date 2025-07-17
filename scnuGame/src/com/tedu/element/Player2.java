@@ -672,7 +672,9 @@ public class Player2 extends ElementObj{
 	
 	// 受伤
 	public void getHurt(int damage) {
-		if (!player2_attack2_time && !player2_attack3_time) {
+		if (player2_attacking2 || player2_attacking3) {
+			
+		} else {
 			this.player2_hp = Math.max(0,this.player2_hp - damage);
 			hpBar.setNowNum(player2_hp);
 				
