@@ -115,12 +115,13 @@ public class GameThread extends Thread{
 		 * 5.map:小怪地图
 		 */
 		em.addround();
-		//每四把一个boss
-		if(em.getRound()%4==0) {
+		//每3把一个boss
+		if(em.getRound()%3==0) {
 			GameLoad.MapLoad(0);
 		}else{
 			int randomMap = random.nextInt(3) + 1; // 1-3
 			GameLoad.MapLoad(randomMap);
+//			GameLoad.MapLoad(0);
 		}
 	}
 

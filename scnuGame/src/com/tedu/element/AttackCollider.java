@@ -55,8 +55,8 @@ public class AttackCollider extends ElementObj{
 				g2d.drawLine(startX, startY, newX, newY);
 			}
 		}else{
-			g.setColor(Color.red);
-			g.fillOval(this.getX(), this.getY(), this.getW(), this.getH());
+//			g.setColor(Color.red);
+//			g.fillOval(this.getX(), this.getY(), this.getW(), this.getH());
 		}
 	}
 	

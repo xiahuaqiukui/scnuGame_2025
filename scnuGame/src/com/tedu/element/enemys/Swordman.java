@@ -175,7 +175,7 @@ public class Swordman extends Enemy {
                 attackPictureIndex++;
                 shutdown_time++;
 //                System.out.println(shutdown_time);
-                if(shutdown_time>40){
+                if(shutdown_time>15){
                     resilience=20;
                     shutDown2=false;
                     shutDown=false;
@@ -405,7 +405,7 @@ public class Swordman extends Enemy {
                 lunge(target);
                 break;
             case 3://大招
-                if(1.0*getEnemy_hp()/getEnemy_max_hp()>0.5){
+                if(1.0*getEnemy_hp()/getEnemy_max_hp()>0.8){
                     break;
                 }
                     SkillOccupationTime++;

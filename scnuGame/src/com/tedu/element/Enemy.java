@@ -325,7 +325,7 @@ public class Enemy extends ElementObj{
 
     @Override
     protected void updateImage(long gameTime, int sleepTime) {
-        if(gameTime-this.pictureTime>=10){
+        if(gameTime-this.pictureTime>=7){
             updateImage(gameTime);
             pictureTime = gameTime;
         }

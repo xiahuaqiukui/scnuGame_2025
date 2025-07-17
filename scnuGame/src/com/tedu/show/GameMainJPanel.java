@@ -24,19 +24,38 @@ import com.tedu.manager.GameElement;
 
 public class GameMainJPanel extends JPanel implements Runnable{
 	private ElementManager em = null;
+	private Image backgroundImage = null;
 
 	public GameMainJPanel() {
 		init();
+		loadBackgroundImage();
 	}
 
 	public void init() {
 		em = ElementManager.getManager();
+	}
+	private void loadBackgroundImage() {
+		try {
+			// 替换为你的图片路径，图片应该放在项目的resources目录下
+			backgroundImage = Toolkit.getDefaultToolkit().getImage("image/background/2.png");
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println("无法加载背景图片");
+			backgroundImage = null;
+		}
 	}
 
 	// 绘制所有元素
 	@Override
 	public void paint(Graphics g) {
 		super.paint(g);
+
+		// 先绘制背景图片
+		if (backgroundImage != null) {
+			// 方式：拉伸图片填满整个面板
+			g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
+
+		}
 		Map<GameElement, List<ElementObj>> all = em.getGameElements();
 //		GameElement.values();//隐藏方法，返回是一个数组
 		for (GameElement ge : GameElement.values()) {
